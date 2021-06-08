@@ -1,0 +1,27 @@
+{
+  "name": "baking-bet-sdk",
+  "version": "0.1.0",
+  "description": "Utilities used to interact with BakingBet smart contract and backend API",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baking-bad/baking-bet-sdk.git"
+  },
+  "author": "",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/baking-bad/baking-bet-sdk/issues"
+  },
+  "homepage": "https://github.com/baking-bad/baking-bet-sdk#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.12.2",
+    "jest": "^27.0.4",
+    "ts-jest": "^27.0.3",
+    "typescript": "^4.3.2"
+  }
+}
