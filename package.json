@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "jest",
-    "start": "node lib/index.js"
+    "start": "node lib/index.js",
+    "interact": "cd docs && jupyter lab"
   },
   "repository": {
     "type": "git",
