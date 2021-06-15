@@ -1,0 +1,23 @@
+{
+  "betA 1000": {
+    "rewardAboveEq": 1000,
+    "rewardBellow": 0,
+    "shares": 0,
+    "providedAboveEq": 0,
+    "providedBellow": 0
+  },
+  "LP 1000": {
+    "rewardAboveEq": 0,
+    "rewardBellow": 0,
+    "shares": 1000,
+    "providedAboveEq": 1000,
+    "providedBellow": 1000
+  },
+  "LP 1m + betB 4m": {
+    "rewardAboveEq": 0,
+    "rewardBellow": 4000000,
+    "shares": 1000000,
+    "providedAboveEq": 1000000,
+    "providedBellow": 500000
+  }
+}

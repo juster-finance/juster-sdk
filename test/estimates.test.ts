@@ -1,6 +1,11 @@
 import { format } from "path/posix";
-import { estimateBetReward, estimateShares } from "../src/estimates";
+import {
+  estimateBetReward,
+  estimateShares,
+  calculatePosition
+} from "../src/estimates";
 import events from "./data/events.json"
+import positions from "./data/positions.json"
 import BigNumber from "bignumber.js";
 
 
@@ -35,4 +40,62 @@ test("estimateShares", async () => {
 
   shares = estimateShares(events["1k:4k"], 10_000).toFixed();
   expect(shares).toBe("2500");
+});
+
+
+test("estimatePosition", async () => {
+  let position: string;
+
+  // Position for bettor in the pool with bet contains bet:
+  position = calculatePosition(
+    positions["betA 1000"],
+    events["1m:1m"],
+    "AboveEq",
+    new BigNumber(0),
+    new BigNumber(1000000)).toFixed();
+  expect(position).toBe("1000");
+
+  // Position for bettor in the pool witout bet is 0:
+  position = calculatePosition(
+    positions["betA 1000"],
+    events["1m:1m"],
+    "Bellow",
+    new BigNumber(0),
+    new BigNumber(1000000)).toFixed();
+  expect(position).toBe("0");
+
+  // Position for liquidity provider that have 0.1% in event shares:
+  // 1000 (poolBellow) + 1000 (providedBellow) - 1000 (providedMin)
+  position = calculatePosition(
+    positions["LP 1000"],
+    events["1m:1m"],
+    "AboveEq",
+    new BigNumber(0),
+    new BigNumber(1000000)).toFixed();
+  expect(position).toBe("1000");
+
+  // Position for liquidity provider that have 100% in event shares
+  // with fee 20%:
+  // 4000 (poolBellow) + 1000 (providedAbove) - 1000 (providedMin) = 4000
+  // profit is 4000 - 1000 provided = 3000
+  // fee is 3000*20% = 600
+  position = calculatePosition(
+    positions["LP 1000"],
+    events["1k:4k"],
+    "AboveEq",
+    new BigNumber(200000),
+    new BigNumber(1000000)).toFixed();
+  expect(position).toBe("3400");
+
+  // Position for LP 100% that bettor B at the same time:
+  // 4000000 (bet) + 1000000 (poolAboveEq)
+  // + 500000 (providedBellow) - 500000 (providedMin)
+  position = calculatePosition(
+    positions["LP 1m + betB 4m"],
+    events["1m:1m"],
+    "Bellow",
+    new BigNumber(0),
+    new BigNumber(1000000)).toFixed();
+  expect(position).toBe("5000000");
+
 });

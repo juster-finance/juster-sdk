@@ -15,14 +15,19 @@ export function estimateBetReward(
   pool: "AboveEq" | "Bellow",
   value: BigNumber.Value
 ): BigNumber {
+  // TODO: add liquidity fee
   const valueBN = new BigNumber(value);
-  const poolTo = (pool === "AboveEq") ? event.poolAboveEq : event.poolBellow;
-  const poolToBN = new BigNumber(poolTo);
-  const poolFrom = (pool === "AboveEq") ? event.poolBellow : event.poolAboveEq;
-  const poolFromBN = new BigNumber(poolFrom);
-  const winDeelta = poolFromBN.times(valueBN).idiv(valueBN.plus(poolToBN));
+  const poolTo = pool === "AboveEq"
+    ? new BigNumber(event.poolAboveEq)
+    : new BigNumber(event.poolBellow);
 
-  return valueBN.plus(winDeelta);
+  const poolFrom = pool === "AboveEq"
+    ? new BigNumber(event.poolBellow)
+    : new BigNumber(event.poolAboveEq);
+
+  const winDelta = poolFrom.times(valueBN).idiv(valueBN.plus(poolTo));
+
+  return valueBN.plus(winDelta);
 }
 
 /**
@@ -50,3 +55,51 @@ export function estimateBetReward(
   return newShares;
 }
 
+/**
+ * Calculates current user position for one of the outcomes using storage data
+ *
+ * @param position participant status returned from graphql (based on dipdup-bets
+ model)
+ * @param event Baking Bet event that used to calculate position
+ * @param pool either AboveEq or Bellow pool
+ * @param profitFee fraction that cutted from provider profits, measured in nat number
+ * @param precision total fractions used to measure profitFee, nat number
+ * @returns user position for the given event and pool
+ */
+export function calculatePosition(
+  position: any,
+  event: any,
+  pool: "AboveEq" | "Bellow",
+
+  // TODO: I don't like to have these arguments here
+  //       need to decide where they should be stored (maybe make an objkt
+  //       that contained this params and loads them from config?):
+  profitFee: BigNumber.Value,
+  precision: BigNumber.Value
+): BigNumber {
+  // TODO: maybe it would be better to split this in two:
+  //   calculateBetPosition + calculateProviderPosition?
+
+  const betReturn = pool === "AboveEq"
+    ? new BigNumber(position.rewardAboveEq)
+    : new BigNumber(position.rewardBellow);
+
+  const shares = new BigNumber(position.shares);
+  const poolA = new BigNumber(event.poolAboveEq);
+  const poolB = new BigNumber(event.poolBellow);
+  const providedA = new BigNumber(position.providedAboveEq);
+  const providedB = new BigNumber(position.providedBellow);
+  const totalShares = new BigNumber(event.totalLiquidityShares);
+
+  const providerProfit = pool === "AboveEq"
+    ? shares.times(poolB).idiv(totalShares).minus(providedB)
+    : shares.times(poolA).idiv(totalShares).minus(providedA);
+
+  const fee = providerProfit.isGreaterThan(0)
+    ? providerProfit.times(profitFee).idiv(precision)
+    : 0;
+
+  const providedMax = BigNumber.max(providedA, providedB);
+
+  return betReturn.plus(providedMax).plus(providerProfit).minus(fee);
+}
