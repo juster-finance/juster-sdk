@@ -1,12 +1,12 @@
 {
   "1m:1m": {
     "poolAboveEq": 1000000,
-    "poolBellow": 1000000,
+    "poolBelow": 1000000,
     "totalLiquidityShares": 1000000
   },
   "1k:4k": {
     "poolAboveEq": 1000,
-    "poolBellow": 4000,
+    "poolBelow": 4000,
     "totalLiquidityShares": 1000
   }
 }

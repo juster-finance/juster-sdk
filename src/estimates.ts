@@ -5,24 +5,24 @@ import BigNumber from "bignumber.js";
  * Estimated the size of the winnings in case of success
  *
  * @param event Baking Bet event where the bet goes to
- * @param pool either AboveEq or Bellow pool
+ * @param pool either AboveEq or Below pool
  * @param value the bet amount
  * @returns calculated possible winning amount for this event state
  */
 export function estimateBetReward(
   // TODO: should I create type with event params?
   event: any,
-  pool: "AboveEq" | "Bellow",
+  pool: "AboveEq" | "Below",
   value: BigNumber.Value
 ): BigNumber {
   // TODO: add liquidity fee
   const valueBN = new BigNumber(value);
   const poolTo = pool === "AboveEq"
     ? new BigNumber(event.poolAboveEq)
-    : new BigNumber(event.poolBellow);
+    : new BigNumber(event.poolBelow);
 
   const poolFrom = pool === "AboveEq"
-    ? new BigNumber(event.poolBellow)
+    ? new BigNumber(event.poolBelow)
     : new BigNumber(event.poolAboveEq);
 
   const winDelta = poolFrom.times(valueBN).idiv(valueBN.plus(poolTo));
@@ -49,7 +49,7 @@ export function estimateBetReward(
   // or raise error if there are no totalShares
   // TODO: test this case with event.totalLiquidityShares === 0
 
-  const maxPool = BigNumber.maximum(event.poolAboveEq, event.poolBellow);
+  const maxPool = BigNumber.maximum(event.poolAboveEq, event.poolBelow);
   const newShares = totalShares.times(provided).idiv(maxPool);
 
   return newShares;
@@ -61,7 +61,7 @@ export function estimateBetReward(
  * @param position participant status returned from graphql (based on dipdup-bets
  model)
  * @param event Baking Bet event that used to calculate position
- * @param pool either AboveEq or Bellow pool
+ * @param pool either AboveEq or Below pool
  * @param profitFee fraction that cutted from provider profits, measured in nat number
  * @param precision total fractions used to measure profitFee, nat number
  * @returns user position for the given event and pool
@@ -69,7 +69,7 @@ export function estimateBetReward(
 export function calculatePosition(
   position: any,
   event: any,
-  pool: "AboveEq" | "Bellow",
+  pool: "AboveEq" | "Below",
 
   // TODO: I don't like to have these arguments here
   //       need to decide where they should be stored (maybe make an objkt
@@ -82,13 +82,13 @@ export function calculatePosition(
 
   const betReturn = pool === "AboveEq"
     ? new BigNumber(position.rewardAboveEq)
-    : new BigNumber(position.rewardBellow);
+    : new BigNumber(position.rewardBelow);
 
   const shares = new BigNumber(position.shares);
   const poolA = new BigNumber(event.poolAboveEq);
-  const poolB = new BigNumber(event.poolBellow);
+  const poolB = new BigNumber(event.poolBelow);
   const providedA = new BigNumber(position.providedAboveEq);
-  const providedB = new BigNumber(position.providedBellow);
+  const providedB = new BigNumber(position.providedBelow);
   const totalShares = new BigNumber(event.totalLiquidityShares);
 
   const providerProfit = pool === "AboveEq"

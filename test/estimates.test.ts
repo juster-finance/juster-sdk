@@ -15,13 +15,13 @@ test("estimateBetReward", async () => {
   reward = estimateBetReward(events["1m:1m"], "AboveEq", 1_000_000).toFixed();
   expect(reward).toBe("1500000");
 
-  reward = estimateBetReward(events["1m:1m"], "Bellow", 1_000_000).toFixed();
+  reward = estimateBetReward(events["1m:1m"], "Below", 1_000_000).toFixed();
   expect(reward).toBe("1500000");
 
   reward = estimateBetReward(events["1k:4k"], "AboveEq", 1_000).toFixed();
   expect(reward).toBe("3000");
 
-  reward = estimateBetReward(events["1k:4k"], "Bellow", 6_000).toFixed();
+  reward = estimateBetReward(events["1k:4k"], "Below", 6_000).toFixed();
   expect(reward).toBe("6600");
 });
 
@@ -59,13 +59,13 @@ test("estimatePosition", async () => {
   position = calculatePosition(
     positions["betA 1000"],
     events["1m:1m"],
-    "Bellow",
+    "Below",
     new BigNumber(0),
     new BigNumber(1000000)).toFixed();
   expect(position).toBe("0");
 
   // Position for liquidity provider that have 0.1% in event shares:
-  // 1000 (poolBellow) + 1000 (providedBellow) - 1000 (providedMin)
+  // 1000 (poolBelow) + 1000 (providedBelow) - 1000 (providedMin)
   position = calculatePosition(
     positions["LP 1000"],
     events["1m:1m"],
@@ -76,7 +76,7 @@ test("estimatePosition", async () => {
 
   // Position for liquidity provider that have 100% in event shares
   // with fee 20%:
-  // 4000 (poolBellow) + 1000 (providedAbove) - 1000 (providedMin) = 4000
+  // 4000 (poolBelow) + 1000 (providedAbove) - 1000 (providedMin) = 4000
   // profit is 4000 - 1000 provided = 3000
   // fee is 3000*20% = 600
   position = calculatePosition(
@@ -89,11 +89,11 @@ test("estimatePosition", async () => {
 
   // Position for LP 100% that bettor B at the same time:
   // 4000000 (bet) + 1000000 (poolAboveEq)
-  // + 500000 (providedBellow) - 500000 (providedMin)
+  // + 500000 (providedBelow) - 500000 (providedMin)
   position = calculatePosition(
     positions["LP 1m + betB 4m"],
     events["1m:1m"],
-    "Bellow",
+    "Below",
     new BigNumber(0),
     new BigNumber(1000000)).toFixed();
   expect(position).toBe("5000000");
