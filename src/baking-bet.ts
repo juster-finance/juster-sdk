@@ -1,5 +1,9 @@
 // import { ContractMethod } from "./types";
-import { ContractMethod, TezosToolkit } from "@taquito/taquito";
+import {
+  ContractMethod,
+  TezosToolkit,
+  TransactionWalletOperation,
+} from "@taquito/taquito";
 import { ParameterSchema } from "@taquito/michelson-encoder";
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import config from "./config.json"
@@ -76,7 +80,7 @@ export class BakingBet {
     entrypoint: EntrypointName,
     args: any,
     amount: number
-  ) {
+  ): Promise<TransactionWalletOperation> {
     const mutez = true;
     return new ContractMethod(
       this._tezos.wallet,
@@ -87,12 +91,11 @@ export class BakingBet {
   };
 
   bet(
-    // TODO: make interface for each entrypoint (?)
     eventId: number,
     bet: BetType,
     betValue: number,
     minimalWinAmount: BigNumber.Value,
-  ) {
+  ): Promise<TransactionWalletOperation> {
     const args = [bet, 'unit', eventId, minimalWinAmount];
     // TODO: should betValue be BigNumber.Value?
     return this.callMethodSend("bet", args, betValue);
@@ -104,7 +107,7 @@ export class BakingBet {
     expectedRatioBellow: BigNumber.Value,
     maxSlippage: BigNumber.Value,
     amount: number
-  ) {
+  ): Promise<TransactionWalletOperation> {
     const args = [eventId, expectedRatioAboveEq, expectedRatioBellow, maxSlippage];
     return this.callMethodSend("provideLiquidity", args, amount);
   };
