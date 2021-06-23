@@ -1,4 +1,3 @@
-// import { ContractMethod } from "./types";
 import {
   ContractMethod,
   TezosToolkit,
@@ -17,7 +16,7 @@ type BetType = "aboveEq" | "below";
 
 // TODO: move all precisions in config into one objkt?
 
-export class BakingBet {
+export class Juster {
   protected _network: Network;
   protected _tezos: TezosToolkit;
   protected _provider: BeaconWallet;
@@ -60,7 +59,7 @@ export class BakingBet {
     const { appName, entrypoints } = config;
 
     const tezos = new TezosToolkit(rpcNode);
-    return new BakingBet(
+    return new Juster(
       network,
       contractAddress,
       tezos,

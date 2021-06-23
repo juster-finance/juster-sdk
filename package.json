@@ -1,7 +1,7 @@
 {
-  "name": "baking-bet-sdk",
+  "name": "juster-sdk",
   "version": "0.1.0",
-  "description": "Utilities used to interact with BakingBet smart contract and backend API",
+  "description": "Utilities used to interact with Juster Protocol contract and backend API",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/baking-bad/baking-bet-sdk.git"
+    "url": "git+https://github.com/juster-finance/juster-sdk.git"
   },
   "author": "",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/baking-bad/baking-bet-sdk/issues"
+    "url": "https://github.com/juster-finance/juster-sdk/issues"
   },
-  "homepage": "https://github.com/baking-bad/baking-bet-sdk#readme",
+  "homepage": "https://github.com/juster-finance/juster-sdk#readme",
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "@types/node": "^15.12.2",

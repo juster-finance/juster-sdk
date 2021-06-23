@@ -1,9 +1,9 @@
-import { BakingBet } from "../src/baking-bet";
+import { Juster } from "../src/juster";
 
-test("test baking bet creation", async () => {
+test("test juster creation", async () => {
   /*
   // Next line is failing with: 
   // The promise rejected with the reason "ReferenceError: localStorage is not defined".
-  const bb = BakingBet.create("testnet");
+  const bb = Juster.create("testnet");
   */
 });

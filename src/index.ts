@@ -1,2 +1,2 @@
-export * from "./baking-bet";
+export * from "./juster";
 export * from "./estimates";

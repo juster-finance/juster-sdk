@@ -4,7 +4,7 @@ import BigNumber from "bignumber.js";
 /**
  * Estimated the size of the winnings in case of success
  *
- * @param event Baking Bet event where the bet goes to
+ * @param event Juster event where the bet goes to
  * @param pool either AboveEq or Below pool
  * @param value the bet amount
  * @returns calculated possible winning amount for this event state
@@ -33,7 +33,7 @@ export function estimateBetReward(
 /**
  * Estimated the amount of the new liquidity shares that would be given to provider
  *
- * @param event Baking Bet event where the provide liquidity goes to
+ * @param event Juster event where the provide liquidity goes to
  * @param provided new liquidity amount
  * @returns calculated possible shares count for this event state if new provider
  *  adds "provided"
@@ -60,7 +60,7 @@ export function estimateBetReward(
  *
  * @param position participant status returned from graphql (based on dipdup-bets
  model)
- * @param event Baking Bet event that used to calculate position
+ * @param event Juster event that used to calculate position
  * @param pool either AboveEq or Below pool
  * @param profitFee fraction that cutted from provider profits, measured in nat number
  * @param precision total fractions used to measure profitFee, nat number
