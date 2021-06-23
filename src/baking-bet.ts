@@ -1,5 +1,5 @@
 // import { ContractMethod } from "./types";
-import { ContractMethod, Wallet, TezosToolkit } from "@taquito/taquito";
+import { ContractMethod, TezosToolkit } from "@taquito/taquito";
 import { ParameterSchema } from "@taquito/michelson-encoder";
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import config from "./config.json"
@@ -68,32 +68,34 @@ export class BakingBet {
   sync() {
     // Calls request permissions:
     return this._provider.requestPermissions({
-      network: {type: NetworkType.FLORENCENET}
+      network: { type: NetworkType.FLORENCENET }
     });
   };
 
-  makeContractMethod(
+  callMethodSend(
     entrypoint: EntrypointName,
-    args: any
+    args: any,
+    amount: number
   ) {
+    const mutez = true;
     return new ContractMethod(
       this._tezos.wallet,
       this._contractAddress,
       this._entrypoints.get(entrypoint)!,
       entrypoint,
-      args);
+      args).send({ amount, mutez });
   };
 
   bet(
     // TODO: make interface for each entrypoint (?)
     eventId: number,
     bet: BetType,
-    betValue: BigNumber.Value,
+    betValue: number,
     minimalWinAmount: BigNumber.Value,
   ) {
     const args = [bet, 'unit', eventId, minimalWinAmount];
-    // TODO: need to add betValue to amount somehow
-    return this.makeContractMethod("bet", args);
+    // TODO: should betValue be BigNumber.Value?
+    return this.callMethodSend("bet", args, betValue);
   };
 
   provideLiquidity(
@@ -101,9 +103,10 @@ export class BakingBet {
     expectedRatioAboveEq: BigNumber.Value,
     expectedRatioBellow: BigNumber.Value,
     maxSlippage: BigNumber.Value,
+    amount: number
   ) {
     const args = [eventId, expectedRatioAboveEq, expectedRatioBellow, maxSlippage];
-    return this.makeContractMethod("provideLiquidity", args);
+    return this.callMethodSend("provideLiquidity", args, amount);
   };
 
   // TODO: withdraw call
