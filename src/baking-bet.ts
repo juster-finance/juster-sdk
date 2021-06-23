@@ -69,17 +69,28 @@ export class BakingBet {
     )
   };
 
-  sync() {
+  /**
+   * Request permissions for BeaconWallet
+   */
+  sync(): Promise<void> {
     // Calls request permissions:
     return this._provider.requestPermissions({
       network: { type: NetworkType.FLORENCENET }
     });
   };
 
+  /**
+   * Creates new ContractMethod and performs send call to the contract
+   *
+   * @param entrypoint contract entrypoint name
+   * @param args arguments that transfers to this entrypoint, order matters
+   * @param amount the amount added to the transaction
+   * @returns promise with TransactionWalletOperation
+   */
   callMethodSend(
     entrypoint: EntrypointName,
     args: any,
-    amount: number
+    amount: number = 0
   ): Promise<TransactionWalletOperation> {
     const mutez = true;
     return new ContractMethod(
@@ -90,6 +101,15 @@ export class BakingBet {
       args).send({ amount, mutez });
   };
 
+  /**
+   * Calling bet entrypoint
+   *
+   * @param eventId nat number of event
+   * @param bet bet type: either aboveEq or below
+   * @param betValue bet amount
+   * @param minimalWinAmount minimal expected bet amount (slippage)
+   * @returns promise with TransactionWalletOperation
+   */
   bet(
     eventId: number,
     bet: BetType,
@@ -101,6 +121,16 @@ export class BakingBet {
     return this.callMethodSend("bet", args, betValue);
   };
 
+  /**
+   * Calling provideLiquidity entrypoint
+   *
+   * @param eventId nat number of event
+   * @param expectedRatioAboveEq expected pool ratio numerator
+   * @param expectedRatioBellow expected pool ratio denomimator
+   * @param maxSlippage maximal difference between expected ratio and actual ratio (nat number measured in ratioPrecision)
+   * @param amount added liquidity amount
+   * @returns promise with TransactionWalletOperation
+   */
   provideLiquidity(
     eventId: number,
     expectedRatioAboveEq: BigNumber.Value,
@@ -112,6 +142,19 @@ export class BakingBet {
     return this.callMethodSend("provideLiquidity", args, amount);
   };
 
-  // TODO: withdraw call
+  /**
+   * Calling withdraw entrypoint
+   *
+   * @param eventId nat number of event
+   * @param participantAddress address of the participant used to calculate and pay rewards
+   * @returns promise with TransactionWalletOperation
+   */
+  withdraw(
+    eventId: number,
+    participantAddress: string,
+  ): Promise<TransactionWalletOperation> {
+    const args = [eventId, participantAddress];
+    return this.callMethodSend("provideLiquidity", args);
+  };
 }
 
