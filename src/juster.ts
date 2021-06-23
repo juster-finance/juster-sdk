@@ -9,7 +9,23 @@ import config from "./config.json"
 import BigNumber from "bignumber.js";
 import { NetworkType } from '@airgap/beacon-sdk';
 import { Network, EntrypointName, BetType } from './types'
+import {
+  ApolloClient,
+  HttpLink,
+  InMemoryCache,
+  NormalizedCacheObject,
+  gql,
+  ApolloQueryResult
+} from "@apollo/client/core";
+import { graphql } from "graphql";
 
+
+const createApolloClient = (uri: string) => {
+  return new ApolloClient({
+    link: new HttpLink({ uri }),
+    cache: new InMemoryCache(),
+  });
+};
 
 // TODO: move all precisions in config into one objkt?
 
@@ -19,13 +35,15 @@ export class Juster {
   protected _provider: BeaconWallet;
   protected _contractAddress: string;
   protected _entrypoints: Map<string, ParameterSchema>;
+  protected _grapghQlClient: ApolloClient<NormalizedCacheObject>
 
   constructor(
     network: Network,
     contractAddress: string,
     tezos: TezosToolkit,
     entrypoints: Record<string, any>,
-    appName: string
+    appName: string,
+    graphqlUri: string
   ) {
     this._network = network;
     this._tezos = tezos;
@@ -46,13 +64,15 @@ export class Juster {
         return [name, new ParameterSchema(typeExpr)];
       }),
     );
+
+    this._grapghQlClient = createApolloClient(graphqlUri);
   };
 
   static create(
     network: Network,
   ) {
     const networkSettings = config.networks[network];
-    const { contractAddress, rpcNode } = networkSettings;
+    const { contractAddress, rpcNode, graphqlUri } = networkSettings;
     const { appName, entrypoints } = config;
 
     const tezos = new TezosToolkit(rpcNode);
@@ -61,7 +81,8 @@ export class Juster {
       contractAddress,
       tezos,
       entrypoints,
-      appName
+      appName,
+      graphqlUri
     )
   };
 
@@ -152,5 +173,22 @@ export class Juster {
     const args = [eventId, participantAddress];
     return this.callMethodSend("provideLiquidity", args);
   };
+
+  getEvent(
+    eventId: number
+  ): Promise<ApolloQueryResult<any>> {
+    const query = gql`query MyQuery {
+      juster_event(where: {id: {_eq: ${ eventId }}}) {
+        pool_above_eq
+        pool_below
+        total_liquidity_shares
+        created_time
+        bets_close_time
+        liquidity_percent
+      }
+    }`
+
+    return this._grapghQlClient.query({query: query})
+  }
 }
 

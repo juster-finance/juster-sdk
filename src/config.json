@@ -8,11 +8,13 @@
   "networks": {
     "testnet": {
       "contractAddress": "KT1CepDBrMg73d7LHm773KAsunjAjgLYituP",
-      "rpcNode": "https://testnet-tezos.giganode.io"
+      "rpcNode": "https://testnet-tezos.giganode.io",
+      "graphqlUri": "https://api.dipdup.net/juster/graphql"
     },
     "mainnet": {
       "contractAddress": "",
-      "rpcNode": ""
+      "rpcNode": "",
+      "graphqlUri": ""
     }
   },
   "entrypoints": {
