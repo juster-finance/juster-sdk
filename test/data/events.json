@@ -2,11 +2,17 @@
   "1m:1m": {
     "poolAboveEq": 1000000,
     "poolBelow": 1000000,
-    "totalLiquidityShares": 1000000
+    "totalLiquidityShares": 1000000,
+    "createdTime": "2021-06-23T12:00:00.000Z",
+    "betsCloseTime": "2021-06-23T18:00:00.000Z",
+    "liquidityPercent": 10000
   },
   "1k:4k": {
     "poolAboveEq": 1000,
     "poolBelow": 4000,
-    "totalLiquidityShares": 1000
+    "totalLiquidityShares": 1000,
+    "createdTime": "2021-06-23T12:00:00.000Z",
+    "betsCloseTime": "2021-06-23T18:00:00.000Z",
+    "liquidityPercent": 10000
   }
 }

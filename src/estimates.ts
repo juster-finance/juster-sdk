@@ -1,5 +1,27 @@
 import BigNumber from "bignumber.js";
-import { BetType } from './types'
+import { BetType, EventType } from './types'
+
+
+/**
+ * Estimated liquidity fee multiplier for added bet
+ *
+ * @param event Juster event where the bet goes to
+ * @param now time when fee estimated
+ * @returns fee multiplier (BigNumber measured in liquidityPrecision)
+ */
+ export function estimateFeeMultiplier(
+  event: EventType,
+  now: Date,
+): BigNumber {
+  // TODO: check that event.betsCloseTime > now > event.createdTime?
+  const totalBettingTime = new BigNumber(
+    event.betsCloseTime.getTime() - event.createdTime.getTime());
+  const elapsedTime = new BigNumber(
+    now.getTime() - event.createdTime.getTime());
+  const liquidityPercent = new BigNumber(event.liquidityPercent);
+  return elapsedTime.times(liquidityPercent).idiv(totalBettingTime);
+}
+
 
 /**
  * Estimated the size of the winnings in case of success
@@ -10,8 +32,7 @@ import { BetType } from './types'
  * @returns calculated possible winning amount for this event state
  */
 export function estimateBetReward(
-  // TODO: should I create type with event params?
-  event: any,
+  event: EventType,
   pool: BetType,
   value: BigNumber.Value
 ): BigNumber {
@@ -30,8 +51,10 @@ export function estimateBetReward(
   return valueBN.plus(winDelta);
 }
 
-// TODO: estimate liquidity fee
+
 // TODO: estimate bet reward with liquidity fee
+// TODO: add slippage to the estimateBetReward (separate helper)
+// TODO: decide if all this helpers should be moved into Juster object (because of precisions)
 
 /**
  * Estimated the amount of the new liquidity shares that would be given to provider
