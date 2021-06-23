@@ -8,11 +8,8 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 import config from "./config.json"
 import BigNumber from "bignumber.js";
 import { NetworkType } from '@airgap/beacon-sdk';
+import { Network, EntrypointName, BetType } from './types'
 
-
-type Network = "mainnet" | "testnet";
-type EntrypointName = "bet" | "provideLiquidity" | "withdraw";
-type BetType = "aboveEq" | "below";
 
 // TODO: move all precisions in config into one objkt?
 

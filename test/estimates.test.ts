@@ -12,16 +12,16 @@ import BigNumber from "bignumber.js";
 test("estimateBetReward", async () => {
   let reward: string;
 
-  reward = estimateBetReward(events["1m:1m"], "AboveEq", 1_000_000).toFixed();
+  reward = estimateBetReward(events["1m:1m"], "aboveEq", 1_000_000).toFixed();
   expect(reward).toBe("1500000");
 
-  reward = estimateBetReward(events["1m:1m"], "Below", 1_000_000).toFixed();
+  reward = estimateBetReward(events["1m:1m"], "below", 1_000_000).toFixed();
   expect(reward).toBe("1500000");
 
-  reward = estimateBetReward(events["1k:4k"], "AboveEq", 1_000).toFixed();
+  reward = estimateBetReward(events["1k:4k"], "aboveEq", 1_000).toFixed();
   expect(reward).toBe("3000");
 
-  reward = estimateBetReward(events["1k:4k"], "Below", 6_000).toFixed();
+  reward = estimateBetReward(events["1k:4k"], "below", 6_000).toFixed();
   expect(reward).toBe("6600");
 });
 
@@ -50,7 +50,7 @@ test("estimatePosition", async () => {
   position = calculatePosition(
     positions["betA 1000"],
     events["1m:1m"],
-    "AboveEq",
+    "aboveEq",
     new BigNumber(0),
     new BigNumber(1000000)).toFixed();
   expect(position).toBe("1000");
@@ -59,7 +59,7 @@ test("estimatePosition", async () => {
   position = calculatePosition(
     positions["betA 1000"],
     events["1m:1m"],
-    "Below",
+    "below",
     new BigNumber(0),
     new BigNumber(1000000)).toFixed();
   expect(position).toBe("0");
@@ -69,7 +69,7 @@ test("estimatePosition", async () => {
   position = calculatePosition(
     positions["LP 1000"],
     events["1m:1m"],
-    "AboveEq",
+    "aboveEq",
     new BigNumber(0),
     new BigNumber(1000000)).toFixed();
   expect(position).toBe("1000");
@@ -82,7 +82,7 @@ test("estimatePosition", async () => {
   position = calculatePosition(
     positions["LP 1000"],
     events["1k:4k"],
-    "AboveEq",
+    "aboveEq",
     new BigNumber(200000),
     new BigNumber(1000000)).toFixed();
   expect(position).toBe("3400");
@@ -93,7 +93,7 @@ test("estimatePosition", async () => {
   position = calculatePosition(
     positions["LP 1m + betB 4m"],
     events["1m:1m"],
-    "Below",
+    "below",
     new BigNumber(0),
     new BigNumber(1000000)).toFixed();
   expect(position).toBe("5000000");

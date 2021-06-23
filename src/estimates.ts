@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-
+import { BetType } from './types'
 
 /**
  * Estimated the size of the winnings in case of success
@@ -12,16 +12,16 @@ import BigNumber from "bignumber.js";
 export function estimateBetReward(
   // TODO: should I create type with event params?
   event: any,
-  pool: "AboveEq" | "Below",
+  pool: BetType,
   value: BigNumber.Value
 ): BigNumber {
   // TODO: add liquidity fee
   const valueBN = new BigNumber(value);
-  const poolTo = pool === "AboveEq"
+  const poolTo = pool === "aboveEq"
     ? new BigNumber(event.poolAboveEq)
     : new BigNumber(event.poolBelow);
 
-  const poolFrom = pool === "AboveEq"
+  const poolFrom = pool === "aboveEq"
     ? new BigNumber(event.poolBelow)
     : new BigNumber(event.poolAboveEq);
 
@@ -29,6 +29,9 @@ export function estimateBetReward(
 
   return valueBN.plus(winDelta);
 }
+
+// TODO: estimate liquidity fee
+// TODO: estimate bet reward with liquidity fee
 
 /**
  * Estimated the amount of the new liquidity shares that would be given to provider
@@ -69,7 +72,7 @@ export function estimateBetReward(
 export function calculatePosition(
   position: any,
   event: any,
-  pool: "AboveEq" | "Below",
+  pool: BetType,
 
   // TODO: I don't like to have these arguments here
   //       need to decide where they should be stored (maybe make an objkt
@@ -80,7 +83,7 @@ export function calculatePosition(
   // TODO: maybe it would be better to split this in two:
   //   calculateBetPosition + calculateProviderPosition?
 
-  const betReturn = pool === "AboveEq"
+  const betReturn = pool === "aboveEq"
     ? new BigNumber(position.rewardAboveEq)
     : new BigNumber(position.rewardBelow);
 
@@ -91,7 +94,7 @@ export function calculatePosition(
   const providedB = new BigNumber(position.providedBelow);
   const totalShares = new BigNumber(event.totalLiquidityShares);
 
-  const providerProfit = pool === "AboveEq"
+  const providerProfit = pool === "aboveEq"
     ? shares.times(poolB).idiv(totalShares).minus(providedB)
     : shares.times(poolA).idiv(totalShares).minus(providedA);
 
