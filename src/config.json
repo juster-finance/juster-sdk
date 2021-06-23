@@ -1,7 +1,113 @@
 {
+  "appName": "Juster",
   "liquidityPrecision": 1000000,
   "providerProfitFeePrecision": 1000000,
   "ratioPrecision": 100000000,
   "sharePrecision": 100000000,
-  "targetDynamicsPrecision": 1000000
+  "targetDynamicsPrecision": 1000000,
+  "networks": {
+    "testnet": {
+      "contractAddress": "KT1CepDBrMg73d7LHm773KAsunjAjgLYituP",
+      "rpcNode": "https://testnet-tezos.giganode.io"
+    },
+    "mainnet": {
+      "contractAddress": "",
+      "rpcNode": ""
+    }
+  },
+  "entrypoints": {
+    "withdraw": {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "nat",
+          "annots": [
+            "%eventId"
+          ]
+        },
+        {
+          "prim": "address",
+          "annots": [
+            "%participantAddress"
+          ]
+        }
+      ]
+    },
+    "provideLiquidity": {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "nat",
+              "annots": [
+                "%eventId"
+              ]
+            },
+            {
+              "prim": "nat",
+              "annots": [
+                "%expectedRatioAboveEq"
+              ]
+            }
+          ]
+        },
+        {
+          "prim": "nat",
+          "annots": [
+            "%expectedRatioBelow"
+          ]
+        },
+        {
+          "prim": "nat",
+          "annots": [
+            "%maxSlippage"
+          ]
+        }
+      ]
+    },
+    "bet": {
+      "prim": "pair",
+      "args": [
+        {
+          "prim": "pair",
+          "args": [
+            {
+              "prim": "or",
+              "args": [
+                {
+                  "prim": "unit",
+                  "annots": [
+                    "%aboveEq"
+                  ]
+                },
+                {
+                  "prim": "unit",
+                  "annots": [
+                    "%below"
+                  ]
+                }
+              ],
+              "annots": [
+                "%bet"
+              ]
+            },
+            {
+              "prim": "nat",
+              "annots": [
+                "%eventId"
+              ]
+            }
+          ]
+        },
+        {
+          "prim": "mutez",
+          "annots": [
+            "%minimalWinAmount"
+          ]
+        }
+      ]
+    }
+  }
 }
