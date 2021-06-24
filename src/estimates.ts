@@ -19,7 +19,7 @@ import { BetType, EventType } from './types'
   const elapsedTime = new BigNumber(
     now.getTime() - event.createdTime.getTime());
   const liquidityPercent = new BigNumber(event.liquidityPercent);
-  return elapsedTime.times(liquidityPercent).idiv(totalBettingTime);
+  return elapsedTime.times(liquidityPercent).div(totalBettingTime);
 }
 
 
@@ -28,27 +28,21 @@ import { BetType, EventType } from './types'
  *
  * @param event Juster event where the bet goes to
  * @param pool either AboveEq or Below pool
- * @param value the bet amount
+ * @param value the bet amount in BigNumber format
  * @returns calculated possible winning amount for this event state
  */
 export function estimateBetReward(
   event: EventType,
   pool: BetType,
-  value: BigNumber.Value
+  value: BigNumber
 ): BigNumber {
   // TODO: add liquidity fee
-  const valueBN = new BigNumber(value);
-  const poolTo = pool === "aboveEq"
-    ? new BigNumber(event.poolAboveEq)
-    : new BigNumber(event.poolBelow);
+  const poolTo = pool === "aboveEq" ? event.poolAboveEq : event.poolBelow;
+  const poolFrom = pool === "aboveEq" ? event.poolBelow : event.poolAboveEq;
 
-  const poolFrom = pool === "aboveEq"
-    ? new BigNumber(event.poolBelow)
-    : new BigNumber(event.poolAboveEq);
+  const winDelta = poolFrom.times(value).div(value.plus(poolTo));
 
-  const winDelta = poolFrom.times(valueBN).idiv(valueBN.plus(poolTo));
-
-  return valueBN.plus(winDelta);
+  return value.plus(winDelta);
 }
 
 
@@ -65,18 +59,16 @@ export function estimateBetReward(
  *  adds "provided"
  */
  export function estimateShares(
-  event: any,
-  provided: BigNumber.Value
+  event: EventType,
+  provided: BigNumber
 ): BigNumber {
-  const investedBN = new BigNumber(provided);
-  const totalShares = new BigNumber(event.totalLiquidityShares);
 
-  // TODO: if first LP then just return precision
+  // TODO: if first LP then just return precision (or 1.0 if we are not using prec?)
   // or raise error if there are no totalShares
   // TODO: test this case with event.totalLiquidityShares === 0
 
   const maxPool = BigNumber.maximum(event.poolAboveEq, event.poolBelow);
-  const newShares = totalShares.times(provided).idiv(maxPool);
+  const newShares = event.totalLiquidityShares.times(provided).div(maxPool);
 
   return newShares;
 }
@@ -94,7 +86,7 @@ export function estimateBetReward(
  */
 export function calculatePosition(
   position: any,
-  event: any,
+  event: EventType,
   pool: BetType,
 
   // TODO: I don't like to have these arguments here

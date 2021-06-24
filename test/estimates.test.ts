@@ -9,52 +9,66 @@ import rawEvents from "./data/events.json"
 import positions from "./data/positions.json"
 import BigNumber from "bignumber.js";
 import { EventType } from '../src/types'
+import { deserializeEvent } from '../src/serialization'
 
-
-const deserealizeEvent = (rawEvent: any): EventType => {
-  let event = rawEvent;
-  event['createdTime'] = new Date(event['createdTime']);
-  event['betsCloseTime'] = new Date(event['betsCloseTime']);
-  return event;
-};
 
 let events = new Map<string, EventType>(
   Object.entries(rawEvents).map(([name, event]) => {
-    return [name, deserealizeEvent(event)];
+    return [name, deserializeEvent(event)];
   })
 );
 
 test("estimateBetReward", async () => {
-  let reward: string;
+  let reward: BigNumber;
 
-  reward = estimateBetReward(events.get("1m:1m")!, "aboveEq", 1_000_000).toFixed();
-  expect(reward).toBe("1500000");
+  reward = estimateBetReward(
+    events.get("1m:1m")!,
+    "aboveEq",  
+    new BigNumber(1.0));
+  expect(reward.toFixed()).toBe("1.5");
 
-  reward = estimateBetReward(events.get("1m:1m")!, "below", 1_000_000).toFixed();
-  expect(reward).toBe("1500000");
+  reward = estimateBetReward(
+    events.get("1m:1m")!,
+    "below",
+    new BigNumber(1.0));
+  expect(reward.toFixed()).toBe("1.5");
 
-  reward = estimateBetReward(events.get("1k:4k")!, "aboveEq", 1_000).toFixed();
-  expect(reward).toBe("3000");
+  reward = estimateBetReward(
+    events.get("1k:4k")!,
+    "aboveEq",
+    new BigNumber(0.001));
+  expect(reward.toFixed()).toBe("0.003");
 
-  reward = estimateBetReward(events.get("1k:4k")!, "below", 6_000).toFixed();
-  expect(reward).toBe("6600");
+  reward = estimateBetReward(
+    events.get("1k:4k")!,
+    "below",
+    new BigNumber(0.006));
+  expect(reward.toFixed()).toBe("0.0066");
 });
 
 
 test("estimateShares", async () => {
-  let shares: string;
+  let shares: BigNumber;
 
-  shares = estimateShares(events.get("1m:1m")!, 1_000_000).toFixed();
-  expect(shares).toBe("1000000");
+  shares = estimateShares(
+    events.get("1m:1m")!,
+    new BigNumber(1.0));
+  expect(shares.toFixed()).toBe("1");
 
-  shares = estimateShares(events.get("1m:1m")!, 5_000_000).toFixed();
-  expect(shares).toBe("5000000");
+  shares = estimateShares(
+    events.get("1m:1m")!,
+    new BigNumber(5.0));
+  expect(shares.toFixed()).toBe("5");
 
-  shares = estimateShares(events.get("1k:4k")!, 2_000).toFixed();
-  expect(shares).toBe("500");
+  shares = estimateShares(
+    events.get("1k:4k")!,
+    new BigNumber(0.002));
+  expect(shares.toFixed()).toBe("0.0005");
 
-  shares = estimateShares(events.get("1k:4k")!, 10_000).toFixed();
-  expect(shares).toBe("2500");
+  shares = estimateShares(
+    events.get("1k:4k")!,
+    new BigNumber(0.01));
+  expect(shares.toFixed()).toBe("0.0025");
 });
 
 
@@ -115,6 +129,7 @@ test("estimatePosition", async () => {
 
 });
 
+
 test("estimateLiquidityFee", async () => {
   let fee: string;
   const eventStartDate = new Date("2021-06-23T12:00:00.000Z");
@@ -127,9 +142,9 @@ test("estimateLiquidityFee", async () => {
 
   fee = estimateFeeMultiplier(
     events.get("1m:1m")!, betsCloseDate).toFixed();
-  expect(fee).toBe("10000");
+  expect(fee).toBe("0.01");
 
   fee = estimateFeeMultiplier(
     events.get("1m:1m")!, dateBetween).toFixed();
-  expect(fee).toBe("5000");
+  expect(fee).toBe("0.005");
 });

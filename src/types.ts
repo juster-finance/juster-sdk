@@ -1,11 +1,14 @@
+import BigNumber from "bignumber.js";
+
+
 export type Network = "mainnet" | "testnet";
 export type EntrypointName = "bet" | "provideLiquidity" | "withdraw";
 export type BetType = "aboveEq" | "below";
 export type EventType = {
-  poolAboveEq: number,
-  poolBelow: number,
-  totalLiquidityShares: number,
+  poolAboveEq: BigNumber,
+  poolBelow: BigNumber,
+  totalLiquidityShares: BigNumber,
   createdTime: Date,
   betsCloseTime: Date,
-  liquidityPercent: number
+  liquidityPercent: BigNumber
 }

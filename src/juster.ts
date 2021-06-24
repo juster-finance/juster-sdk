@@ -8,7 +8,7 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 import config from "./config.json"
 import BigNumber from "bignumber.js";
 import { NetworkType } from '@airgap/beacon-sdk';
-import { Network, EntrypointName, BetType } from './types'
+import { Network, EntrypointName, BetType, EventType } from './types'
 import {
   ApolloClient,
   HttpLink,
@@ -17,6 +17,7 @@ import {
   gql,
   ApolloQueryResult
 } from "@apollo/client/core";
+import { deserializeEvent } from './serialization'
 import { graphql } from "graphql";
 
 
@@ -176,7 +177,7 @@ export class Juster {
 
   getEvent(
     eventId: number
-  ): Promise<ApolloQueryResult<any>> {
+  ): Promise<EventType> {
     const query = gql`query MyQuery {
       juster_event(where: {id: {_eq: ${ eventId }}}) {
         pool_above_eq
@@ -188,7 +189,19 @@ export class Juster {
       }
     }`
 
-    return this._grapghQlClient.query({query: query})
+    // TODO: unpack data and return EventType object? (or promise with EventType)
+    const eventPromise: Promise<EventType> = this._grapghQlClient
+      .query({query: query})
+      .then(result => {
+        // TODO: is it good to select 0 object? What happens if there are more
+        // items in array? (should not happen)
+        const rawEvent = result.data.juster_event[0];
+
+        // TODO: check if there are any errors while request?
+        return deserializeEvent(rawEvent)
+    });
+
+    return eventPromise
   }
 }
 
