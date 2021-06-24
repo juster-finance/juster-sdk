@@ -203,7 +203,7 @@ export class Juster {
     participantAddress: string,
   ): Promise<TransactionWalletOperation> {
     const args = [eventId, participantAddress];
-    return this.callMethodSend("provideLiquidity", args);
+    return this.callMethodSend("withdraw", args);
   };
 
   /**
