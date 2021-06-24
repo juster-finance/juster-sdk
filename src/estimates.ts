@@ -28,6 +28,27 @@ import {
 
 
 /**
+ * Calculates ratio for given event and pool
+ *
+ * @param event Juster event that used to calculate position
+ * @param pool either AboveEq or Below pool
+ * @param valueBias optional bet amount that would change ratio
+ * @returns calculated ratio for give value
+ */
+ export function calculateRatio(
+  event: EventType,
+  pool: BetType,
+  valueBias: BigNumber = new BigNumber(0)
+): BigNumber {
+  const poolTo = pool === "aboveEq" ? event.poolAboveEq : event.poolBelow;
+  const poolFrom = pool === "aboveEq" ? event.poolBelow : event.poolAboveEq;
+
+  const ratio = poolFrom.div(valueBias.plus(poolTo));
+  return ratio
+}
+
+
+/**
  * Estimated the size of the winnings in case of success
  *
  * @param event Juster event where the bet goes to
@@ -38,15 +59,13 @@ import {
 export function estimateBetReward(
   event: EventType,
   pool: BetType,
-  value: BigNumber
+  betValue: BigNumber
 ): BigNumber {
   // TODO: add liquidity fee
-  const poolTo = pool === "aboveEq" ? event.poolAboveEq : event.poolBelow;
-  const poolFrom = pool === "aboveEq" ? event.poolBelow : event.poolAboveEq;
 
-  const winDelta = poolFrom.times(value).div(value.plus(poolTo));
-
-  return value.plus(winDelta);
+  const ratio = calculateRatio(event, pool, betValue);
+  const winDelta = betValue.times(ratio);
+  return betValue.plus(winDelta);
 }
 
 
