@@ -16,7 +16,20 @@ export const deserializeEvent = (rawEvent: any): EventType => {
   };
 };
 
+const emptyPosition: PositionType = {
+  rewardAboveEq: new BigNumber(0),
+  rewardBelow: new BigNumber(0),
+  shares: new BigNumber(0),
+  providedAboveEq: new BigNumber(0),
+  providedBelow: new BigNumber(0)  
+};
+
 export const deserializePosition = (rawPosition: any): PositionType => {
+  // TODO: where should happen this check that position is empty?
+  if (rawPosition === undefined) {
+    return emptyPosition
+  };
+
   return {
     rewardAboveEq: new BigNumber(rawPosition.reward_above_eq),
     rewardBelow: new BigNumber(rawPosition.reward_below),
