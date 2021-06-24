@@ -1,23 +1,23 @@
 {
   "betA 1000": {
-    "rewardAboveEq": 1000,
-    "rewardBelow": 0,
+    "reward_above_eq": 0.001,
+    "reward_below": 0,
     "shares": 0,
-    "providedAboveEq": 0,
-    "providedBelow": 0
+    "liquidity_provided_above_eq": 0,
+    "liquidity_provided_below": 0
   },
   "LP 1000": {
-    "rewardAboveEq": 0,
-    "rewardBelow": 0,
-    "shares": 1000,
-    "providedAboveEq": 1000,
-    "providedBelow": 1000
+    "reward_above_eq": 0,
+    "reward_below": 0,
+    "shares": 0.001,
+    "liquidity_provided_above_eq": 0.001,
+    "liquidity_provided_below": 0.001
   },
   "LP 1m + betB 4m": {
-    "rewardAboveEq": 0,
-    "rewardBelow": 4000000,
-    "shares": 1000000,
-    "providedAboveEq": 1000000,
-    "providedBelow": 500000
+    "reward_above_eq": 0,
+    "reward_below": 4,
+    "shares": 1,
+    "liquidity_provided_above_eq": 1,
+    "liquidity_provided_below": 0.5
   }
 }

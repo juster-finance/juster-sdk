@@ -1,5 +1,9 @@
 import BigNumber from "bignumber.js";
-import { BetType, EventType } from './types'
+import {
+  BetType,
+  EventType,
+  PositionType
+} from './types'
 
 
 /**
@@ -85,39 +89,35 @@ export function estimateBetReward(
  * @returns user position for the given event and pool
  */
 export function calculatePosition(
-  position: any,
+  position: PositionType,
   event: EventType,
   pool: BetType,
 
-  // TODO: I don't like to have these arguments here
-  //       need to decide where they should be stored (maybe make an objkt
-  //       that contained this params and loads them from config?):
-  profitFee: BigNumber.Value,
-  precision: BigNumber.Value
+  // TODO: how do we request profitFee from contract? need another API entry?:
+  profitFee: BigNumber,
 ): BigNumber {
   // TODO: maybe it would be better to split this in two:
   //   calculateBetPosition + calculateProviderPosition?
 
   const betReturn = pool === "aboveEq"
-    ? new BigNumber(position.rewardAboveEq)
-    : new BigNumber(position.rewardBelow);
+    ? position.rewardAboveEq
+    : position.rewardBelow;
 
-  const shares = new BigNumber(position.shares);
-  const poolA = new BigNumber(event.poolAboveEq);
-  const poolB = new BigNumber(event.poolBelow);
-  const providedA = new BigNumber(position.providedAboveEq);
-  const providedB = new BigNumber(position.providedBelow);
-  const totalShares = new BigNumber(event.totalLiquidityShares);
+  const providerShare = position.shares.div(event.totalLiquidityShares);
 
   const providerProfit = pool === "aboveEq"
-    ? shares.times(poolB).idiv(totalShares).minus(providedB)
-    : shares.times(poolA).idiv(totalShares).minus(providedA);
+    ? providerShare.times(event.poolBelow)
+      .minus(position.providedBelow)
+    : providerShare.times(event.poolAboveEq)
+      .minus(position.providedAboveEq);
 
   const fee = providerProfit.isGreaterThan(0)
-    ? providerProfit.times(profitFee).idiv(precision)
+    ? providerProfit.times(profitFee)
     : 0;
 
-  const providedMax = BigNumber.max(providedA, providedB);
+  const providedMax = BigNumber.max(
+    position.providedAboveEq,
+    position.providedBelow);
 
   return betReturn.plus(providedMax).plus(providerProfit).minus(fee);
 }

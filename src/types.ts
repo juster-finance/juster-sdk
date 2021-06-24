@@ -12,3 +12,11 @@ export type EventType = {
   betsCloseTime: Date,
   liquidityPercent: BigNumber
 }
+
+export type PositionType = {
+  rewardAboveEq: BigNumber,
+  rewardBelow: BigNumber,
+  shares: BigNumber,
+  providedAboveEq: BigNumber,
+  providedBelow: BigNumber
+}

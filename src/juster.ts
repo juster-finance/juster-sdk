@@ -8,16 +8,24 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 import config from "./config.json"
 import BigNumber from "bignumber.js";
 import { NetworkType } from '@airgap/beacon-sdk';
-import { Network, EntrypointName, BetType, EventType } from './types'
+import {
+  Network,
+  EntrypointName,
+  BetType,
+  EventType,
+  PositionType
+} from './types'
 import {
   ApolloClient,
   HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
   gql,
-  ApolloQueryResult
 } from "@apollo/client/core";
-import { deserializeEvent } from './serialization'
+import {
+  deserializeEvent,
+  deserializePosition
+} from './serialization'
 import { graphql } from "graphql";
 
 
@@ -110,7 +118,7 @@ export class Juster {
     args: any,
     amount: number = 0
   ): Promise<TransactionWalletOperation> {
-    const mutez = true;
+    const mutez = false;
     return new ContractMethod(
       this._tezos.wallet,
       this._contractAddress,
@@ -175,10 +183,16 @@ export class Juster {
     return this.callMethodSend("provideLiquidity", args);
   };
 
+  /**
+   * Performs request to graphql API with event data for given eventId
+   *
+   * @param eventId nat number of event
+   * @returns promise with EventType
+   */
   getEvent(
     eventId: number
   ): Promise<EventType> {
-    const query = gql`query MyQuery {
+    const query = gql`query EventQuery {
       juster_event(where: {id: {_eq: ${ eventId }}}) {
         pool_above_eq
         pool_below
@@ -189,6 +203,7 @@ export class Juster {
       }
     }`
 
+    // TODO: turn off auto deserialization of numbers
     // TODO: unpack data and return EventType object? (or promise with EventType)
     const eventPromise: Promise<EventType> = this._grapghQlClient
       .query({query: query})
@@ -202,6 +217,44 @@ export class Juster {
     });
 
     return eventPromise
+  };
+
+  /**
+   * Performs request to graphql API with user position data for given eventId
+   * and participantAddress
+   *
+   * @param eventId nat number of event
+   * @param participantAddress address of the user
+   * @returns promise with PositionType
+   */
+  getPosition(
+    eventId: number,
+    participantAddress: string
+  ): Promise<PositionType> {
+    const query = gql`query PositionQuery {
+      juster_position(where: {user: {address: {_eq: "${ participantAddress }"}}, event_id: {_eq: ${ eventId }}}) {
+        liquidity_provided_above_eq
+        liquidity_provided_below
+        reward_above_eq
+        reward_below
+        shares
+      }
+    }`
+
+    // TODO: turn off auto deserialization of numbers
+    // TODO: unpack data and return EventType object? (or promise with EventType)
+    const positionPromise: Promise<PositionType> = this._grapghQlClient
+      .query({query: query})
+      .then(result => {
+        // TODO: is it good to select 0 object? What happens if there are more
+        // items in array? (should not happen)
+        const rawPosition = result.data.juster_position[0];
+
+        // TODO: check if there are any errors while request?
+        return deserializePosition(rawPosition)
+    });
+
+    return positionPromise
   }
 }
 

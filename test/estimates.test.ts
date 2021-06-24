@@ -6,17 +6,31 @@ import {
   estimateFeeMultiplier
 } from "../src/estimates";
 import rawEvents from "./data/events.json"
-import positions from "./data/positions.json"
+import rawPositions from "./data/positions.json"
 import BigNumber from "bignumber.js";
-import { EventType } from '../src/types'
-import { deserializeEvent } from '../src/serialization'
+import {
+  EventType,
+  PositionType
+} from '../src/types'
+import {
+  deserializeEvent,
+  deserializePosition
+} from '../src/serialization'
 
 
-let events = new Map<string, EventType>(
+const events = new Map<string, EventType>(
   Object.entries(rawEvents).map(([name, event]) => {
     return [name, deserializeEvent(event)];
   })
 );
+
+
+const positions = new Map<string, PositionType>(
+  Object.entries(rawPositions).map(([name, position]) => {
+    return [name, deserializePosition(position)];
+  })
+);
+
 
 test("estimateBetReward", async () => {
   let reward: BigNumber;
@@ -73,35 +87,32 @@ test("estimateShares", async () => {
 
 
 test("estimatePosition", async () => {
-  let position: string;
+  let position: BigNumber;
 
   // Position for bettor in the pool with bet contains bet:
   position = calculatePosition(
-    positions["betA 1000"],
+    positions.get("betA 1000")!,
     events.get("1m:1m")!,
     "aboveEq",
-    new BigNumber(0),
-    new BigNumber(1000000)).toFixed();
-  expect(position).toBe("1000");
+    new BigNumber(0));
+  expect(position.toFixed()).toBe("0.001");
 
   // Position for bettor in the pool witout bet is 0:
   position = calculatePosition(
-    positions["betA 1000"],
+    positions.get("betA 1000")!,
     events.get("1m:1m")!,
     "below",
-    new BigNumber(0),
-    new BigNumber(1000000)).toFixed();
-  expect(position).toBe("0");
+    new BigNumber(0));
+  expect(position.toFixed()).toBe("0");
 
   // Position for liquidity provider that have 0.1% in event shares:
   // 1000 (poolBelow) + 1000 (providedBelow) - 1000 (providedMin)
   position = calculatePosition(
-    positions["LP 1000"],
+    positions.get("LP 1000")!,
     events.get("1m:1m")!,
     "aboveEq",
-    new BigNumber(0),
-    new BigNumber(1000000)).toFixed();
-  expect(position).toBe("1000");
+    new BigNumber(0));
+  expect(position.toFixed()).toBe("0.001");
 
   // Position for liquidity provider that have 100% in event shares
   // with fee 20%:
@@ -109,23 +120,21 @@ test("estimatePosition", async () => {
   // profit is 4000 - 1000 provided = 3000
   // fee is 3000*20% = 600
   position = calculatePosition(
-    positions["LP 1000"],
+    positions.get("LP 1000")!,
     events.get("1k:4k")!,
     "aboveEq",
-    new BigNumber(200000),
-    new BigNumber(1000000)).toFixed();
-  expect(position).toBe("3400");
+    new BigNumber(0.2));
+  expect(position.toFixed()).toBe("0.0034");
 
   // Position for LP 100% that bettor B at the same time:
   // 4000000 (bet) + 1000000 (poolAboveEq)
   // + 500000 (providedBelow) - 500000 (providedMin)
   position = calculatePosition(
-    positions["LP 1m + betB 4m"],
+    positions.get("LP 1m + betB 4m")!,
     events.get("1m:1m")!,
     "below",
-    new BigNumber(0),
-    new BigNumber(1000000)).toFixed();
-  expect(position).toBe("5000000");
+    new BigNumber(0));
+  expect(position.toFixed()).toBe("5");
 
 });
 
