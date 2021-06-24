@@ -29,6 +29,11 @@ import {
 import { graphql } from "graphql";
 
 
+// TODO: move this consts into config/somewhere?
+const XTZ_DECIMALS = new BigNumber(1000000);
+const RATIO_PRECISION = new BigNumber(100000000);
+
+
 const createApolloClient = (uri: string) => {
   return new ApolloClient({
     link: new HttpLink({ uri }),
@@ -148,12 +153,16 @@ export class Juster {
   bet(
     eventId: number,
     bet: BetType,
-    betValue: number,
-    minimalWinAmount: BigNumber.Value,
+    betValue: BigNumber,
+    minimalWinAmount: BigNumber,
   ): Promise<TransactionWalletOperation> {
-    const args = [bet, 'unit', eventId, minimalWinAmount];
-    // TODO: should betValue be BigNumber.Value?
-    return this.callMethodSend("bet", args, betValue);
+    const args = [
+      bet,
+      'unit',
+      eventId,
+      minimalWinAmount.times(XTZ_DECIMALS).integerValue().toNumber()
+    ];
+    return this.callMethodSend("bet", args, betValue.toNumber());
   };
 
   /**
@@ -168,13 +177,18 @@ export class Juster {
    */
   provideLiquidity(
     eventId: number,
-    expectedRatioAboveEq: BigNumber.Value,
-    expectedRatioBellow: BigNumber.Value,
-    maxSlippage: BigNumber.Value,
-    amount: number
+    expectedRatioAboveEq: BigNumber,
+    expectedRatioBellow: BigNumber,
+    maxSlippage: BigNumber,
+    amount: BigNumber
   ): Promise<TransactionWalletOperation> {
-    const args = [eventId, expectedRatioAboveEq, expectedRatioBellow, maxSlippage];
-    return this.callMethodSend("provideLiquidity", args, amount);
+    const args = [
+      eventId,
+      expectedRatioAboveEq.times(XTZ_DECIMALS).integerValue().toNumber(),
+      expectedRatioBellow.times(XTZ_DECIMALS).integerValue().toNumber(),
+      maxSlippage.times(RATIO_PRECISION).integerValue().toNumber()
+    ];
+    return this.callMethodSend("provideLiquidity", args, amount.toNumber());
   };
 
   /**
