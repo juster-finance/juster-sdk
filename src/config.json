@@ -1,10 +1,5 @@
 {
   "appName": "Juster",
-  "liquidityPrecision": 1000000,
-  "providerProfitFeePrecision": 1000000,
-  "ratioPrecision": 100000000,
-  "sharePrecision": 100000000,
-  "targetDynamicsPrecision": 1000000,
   "networks": {
     "testnet": {
       "contractAddress": "KT1CepDBrMg73d7LHm773KAsunjAjgLYituP",
