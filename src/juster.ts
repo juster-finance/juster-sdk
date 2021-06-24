@@ -106,6 +106,15 @@ export class Juster {
   };
 
   /**
+   * Return user address (public key hash)
+   */
+  getPkh(): Promise<string> {
+    // TODO: consider saving this PKH inside sync and returing string here
+    // instead of promise?
+    return this._provider.getPKH()
+  }
+
+  /**
    * Creates new ContractMethod and performs send call to the contract
    *
    * @param entrypoint contract entrypoint name
