@@ -53,7 +53,8 @@ export const ProvideLiquidityForm: FunctionComponent<ProvideLiquidityProps> = ({
             }
           })
           .catch((err) => console.log(err));
-      });
+      })
+      .catch((err) => console.log(err));
   };
 
   return (

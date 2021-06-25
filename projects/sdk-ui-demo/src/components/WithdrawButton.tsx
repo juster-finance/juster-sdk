@@ -33,7 +33,8 @@ export const WithdrawButton: FunctionComponent<WithdrawProps> = ({ eventId, pkh,
             }
           })
           .catch((err) => console.log(err));
-      });
+      })
+      .catch((err) => console.log(err));
   };
   
   return (
