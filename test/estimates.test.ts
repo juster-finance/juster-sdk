@@ -3,7 +3,8 @@ import {
   estimateBetReward,
   estimateShares,
   calculatePosition,
-  estimateFeeMultiplier
+  estimateFeeMultiplier,
+  calculateRatio
 } from "../src/estimates";
 import rawEvents from "./data/events.json"
 import rawPositions from "./data/positions.json"
@@ -156,4 +157,31 @@ test("estimateLiquidityFee", async () => {
   fee = estimateFeeMultiplier(
     events.get("1m:1m")!, dateBetween).toFixed();
   expect(fee).toBe("0.005");
+});
+
+
+test("estimateRatioAfterBet", async () => {
+  let ratio: BigNumber;
+  let betValue: BigNumber;
+  let winDelta: BigNumber;
+
+  // +1tez to below, -0.5tez from below would be 0.5:2 === 0.25
+  betValue = new BigNumber(1.0);
+  winDelta = new BigNumber(0.5);
+  ratio = calculateRatio(
+    events.get("1m:1m")!,
+    "below",
+    betValue,
+    winDelta);
+  expect(ratio.toFixed()).toBe("0.25");
+
+  // +0.001tez to aboveEq, -0.003tez from below would be 1k:4k === 0.25 too
+  betValue = new BigNumber(0.003);
+  winDelta = new BigNumber(0.003);
+  ratio = calculateRatio(
+    events.get("1k:4k")!,
+    "aboveEq",
+    betValue,
+    winDelta);
+  expect(ratio.toFixed()).toBe("0.25");
 });

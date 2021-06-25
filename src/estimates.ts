@@ -46,7 +46,7 @@ import {
   const poolTo = pool === "aboveEq" ? event.poolAboveEq : event.poolBelow;
   const poolFrom = pool === "aboveEq" ? event.poolBelow : event.poolAboveEq;
 
-  const ratio = poolFrom.plus(valueBiasFrom).div(valueBiasTo.plus(poolTo));
+  const ratio = poolFrom.minus(valueBiasFrom).div(valueBiasTo.plus(poolTo));
   return ratio
 }
 
