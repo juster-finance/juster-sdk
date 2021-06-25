@@ -3,7 +3,8 @@ import {
   Juster,
   EventType,
   calculateRatio,
-  BetType
+  BetType,
+  estimateFeeMultiplier
 } from 'juster-sdk';
 import BigNumber from "bignumber.js";
 
@@ -17,11 +18,37 @@ export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster })
   // TODO: make hook to use juster?
 
   const [amount, setAmount] = useState<BigNumber>(new BigNumber(0));
-  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(0.05));
-  // TODO: maybe it is better to have ratio as BigNumber?
+
+  // Slippage is pecent that used to reduce winDelta a bit but make this
+  // bet transaction stable to ratio changes that may happen while
+  // transaction accepted:
+  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(0.005));
+
+  // Ratio is the multiplier for bet amount that would be bettor profit if
+  // he succeed in event:
   const [ratio, setRatio] = useState<BigNumber>(new BigNumber(0));
+
+  // fee is liquidity, that paid to Liquidity Providers + JUSTER DAO
+  // it is cutted from winDelta:
+  const [fee, setFee] = useState<BigNumber>(new BigNumber(0));
+
   const [betType, setBetType] = useState<BetType>("aboveEq");
+
+  // Possible win amount: it is expected fixed win amount that would receive bettor:
+  const [possibleWinAmount, setPossibleWinAmount] = useState<BigNumber>(new BigNumber(0));
+
+  // Minimal win amount is possibleWinAmount without slippage multiplier used
+  // to increase chance that transaction would be succeed:
   const [minimalWinAmount, setMinimalWinAmount] = useState<BigNumber>(new BigNumber(0));
+
+  // Ratio before bet is the ratio that was in the pool before bet changed it:
+  const [ratioBeforeBet, setRatioBeforeBet] = useState<BigNumber>(new BigNumber(0));
+
+  // Ratio after bet is the ratio that would be in the pool after bet changed it:
+  const [ratioAfterBet, setRatioAfterBet] = useState<BigNumber>(new BigNumber(0));
+
+  // TODO: Show pool change effect?
+  // TODO: update all values after initialization?
 
   if (event === null) {
     return <div></div>
@@ -32,14 +59,29 @@ export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster })
     slippage: BigNumber,
     betType: BetType
   ) => {
-    // TODO: add liquidity fee calculation
     // TODO: should this possibleWinAmount / minimalWinAmount calculation moved to SDK?
+    // TODO: maybe create one function that returns objkt with all required data?
+    const fee = estimateFeeMultiplier(event, new Date());
+    const feeMultiplier = new BigNumber(1).minus(fee);
+
     const ratio = calculateRatio(event, betType, amount);
-    const winDelta = amount.times(ratio);
-    const multiplier = new BigNumber(1).minus(slippage);
+    const winDelta = amount.times(ratio).times(feeMultiplier);
+
+    const possibleWinAmount = winDelta.plus(amount);
+    const slippageMultiplier = new BigNumber(1).minus(slippage);
+    const minimalWinAmount = winDelta.times(slippageMultiplier).plus(amount);
+
     setAmount(amount);
-    setMinimalWinAmount(winDelta.times(multiplier).plus(amount));
+    setFee(fee);
+    setPossibleWinAmount(possibleWinAmount);
+    setMinimalWinAmount(minimalWinAmount);
     setRatio(ratio);
+
+    // Info parameters:
+    const ratioBeforeBet = calculateRatio(event, betType);
+    const ratioAfterBet = calculateRatio(event, betType, amount, winDelta);
+    setRatioBeforeBet(ratioBeforeBet);
+    setRatioAfterBet(ratioAfterBet)
   };
 
   const handleAmountChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +119,8 @@ export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster })
             }
           })
           .catch((err) => console.log(err));
-      });
+      })
+      .catch((err) => console.log(err));
   };
   
   return (
@@ -96,10 +139,18 @@ export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster })
           defaultValue={amount.toFixed(6) || ''}/>
       </p>
       <p>
+        <span>Liquidity fee:</span>
+        <span>{fee.toFixed(3)}</span>
+      </p>
+      <p>
         <span>Slippage percent:</span>
         <input
           onChange={handleSlippageChange}
           defaultValue={slippage.toFixed(3) || ''}/>
+      </p>
+      <p>
+        <span>Possible Win Amount:</span>
+        <span>{possibleWinAmount.toFixed(6)}</span>
       </p>
       <p>
         <span>Minimal Win Amount:</span>
@@ -107,7 +158,7 @@ export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster })
       </p>
       <p>
         <span>Ratio for bet:</span>
-        <span>{ratio.toFixed(3)}</span>
+        <span>{ratio.toFixed(3)} ({ratioBeforeBet.toFixed(3)} &#10140; {ratioAfterBet.toFixed(3)})</span>
       </p>
 
       <button
