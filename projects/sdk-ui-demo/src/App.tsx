@@ -17,31 +17,33 @@ const juster = Juster.create("testnet");
 
 function App() {
   const [eventId, setEventId] = useState<number>(12);
-
   const [event, setEvent] = useState<EventType | null>(null);
   const [position, setPosition] = useState<PositionType | null>(null);
   const [pkh, setPkh] = useState<string | null>(null);
 
-  const update = async () => {
-    if (eventId !== null) {
-      const updEvent = await juster.getEvent(eventId);
-      setEvent(updEvent);
-      console.log(updEvent);
-    }
+  const update = async (
+    eventId: number,
+    pkh: string | null
+  ) => {
+    const updEvent = await juster.getEvent(eventId);
+    setEvent(updEvent);
 
     if ((pkh !== null) && (eventId !== null)) {
       const updPosition = await juster.getPosition(eventId, pkh)
       setPosition(updPosition);
-      console.log(updPosition);
-    }
+    };
+
+    setPkh(pkh);
+    setEventId(eventId);
   };  
 
   const handleSync = async (e: FormEvent<HTMLButtonElement>) => {
     await juster!.sync();
-    const newPkh = await juster!.getPkh();
-    setPkh(newPkh)
-    update()
-  }
+    juster!.getPkh().then((pkh) => {
+      console.log("newPkh: ", pkh)
+      update(eventId, pkh)
+    });
+  };
 
   return (
     <div className="App">
@@ -56,7 +58,7 @@ function App() {
         </button>
 
         <button
-          onClick={(e) => update()}
+          onClick={(e) => update(eventId, pkh)}
         >
           update
         </button>
