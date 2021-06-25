@@ -6,6 +6,7 @@ import {
 } from './types'
 
 
+// TODO: rename it to just estimateFee, because multiplier 1-fee?
 /**
  * Estimated liquidity fee multiplier for added bet
  *
@@ -32,18 +33,20 @@ import {
  *
  * @param event Juster event that used to calculate position
  * @param pool either AboveEq or Below pool
- * @param valueBias optional bet amount that would change ratio
+ * @param valueBiasTo optional bet amount that adds into pool and change ratio
+ * @param valueBiasFrom optional winDelta amount that adds into opposite pol and change ratio
  * @returns calculated ratio for give value
  */
  export function calculateRatio(
   event: EventType,
   pool: BetType,
-  valueBias: BigNumber = new BigNumber(0)
+  valueBiasTo: BigNumber = new BigNumber(0),
+  valueBiasFrom: BigNumber = new BigNumber(0)
 ): BigNumber {
   const poolTo = pool === "aboveEq" ? event.poolAboveEq : event.poolBelow;
   const poolFrom = pool === "aboveEq" ? event.poolBelow : event.poolAboveEq;
 
-  const ratio = poolFrom.div(valueBias.plus(poolTo));
+  const ratio = poolFrom.plus(valueBiasFrom).div(valueBiasTo.plus(poolTo));
   return ratio
 }
 
