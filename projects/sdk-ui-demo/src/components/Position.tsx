@@ -28,19 +28,19 @@ export const PositionComponent: FunctionComponent<PositionProps> = ({ position, 
 
   let positionA: string = position === null
     ? "-"
-    : calculatePosition(position, event!, "aboveEq", new BigNumber(0)).toFixed();
+    : calculatePosition(position, event!, "aboveEq", new BigNumber(0)).toFixed(6);
 
   let positionB: string = position === null
     ? "-"
-    : calculatePosition(position, event!, "below", new BigNumber(0)).toFixed();
+    : calculatePosition(position, event!, "below", new BigNumber(0)).toFixed(6);
 
   let shares: string = position === null
     ? "-"
-    : position.shares.toFixed();
+    : position.shares.toFixed(3);
 
   return (
     <div className="Grid">
-      Address: {pkh || "-"}
+      Position for address: {pkh || "-"}
       <p>
         <span>position aboveEq wins:</span>
         <span>{positionA} xtz</span>

@@ -19,7 +19,7 @@ export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster })
   const [amount, setAmount] = useState<BigNumber>(new BigNumber(0));
   const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(0.05));
   // TODO: maybe it is better to have ratio as BigNumber?
-  const [ratioString, setRatio] = useState<string>("-");
+  const [ratio, setRatio] = useState<BigNumber>(new BigNumber(0));
   const [betType, setBetType] = useState<BetType>("aboveEq");
   const [minimalWinAmount, setMinimalWinAmount] = useState<BigNumber>(new BigNumber(0));
 
@@ -27,8 +27,6 @@ export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster })
     return <div></div>
   };
 
-  // TODO: I feel that it can be done a lot easier with some kind of mutations
-  // that I was not worked with, but this is just example:
   const updateValues = (
     amount: BigNumber,
     slippage: BigNumber,
@@ -41,13 +39,8 @@ export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster })
     const multiplier = new BigNumber(1).minus(slippage);
     setAmount(amount);
     setMinimalWinAmount(winDelta.times(multiplier).plus(amount));
-    setRatio(ratio.toFixed());
+    setRatio(ratio);
   };
-
-  // TODO: is it important to have this?:
-  if (ratioString === "-") {
-    updateValues(amount, slippage, betType);
-  }
 
   const handleAmountChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const newAmount = new BigNumber(e.target.value)
@@ -100,21 +93,21 @@ export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster })
         <span>Amount:</span>
         <input
           onChange={handleAmountChange}
-          defaultValue={amount.toFixed() || ''}/>
+          defaultValue={amount.toFixed(6) || ''}/>
       </p>
       <p>
         <span>Slippage percent:</span>
         <input
           onChange={handleSlippageChange}
-          defaultValue={slippage.toFixed() || ''}/>
+          defaultValue={slippage.toFixed(3) || ''}/>
       </p>
       <p>
         <span>Minimal Win Amount:</span>
-        <span>{minimalWinAmount.toFixed()}</span>
+        <span>{minimalWinAmount.toFixed(6)}</span>
       </p>
       <p>
         <span>Ratio for bet:</span>
-        <span>{ratioString}</span>
+        <span>{ratio.toFixed(3)}</span>
       </p>
 
       <button

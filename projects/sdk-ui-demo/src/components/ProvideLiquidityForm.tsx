@@ -67,11 +67,11 @@ export const ProvideLiquidityForm: FunctionComponent<ProvideLiquidityProps> = ({
       </p>
       <p>
         <span>Ratio:</span>
-        <span>{ratio.toFixed()}</span>
+        <span>{ratio.toFixed(3)}</span>
       </p>
       <p>
         <span>New shares:</span>
-        <span>{newShares.toFixed()}</span>
+        <span>{newShares.toFixed(3)}</span>
       </p>
       <button
           onClick={handleProvideLiquidity}

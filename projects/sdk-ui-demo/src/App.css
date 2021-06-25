@@ -19,6 +19,15 @@
 
 .Grid p {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-gap: 10px;
+}
+
+.Grid {
+  max-width: 50%;
+  margin: auto;
+}
+
+.Grid span {
+  text-align: left;
 }

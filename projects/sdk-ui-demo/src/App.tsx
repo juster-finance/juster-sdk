@@ -62,9 +62,11 @@ function App() {
         >
           update
         </button>
-
-        <PositionComponent position={position} event={event} pkh={pkh}/>
+    
+        <hr/>
         <EventComponent eventId={eventId} event={event}/>
+        <hr/>
+        <PositionComponent position={position} event={event} pkh={pkh}/>
         <hr/>
         <ProvideLiquidityForm eventId={eventId} event={event} juster={juster}/>
         <hr/>

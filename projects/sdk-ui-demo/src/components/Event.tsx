@@ -18,11 +18,15 @@ export const EventComponent: FunctionComponent<EventProps> = ({ eventId, event }
 
   let ratioA: string = event === null
     ? "-"
-    : calculateRatio(event, "aboveEq").toFixed();
+    : calculateRatio(event, "aboveEq").toFixed(3);
 
   let ratioB: string = event === null
     ? "-"
-    : calculateRatio(event, "below").toFixed();
+    : calculateRatio(event, "below").toFixed(3);
+
+  let totalShares: string = event === null
+    ? "-"
+    : event.totalLiquidityShares.toFixed(3);
 
   return (
     <div className="Grid">
@@ -34,6 +38,10 @@ export const EventComponent: FunctionComponent<EventProps> = ({ eventId, event }
       <p>
         <span>Ratio Below:</span>
         <span>{ratioB}</span>
+      </p>
+      <p>
+        <span>Total Event Shares:</span>
+        <span>{totalShares}</span>
       </p>
     </div>
   );
