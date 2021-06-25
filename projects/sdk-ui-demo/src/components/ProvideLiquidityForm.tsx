@@ -1,5 +1,10 @@
 import React, { FunctionComponent, FormEvent, useState, ChangeEvent } from 'react';
-import { Juster, EventType, calculateRatio } from 'juster-sdk';
+import {
+  Juster,
+  EventType,
+  calculateRatio,
+  estimateShares
+} from 'juster-sdk';
 import BigNumber from "bignumber.js";
 
 type ProvideLiquidityProps = {
@@ -12,19 +17,21 @@ export const ProvideLiquidityForm: FunctionComponent<ProvideLiquidityProps> = ({
   // TODO: make hook to use juster?
 
   const [amount, setAmount] = useState<BigNumber>(new BigNumber(0));
+  const [newShares, setNewShares] = useState<BigNumber>(new BigNumber(0));
   const [maxSlippage, setMaxSlippage] = useState<BigNumber>(new BigNumber(0.05));
-  const [ratio, setRatio] = useState<string>("-");
+  const [ratio, setRatio] = useState<BigNumber>(new BigNumber(0.05));
 
   if (event === null) {
     return <div></div>
   };
 
-  if (ratio === "-") {
-    setRatio(calculateRatio(event, "aboveEq").toFixed());
-  }
-
   const handleAmountChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    setAmount(new BigNumber(e.target.value))
+    const provided = new BigNumber(e.target.value);
+    setNewShares(estimateShares(event, provided));
+
+    // Ratio for shares calculated for one pool, let it be aboveEq:
+    setRatio(calculateRatio(event, "aboveEq"));
+    setAmount(provided);
   };
 
   // TODO: need to show new shares that would receive participant
@@ -53,13 +60,19 @@ export const ProvideLiquidityForm: FunctionComponent<ProvideLiquidityProps> = ({
     <div className="Grid">Provide Liquidity:
       <p>
         <span>Amount:</span>
-        <input onChange={handleAmountChange}/>
+        <input
+          onChange={handleAmountChange}
+          defaultValue={amount.toFixed() || ''}
+        />
       </p>
       <p>
         <span>Ratio:</span>
-        <span>{ratio}</span>
+        <span>{ratio.toFixed()}</span>
       </p>
-
+      <p>
+        <span>New shares:</span>
+        <span>{newShares.toFixed()}</span>
+      </p>
       <button
           onClick={handleProvideLiquidity}
         >
