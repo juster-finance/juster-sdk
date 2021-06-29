@@ -15,31 +15,17 @@ import {
   EventType,
   PositionType
 } from './types'
-import {
-  ApolloClient,
-  HttpLink,
-  InMemoryCache,
-  NormalizedCacheObject,
-  gql,
-} from "@apollo/client/core";
+import { createClient, Client } from './genql_client'
 import {
   deserializeEvent,
   deserializePosition
 } from './serialization'
-import { graphql } from "graphql";
 
 
 // TODO: move this consts into config/somewhere?
 const XTZ_DECIMALS = new BigNumber(1000000);
 const RATIO_PRECISION = new BigNumber(100000000);
 
-
-const createApolloClient = (uri: string) => {
-  return new ApolloClient({
-    link: new HttpLink({ uri }),
-    cache: new InMemoryCache(),
-  });
-};
 
 // TODO: move all precisions in config into one objkt?
 
@@ -49,7 +35,7 @@ export class Juster {
   protected _provider: BeaconWallet;
   protected _contractAddress: string;
   protected _entrypoints: Map<string, ParameterSchema>;
-  protected _grapghQlClient: ApolloClient<NormalizedCacheObject>
+  protected _genqlClient: Client;
 
   constructor(
     network: Network,
@@ -79,7 +65,7 @@ export class Juster {
       }),
     );
 
-    this._grapghQlClient = createApolloClient(graphqlUri);
+    this._genqlClient = createClient({ url: graphqlUri });
   };
 
   static create(
@@ -215,32 +201,31 @@ export class Juster {
   getEvent(
     eventId: number
   ): Promise<EventType> {
-    const query = gql`query EventQuery {
-      juster_event(where: {id: {_eq: ${ eventId }}}) {
-        pool_above_eq
-        pool_below
-        total_liquidity_shares
-        created_time
-        bets_close_time
-        liquidity_percent
-      }
-    }`
+    const eventPromise: Promise<EventType> = this._genqlClient.query({
+      juster_event: [
+        {
+          where: {id: {_eq: eventId}}
+        },
+        {
+          pool_above_eq: true,
+          pool_below: true,
+          total_liquidity_shares: true,
+          created_time: true,
+          bets_close_time: true,
+          liquidity_percent: true
+        }
+      ]
+    }).then(result => {
+      // TODO: is it good to select 0 object? What happens if there are more
+      // items in array? (should not happen)
+      const rawEvent = result.juster_event[0];
 
-    // TODO: turn off auto deserialization of numbers
-    // TODO: unpack data and return EventType object? (or promise with EventType)
-    const eventPromise: Promise<EventType> = this._grapghQlClient
-      .query({query: query})
-      .then(result => {
-        // TODO: is it good to select 0 object? What happens if there are more
-        // items in array? (should not happen)
-        const rawEvent = result.data.juster_event[0];
+      // TODO: check if there are any errors while request?
+      return deserializeEvent(rawEvent)
+  });
 
-        // TODO: check if there are any errors while request?
-        return deserializeEvent(rawEvent)
-    });
-
-    return eventPromise
-  };
+  return eventPromise
+  }
 
   /**
    * Performs request to graphql API with user position data for given eventId
@@ -254,24 +239,28 @@ export class Juster {
     eventId: number,
     participantAddress: string
   ): Promise<PositionType> {
-    const query = gql`query PositionQuery {
-      juster_position(where: {user: {address: {_eq: "${ participantAddress }"}}, event_id: {_eq: ${ eventId }}}) {
-        liquidity_provided_above_eq
-        liquidity_provided_below
-        reward_above_eq
-        reward_below
-        shares
-      }
-    }`
 
     // TODO: turn off auto deserialization of numbers
-    // TODO: unpack data and return EventType object? (or promise with EventType)
-    const positionPromise: Promise<PositionType> = this._grapghQlClient
-      .query({query: query})
-      .then(result => {
+    const positionPromise: Promise<PositionType> = this._genqlClient.query({
+      juster_position: [
+        {
+          where: {
+            user: {address: {_eq: participantAddress}},
+            event_id: {_eq: eventId}
+          }
+        },
+        {
+          liquidity_provided_above_eq: true,
+          liquidity_provided_below: true,
+          reward_above_eq: true,
+          reward_below: true,
+          shares: true,
+        }
+      ]
+    }).then(result => {
         // TODO: is it good to select 0 object? What happens if there are more
         // items in array? (should not happen)
-        const rawPosition = result.data.juster_position[0];
+        const rawPosition = result.juster_position[0];
 
         // TODO: check if there are any errors while request?
         return deserializePosition(rawPosition)
