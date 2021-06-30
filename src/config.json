@@ -1,5 +1,7 @@
 {
   "appName": "Juster",
+  "ratioPrecision": "100000000",
+  "providerProfitFee": "0.1",
   "networks": {
     "testnet": {
       "contractAddress": "KT1CepDBrMg73d7LHm773KAsunjAjgLYituP",

@@ -22,13 +22,6 @@ import {
 } from './serialization'
 
 
-// TODO: move this consts into config/somewhere?
-const XTZ_DECIMALS = new BigNumber(1000000);
-const RATIO_PRECISION = new BigNumber(100000000);
-
-
-// TODO: move all precisions in config into one objkt?
-
 export class Juster {
   protected _network: Network;
   protected _tezos: TezosToolkit;
@@ -36,7 +29,10 @@ export class Juster {
   protected _contractAddress: string;
   protected _entrypoints: Map<string, ParameterSchema>;
   protected _genqlClient: Client;
+  protected _xtzDecimals: BigNumber;
+  protected _ratioPrecision: BigNumber;
 
+  public providerProfitFee: BigNumber;
   public unsubscribeFromEvent: () => void;
   public unsubscribeFromPosition: () => void;
 
@@ -47,7 +43,9 @@ export class Juster {
     entrypoints: Record<string, any>,
     appName: string,
     graphqlUri: string,
-    subscriptionUri: string
+    subscriptionUri: string,
+    providerProfitFee: string,
+    ratioPrecision: string,
   ) {
     this._network = network;
     this._tezos = tezos;
@@ -76,14 +74,30 @@ export class Juster {
 
     this.unsubscribeFromEvent = () => {};
     this.unsubscribeFromPosition = () => {};
+
+    this._xtzDecimals = new BigNumber(1000000);
+    this._ratioPrecision = new BigNumber(ratioPrecision);
+    this.providerProfitFee = new BigNumber(providerProfitFee);
   };
 
   static create(
     network: Network,
   ) {
     const networkSettings = config.networks[network];
-    const { contractAddress, rpcNode, graphqlUri, subscriptionUri } = networkSettings;
-    const { appName, entrypoints } = config;
+
+    const {
+      contractAddress,
+      rpcNode,
+      graphqlUri,
+      subscriptionUri
+    } = networkSettings;
+
+    const {
+      appName,
+      entrypoints,
+      providerProfitFee,
+      ratioPrecision
+    } = config;
 
     const tezos = new TezosToolkit(rpcNode);
     return new Juster(
@@ -93,7 +107,9 @@ export class Juster {
       entrypoints,
       appName,
       graphqlUri,
-      subscriptionUri
+      subscriptionUri,
+      providerProfitFee,
+      ratioPrecision
     )
   };
 
@@ -157,7 +173,7 @@ export class Juster {
       bet,
       'unit',
       eventId,
-      minimalWinAmount.times(XTZ_DECIMALS).integerValue().toNumber()
+      minimalWinAmount.times(this._xtzDecimals).integerValue().toNumber()
     ];
     return this.callMethodSend("bet", args, betValue.toNumber());
   };
@@ -181,9 +197,9 @@ export class Juster {
   ): Promise<TransactionWalletOperation> {
     const args = [
       eventId,
-      expectedRatioAboveEq.times(XTZ_DECIMALS).integerValue().toNumber(),
-      expectedRatioBellow.times(XTZ_DECIMALS).integerValue().toNumber(),
-      maxSlippage.times(RATIO_PRECISION).integerValue().toNumber()
+      expectedRatioAboveEq.times(this._xtzDecimals).integerValue().toNumber(),
+      expectedRatioBellow.times(this._xtzDecimals).integerValue().toNumber(),
+      maxSlippage.times(this._ratioPrecision).integerValue().toNumber()
     ];
     return this.callMethodSend("provideLiquidity", args, amount.toNumber());
   };
