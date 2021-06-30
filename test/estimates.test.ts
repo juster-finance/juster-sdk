@@ -137,6 +137,8 @@ test("estimatePosition", async () => {
     new BigNumber(0));
   expect(position.toFixed()).toBe("5");
 
+  // TODO: add test with providerFee > 0 (for example with 100% fee when
+  // provider would have no profit)
 });
 
 
