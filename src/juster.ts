@@ -234,7 +234,7 @@ export class Juster {
    * @param eventId nat number of event
    * @param updateCallback function with EventType arg that called each time
    *    new update received
-   * @returns promise with EventType
+   * @returns unsubscribe function
    */
   async subscribeToEvent(
     eventId: number,
@@ -303,5 +303,45 @@ export class Juster {
 
     return positionPromise
   }
-}
 
+  /**
+   * Subscribes to position updates, calls updateCallback each time when
+   * new update received
+   *
+   * @param eventId nat number of event
+   * @param participantAddress address of the user
+   * @param updateCallback function with PositionType arg that called each time
+   *    new update received
+   * @returns unsubscribe function
+   */
+   async subscribeToPosition(
+    eventId: number,
+    participantAddress: string,
+    updateCallback: (event: PositionType) => void
+  ): Promise<() => void> {
+    const { unsubscribe } = this._genqlClient.subscription({
+      juster_position: [
+        {
+          where: {
+            user: {address: {_eq: participantAddress}},
+            event_id: {_eq: eventId}
+          }
+        },
+        {
+          liquidity_provided_above_eq: true,
+          liquidity_provided_below: true,
+          reward_above_eq: true,
+          reward_below: true,
+          shares: true,
+        }
+      ]
+    }).subscribe({
+      // TODO: I feel that this is too complicated and there is smth wrong doing this:
+      next: (result) => updateCallback(
+        deserializePosition(result.juster_position[0])),
+      error: console.error,
+  });
+
+  return unsubscribe
+  }
+}
