@@ -43,7 +43,8 @@ export class Juster {
     tezos: TezosToolkit,
     entrypoints: Record<string, any>,
     appName: string,
-    graphqlUri: string
+    graphqlUri: string,
+    subscriptionUri: string
   ) {
     this._network = network;
     this._tezos = tezos;
@@ -65,14 +66,17 @@ export class Juster {
       }),
     );
 
-    this._genqlClient = createClient({ url: graphqlUri });
+    this._genqlClient = createClient({
+      url: graphqlUri,
+      subscription: {url: subscriptionUri}
+    });
   };
 
   static create(
     network: Network,
   ) {
     const networkSettings = config.networks[network];
-    const { contractAddress, rpcNode, graphqlUri } = networkSettings;
+    const { contractAddress, rpcNode, graphqlUri, subscriptionUri } = networkSettings;
     const { appName, entrypoints } = config;
 
     const tezos = new TezosToolkit(rpcNode);
@@ -82,7 +86,8 @@ export class Juster {
       tezos,
       entrypoints,
       appName,
-      graphqlUri
+      graphqlUri,
+      subscriptionUri
     )
   };
 
@@ -221,6 +226,40 @@ export class Juster {
   });
 
   return eventPromise
+  }
+
+  /**
+   * Subscribes to event updates, calls updateCallback each time when new update received
+   *
+   * @param eventId nat number of event
+   * @param updateCallback function with EventType arg that called each time
+   *    new update received
+   * @returns promise with EventType
+   */
+  async subscribeToEvent(
+    eventId: number,
+    updateCallback: (event: EventType) => void
+  ): Promise<() => void> {
+    const { unsubscribe } = this._genqlClient.subscription({
+      juster_event_by_pk: [
+        {
+          id: eventId
+        },
+        {
+          pool_above_eq: true,
+          pool_below: true,
+          total_liquidity_shares: true,
+          created_time: true,
+          bets_close_time: true,
+          liquidity_percent: true
+        }
+      ]
+    }).subscribe({
+      next: (result) => updateCallback(deserializeEvent(result.juster_event_by_pk)),
+      error: console.error,
+  });
+
+  return unsubscribe
   }
 
   /**

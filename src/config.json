@@ -4,12 +4,14 @@
     "testnet": {
       "contractAddress": "KT1CepDBrMg73d7LHm773KAsunjAjgLYituP",
       "rpcNode": "https://testnet-tezos.giganode.io",
-      "graphqlUri": "https://api.dipdup.net/juster/graphql"
+      "graphqlUri": "https://api.dipdup.net/juster/graphql",
+      "subscriptionUri": "wss://api.dipdup.net/juster/graphql"
     },
     "mainnet": {
       "contractAddress": "",
       "rpcNode": "",
-      "graphqlUri": ""
+      "graphqlUri": "",
+      "subscriptionUri": ""
     }
   },
   "entrypoints": {
