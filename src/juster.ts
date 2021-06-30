@@ -202,9 +202,9 @@ export class Juster {
     eventId: number
   ): Promise<EventType> {
     const eventPromise: Promise<EventType> = this._genqlClient.query({
-      juster_event: [
+      juster_event_by_pk: [
         {
-          where: {id: {_eq: eventId}}
+          id: eventId
         },
         {
           pool_above_eq: true,
@@ -216,12 +216,8 @@ export class Juster {
         }
       ]
     }).then(result => {
-      // TODO: is it good to select 0 object? What happens if there are more
-      // items in array? (should not happen)
-      const rawEvent = result.juster_event[0];
-
       // TODO: check if there are any errors while request?
-      return deserializeEvent(rawEvent)
+      return deserializeEvent(result.juster_event_by_pk)
   });
 
   return eventPromise
