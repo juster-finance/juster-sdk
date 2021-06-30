@@ -5,16 +5,19 @@ import {
   calculatePosition
 } from 'juster-sdk';
 import BigNumber from "bignumber.js";
-
+import {
+  Juster,
+} from 'juster-sdk';
 
 export type PositionProps = {
   position: PositionType | null,
   event: EventType | null,
-  pkh: string | null
+  pkh: string | null,
+  juster: Juster
 };
 
 
-export const PositionComponent: FunctionComponent<PositionProps> = ({ position, event, pkh }) => {
+export const PositionComponent: FunctionComponent<PositionProps> = ({ position, event, pkh, juster }) => {
 
   const isNotLoaded = (
     (position === null)
@@ -28,11 +31,11 @@ export const PositionComponent: FunctionComponent<PositionProps> = ({ position, 
 
   let positionA: string = position === null
     ? "-"
-    : calculatePosition(position, event!, "aboveEq", new BigNumber(0)).toFixed(6);
+    : calculatePosition(position, event!, "aboveEq", juster.providerProfitFee).toFixed(6);
 
   let positionB: string = position === null
     ? "-"
-    : calculatePosition(position, event!, "below", new BigNumber(0)).toFixed(6);
+    : calculatePosition(position, event!, "below", juster.providerProfitFee).toFixed(6);
 
   let shares: string = position === null
     ? "-"

@@ -72,17 +72,40 @@ function App() {
         >
           update
         </button>
-    
+
         <hr/>
-        <EventComponent eventId={eventId} event={event}/>
+        <EventComponent
+          eventId={eventId}
+          event={event}
+        />
+
         <hr/>
-        <PositionComponent position={position} event={event} pkh={pkh}/>
+        <PositionComponent
+          position={position}
+          event={event}
+          pkh={pkh}
+          juster={juster}
+        />
+
         <hr/>
-        <ProvideLiquidityForm eventId={eventId} event={event} juster={juster}/>
+        <ProvideLiquidityForm
+          eventId={eventId}
+          event={event}
+          juster={juster}
+        />
+
         <hr/>
-        <BetForm eventId={eventId} event={event} juster={juster}/>
+        <BetForm
+          eventId={eventId}
+          event={event}
+          juster={juster}
+        />
+
         <hr/>
-        <WithdrawButton eventId={eventId} pkh={pkh} juster={juster}/>
+        <WithdrawButton
+          eventId={eventId}
+          pkh={pkh}
+          juster={juster}/>
 
       </div>
     </div>
