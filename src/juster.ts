@@ -37,6 +37,9 @@ export class Juster {
   protected _entrypoints: Map<string, ParameterSchema>;
   protected _genqlClient: Client;
 
+  public unsubscribeFromEvent: () => void;
+  public unsubscribeFromPosition: () => void;
+
   constructor(
     network: Network,
     contractAddress: string,
@@ -70,6 +73,9 @@ export class Juster {
       url: graphqlUri,
       subscription: {url: subscriptionUri}
     });
+
+    this.unsubscribeFromEvent = () => {};
+    this.unsubscribeFromPosition = () => {};
   };
 
   static create(
@@ -239,7 +245,9 @@ export class Juster {
   async subscribeToEvent(
     eventId: number,
     updateCallback: (event: EventType) => void
-  ): Promise<() => void> {
+  ): Promise<void> {
+
+    this.unsubscribeFromEvent();
     const { unsubscribe } = this._genqlClient.subscription({
       juster_event_by_pk: [
         {
@@ -259,7 +267,7 @@ export class Juster {
       error: console.error,
   });
 
-  return unsubscribe
+  this.unsubscribeFromEvent = unsubscribe;
   }
 
   /**
@@ -318,7 +326,9 @@ export class Juster {
     eventId: number,
     participantAddress: string,
     updateCallback: (event: PositionType) => void
-  ): Promise<() => void> {
+  ): Promise<void> {
+
+    this.unsubscribeFromPosition();
     const { unsubscribe } = this._genqlClient.subscription({
       juster_position: [
         {
@@ -342,6 +352,6 @@ export class Juster {
       error: console.error,
   });
 
-  return unsubscribe
+  this.unsubscribeFromPosition = unsubscribe;
   }
 }
