@@ -22,7 +22,7 @@ export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster })
   // Slippage is pecent that used to reduce winDelta a bit but make this
   // bet transaction stable to ratio changes that may happen while
   // transaction accepted:
-  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(0.005));
+  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(0.03));
 
   // Ratio is the multiplier for bet amount that would be bettor profit if
   // he succeed in event:
