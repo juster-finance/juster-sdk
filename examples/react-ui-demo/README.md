@@ -2,25 +2,6 @@
 
 This is simple react demo example that uses Juster SDK. I made this to check and test SDK interactions.
 
-### Installation:
-1. Clone Juster SDK, install all packages and build it:
-```
-git clone https://github.com/juster-finance/juster-sdk
-cd juster-sdk
-yarn start
-npm run build
-```
-
-2. Create link from the demo to the SDK:
-```
-cd projects/sdk-ui-demo
-npm link ../../
-```
-
-4. Use `yarn start` or `npm i` to install all packages
-
-5. Run demo `npm run start`
-
 ---
 # Getting Started with Create React App
 
