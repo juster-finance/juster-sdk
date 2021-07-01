@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import {
   EventType,
   calculateRatio
-} from '@juster/sdk';
+} from '@juster-finance/sdk';
 
 export type EventProps = {
   eventId: number | null,
