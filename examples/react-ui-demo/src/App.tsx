@@ -4,7 +4,7 @@ import {
   Juster,
   EventType,
   PositionType,
-} from 'juster-sdk';
+} from '@juster/sdk';
 import { PositionComponent } from './components/Position';
 import { EventComponent } from './components/Event';
 import { ProvideLiquidityForm } from './components/ProvideLiquidityForm';

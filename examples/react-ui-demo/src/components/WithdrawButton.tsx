@@ -1,7 +1,7 @@
 import React, { FunctionComponent, FormEvent, useState, ChangeEvent } from 'react';
 import {
   Juster,
-} from 'juster-sdk';
+} from '@juster/sdk';
 
 type WithdrawProps = {
   eventId: number;

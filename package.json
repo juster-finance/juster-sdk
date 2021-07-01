@@ -1,40 +1,12 @@
 {
-  "name": "juster-sdk",
-  "version": "0.1.0",
-  "description": "Utilities used to interact with Juster Protocol contract and backend API",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "scripts": {
-    "test": "jest",
-    "start": "node lib/index.js",
-    "build-genql": "genql --esm --endpoint https://api.dipdup.net/juster/graphql --output ./src/genql_client",
-    "build-lib": "tsc",
-    "build": "npm run build-genql && npm run build-lib",
-    "interact": "cd docs && jupyter lab"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/juster-finance/juster-sdk.git"
-  },
-  "author": "",
-  "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/juster-finance/juster-sdk/issues"
-  },
-  "homepage": "https://github.com/juster-finance/juster-sdk#readme",
-  "devDependencies": {
-    "@genql/cli": "^2.6.0",
-    "@types/jest": "^26.0.23",
-    "@types/node": "^15.12.2",
-    "jest": "^27.0.5",
-    "ts-jest": "^27.0.3",
-    "typescript": "^4.3.3"
-  },
-  "dependencies": {
-    "@genql/runtime": "^2.6.0",
-    "@taquito/beacon-wallet": "^9.1.1",
-    "@taquito/taquito": "^9.1.0",
-    "bignumber.js": "^9.0.1",
-    "graphql": "^15.5.1"
+    "name": "root",
+    "private": true,
+    "devDependencies": {
+      "lerna": "^4.0.0"
+    },
+    "workspaces": [
+      "packages/*",
+      "examples/*"
+    ]
   }
-}
+  

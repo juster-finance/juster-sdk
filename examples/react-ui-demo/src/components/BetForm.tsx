@@ -5,7 +5,7 @@ import {
   calculateRatio,
   BetType,
   estimateFeeMultiplier
-} from 'juster-sdk';
+} from '@juster/sdk';
 import BigNumber from "bignumber.js";
 
 type BetProps = {

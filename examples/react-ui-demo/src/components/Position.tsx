@@ -2,12 +2,9 @@ import React, { FunctionComponent } from 'react';
 import {
   EventType,
   PositionType,
-  calculatePosition
-} from 'juster-sdk';
-import BigNumber from "bignumber.js";
-import {
-  Juster,
-} from 'juster-sdk';
+  calculatePosition,
+  Juster
+} from '@juster/sdk';
 
 export type PositionProps = {
   position: PositionType | null,
