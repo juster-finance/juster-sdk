@@ -15,7 +15,7 @@ import {
   EventType,
   PositionType
 } from './types'
-import { createClient, Client } from '@juster/gql-client'
+import { createClient, Client } from '@juster-finance/gql-client'
 import {
   deserializeEvent,
   deserializePosition

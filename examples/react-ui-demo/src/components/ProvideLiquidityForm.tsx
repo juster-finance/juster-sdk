@@ -4,7 +4,7 @@ import {
   EventType,
   calculateRatio,
   estimateShares
-} from '@juster/sdk';
+} from '@juster-finance/sdk';
 import BigNumber from "bignumber.js";
 
 type ProvideLiquidityProps = {

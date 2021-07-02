@@ -4,7 +4,7 @@ import {
   PositionType,
   calculatePosition,
   Juster
-} from '@juster/sdk';
+} from '@juster-finance/sdk';
 
 export type PositionProps = {
   position: PositionType | null,
