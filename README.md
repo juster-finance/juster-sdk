@@ -2,7 +2,7 @@
 
 ## Quickstart
 
-Begin with installing lerna tool if not yet:
+Begin with installing lerna tool if not yet (make sure you have **yarn** installed):
 
 ```
 yarn global add lerna
