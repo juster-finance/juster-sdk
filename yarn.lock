@@ -1740,6 +1740,14 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
+"@juster-finance/gql-client@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@juster-finance/gql-client/-/gql-client-0.0.1.tgz#37eb4ea3ecca1f35d9575e30b948b98ecda05fc6"
+  integrity sha512-PF9oGaMv/5GoUtRQVsZGopWV/FiT7geQQG06F6FdO29OXOMl2YjRXwyRNUHZg/FDCQTp69KRwzMruIqpsTLNHg==
+  dependencies:
+    "@genql/runtime" "2.6.0"
+    graphql "^15.5.0"
+
 "@lerna/add@4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@lerna/add/-/add-4.0.0.tgz#c36f57d132502a57b9e7058d1548b7a565ef183f"
