@@ -229,22 +229,22 @@ export class Juster {
     eventId: number
   ): Promise<EventType> {
     const eventPromise: Promise<EventType> = this._genqlClient.query({
-      juster_event_by_pk: [
+      eventByPk: [
         {
           id: eventId
         },
         {
-          pool_above_eq: true,
-          pool_below: true,
-          total_liquidity_shares: true,
-          created_time: true,
-          bets_close_time: true,
-          liquidity_percent: true
+          poolAboveEq: true,
+          poolBelow: true,
+          totalLiquidityShares: true,
+          createdTime: true,
+          betsCloseTime: true,
+          liquidityPercent: true
         }
       ]
     }).then(result => {
       // TODO: check if there are any errors while request?
-      return deserializeEvent(result.juster_event_by_pk)
+      return deserializeEvent(result.eventByPk)
   });
 
   return eventPromise
@@ -265,21 +265,21 @@ export class Juster {
 
     this.unsubscribeFromEvent();
     const { unsubscribe } = this._genqlClient.subscription({
-      juster_event_by_pk: [
+      eventByPk: [
         {
           id: eventId
         },
         {
-          pool_above_eq: true,
-          pool_below: true,
-          total_liquidity_shares: true,
-          created_time: true,
-          bets_close_time: true,
-          liquidity_percent: true
+          poolAboveEq: true,
+          poolBelow: true,
+          totalLiquidityShares: true,
+          createdTime: true,
+          betsCloseTime: true,
+          liquidityPercent: true
         }
       ]
     }).subscribe({
-      next: (result) => updateCallback(deserializeEvent(result.juster_event_by_pk)),
+      next: (result) => updateCallback(deserializeEvent(result.eventByPk)),
       error: console.error,
   });
 
@@ -301,25 +301,25 @@ export class Juster {
 
     // TODO: turn off auto deserialization of numbers
     const positionPromise: Promise<PositionType> = this._genqlClient.query({
-      juster_position: [
+      position: [
         {
           where: {
             user: {address: {_eq: participantAddress}},
-            event_id: {_eq: eventId}
+            eventId: {_eq: eventId}
           }
         },
         {
-          liquidity_provided_above_eq: true,
-          liquidity_provided_below: true,
-          reward_above_eq: true,
-          reward_below: true,
+          liquidityProvidedAboveEq: true,
+          liquidityProvidedBelow: true,
+          rewardAboveEq: true,
+          rewardBelow: true,
           shares: true,
         }
       ]
     }).then(result => {
         // TODO: is it good to select 0 object? What happens if there are more
         // items in array? (should not happen)
-        const rawPosition = result.juster_position[0];
+        const rawPosition = result.position[0];
 
         // TODO: check if there are any errors while request?
         return deserializePosition(rawPosition)
@@ -346,25 +346,25 @@ export class Juster {
 
     this.unsubscribeFromPosition();
     const { unsubscribe } = this._genqlClient.subscription({
-      juster_position: [
+      position: [
         {
           where: {
             user: {address: {_eq: participantAddress}},
-            event_id: {_eq: eventId}
+            eventId: {_eq: eventId}
           }
         },
         {
-          liquidity_provided_above_eq: true,
-          liquidity_provided_below: true,
-          reward_above_eq: true,
-          reward_below: true,
+          liquidityProvidedAboveEq: true,
+          liquidityProvidedBelow: true,
+          rewardAboveEq: true,
+          rewardBelow: true,
           shares: true,
         }
       ]
     }).subscribe({
       // TODO: I feel that this is too complicated and there is smth wrong doing this:
       next: (result) => updateCallback(
-        deserializePosition(result.juster_position[0])),
+        deserializePosition(result.position[0])),
       error: console.error,
   });
 

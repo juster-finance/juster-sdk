@@ -4,10 +4,10 @@
   "providerProfitFee": "0.1",
   "networks": {
     "testnet": {
-      "contractAddress": "KT1CepDBrMg73d7LHm773KAsunjAjgLYituP",
-      "rpcNode": "https://testnet-tezos.giganode.io",
-      "graphqlUri": "https://api.dipdup.net/juster/graphql",
-      "subscriptionUri": "wss://api.dipdup.net/juster/graphql"
+      "contractAddress": "KT1JPehwEkAhg1z5RVA8wAccYbDgF2E2itDv",
+      "rpcNode": "https://rpc.tzkt.io/granadanet/",
+      "graphqlUri": "https://api.granadanet.juster.fi/v1/graphql",
+      "subscriptionUri": "wss://api.granadanet.juster.fi/v1/graphql"
     },
     "mainnet": {
       "contractAddress": "",
