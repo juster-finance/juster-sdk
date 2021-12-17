@@ -1,18 +1,18 @@
 {
   "1m:1m": {
-    "pool_above_eq": 1.0,
-    "pool_below": 1.0,
-    "total_liquidity_shares": 1.0,
-    "created_time": "2021-06-23T12:00:00.000Z",
-    "bets_close_time": "2021-06-23T18:00:00.000Z",
-    "liquidity_percent": 0.01
+    "poolAboveEq": 1.0,
+    "poolBelow": 1.0,
+    "totalLiquidityShares": 1.0,
+    "createdTime": "2021-06-23T12:00:00.000Z",
+    "betsCloseTime": "2021-06-23T18:00:00.000Z",
+    "liquidityPercent": 0.01
   },
   "1k:4k": {
-    "pool_above_eq": 0.001,
-    "pool_below": 0.004,
-    "total_liquidity_shares": 0.001,
-    "created_time": "2021-06-23T12:00:00.000Z",
-    "bets_close_time": "2021-06-23T18:00:00.000Z",
-    "liquidity_percent": 0.001
+    "poolAboveEq": 0.001,
+    "poolBelow": 0.004,
+    "totalLiquidityShares": 0.001,
+    "createdTime": "2021-06-23T12:00:00.000Z",
+    "betsCloseTime": "2021-06-23T18:00:00.000Z",
+    "liquidityPercent": 0.001
   }
 }
