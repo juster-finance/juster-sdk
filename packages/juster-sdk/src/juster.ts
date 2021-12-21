@@ -56,7 +56,7 @@ export class Juster {
       name: appName,
       preferredNetwork: network === "mainnet"
         ? NetworkType.MAINNET
-        : NetworkType.GRANADANET
+        : NetworkType.HANGZHOUNET
     });
 
     this._tezos.setWalletProvider(this._provider);
@@ -122,7 +122,7 @@ export class Juster {
       network: {
         type: this._network === "mainnet"
           ? NetworkType.MAINNET
-          : NetworkType.GRANADANET
+          : NetworkType.HANGZHOUNET
       }
     });
   };

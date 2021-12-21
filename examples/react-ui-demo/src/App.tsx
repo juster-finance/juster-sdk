@@ -16,7 +16,7 @@ const juster = Juster.create("testnet");
 
 
 function App() {
-  const [eventId, setEventId] = useState<number>(15);
+  const [eventId, setEventId] = useState<number>(12);
   const [event, setEvent] = useState<EventType | null>(null);
   const [position, setPosition] = useState<PositionType | null>(null);
   const [pkh, setPkh] = useState<string | null>(null);
