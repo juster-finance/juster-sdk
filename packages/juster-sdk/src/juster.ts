@@ -110,7 +110,6 @@ export class Juster {
       providerProfitFee,
       ratioPrecision
     );
-    console.log("Succesfully created Juster with 2022-01-24 changes");
   };
 
   /**
@@ -119,7 +118,6 @@ export class Juster {
   sync(): Promise<void> {
     // Calls request permissions:
 
-    console.log("Syncin Juster with 2022-01-24 changes");
     return this._provider.requestPermissions({
       network: {
         type: this._network
