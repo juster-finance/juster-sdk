@@ -23,7 +23,7 @@ import {
 
 
 export class Juster {
-  protected _network: Network;
+  protected _network: NetworkType;
   protected _tezos: TezosToolkit;
   protected _provider: BeaconWallet;
   protected _contractAddress: string;
@@ -37,7 +37,7 @@ export class Juster {
   public unsubscribeFromPosition: () => void;
 
   constructor(
-    network: Network,
+    network: NetworkType,
     contractAddress: string,
     tezos: TezosToolkit,
     entrypoints: Record<string, any>,
@@ -54,9 +54,7 @@ export class Juster {
     // I did not find it, so I am saving this provider to call requestPermissions
     this._provider = new BeaconWallet({
       name: appName,
-      preferredNetwork: network === "mainnet"
-        ? NetworkType.MAINNET
-        : NetworkType.HANGZHOUNET
+      preferredNetwork: network
     });
 
     this._tezos.setWalletProvider(this._provider);
@@ -89,7 +87,8 @@ export class Juster {
       contractAddress,
       rpcNode,
       graphqlUri,
-      subscriptionUri
+      subscriptionUri,
+      networkName
     } = networkSettings;
 
     const {
@@ -101,7 +100,7 @@ export class Juster {
 
     const tezos = new TezosToolkit(rpcNode);
     return new Juster(
-      network,
+      (<any>NetworkType)[networkName],
       contractAddress,
       tezos,
       entrypoints,
@@ -110,7 +109,8 @@ export class Juster {
       subscriptionUri,
       providerProfitFee,
       ratioPrecision
-    )
+    );
+    console.log("Succesfully created Juster with 2022-01-24 changes");
   };
 
   /**
@@ -118,11 +118,11 @@ export class Juster {
    */
   sync(): Promise<void> {
     // Calls request permissions:
+
+    console.log("Syncin Juster with 2022-01-24 changes");
     return this._provider.requestPermissions({
       network: {
-        type: this._network === "mainnet"
-          ? NetworkType.MAINNET
-          : NetworkType.HANGZHOUNET
+        type: this._network
       }
     });
   };

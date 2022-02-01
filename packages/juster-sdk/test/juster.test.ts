@@ -2,8 +2,8 @@ import { Juster } from "../src/juster";
 
 test("test juster creation", async () => {
   /*
-  // Next line is failing with: 
-  // The promise rejected with the reason "ReferenceError: localStorage is not defined".
+   * the next line fails with
+   * "SyntaxError: Cannot use import statement outside a module"
   const bb = Juster.create("testnet");
-  */
+   */
 });
