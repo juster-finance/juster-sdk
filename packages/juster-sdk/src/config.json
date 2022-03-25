@@ -4,11 +4,11 @@
   "providerProfitFee": "0.1",
   "networks": {
     "testnet": {
-      "networkName": "HANGZHOUNET",
-      "contractAddress": "KT197iHRJaAGw3oGpQj21YYV1vK9Fa5ShoMn",
-      "rpcNode": "https://rpc.tzkt.io/hangzhou2net/",
-      "graphqlUri": "https://api.hangzhounet.juster.fi/v1/graphql",
-      "subscriptionUri": "wss://api.hangzhounet.juster.fi/v1/graphql"
+      "networkName": "ITHACANET",
+      "contractAddress": "KT1Feq9iRBBhpSBdPF1Y7Sd7iJu7uLqqRf1A",
+      "rpcNode": "https://rpc.tzkt.io/ithacanet/",
+      "graphqlUri": "https://api.ithacanet.juster.fi/v1/graphql",
+      "subscriptionUri": "wss://api.ithacanet.juster.fi/v1/graphql"
     },
     "mainnet": {
       "networkName": "MAINNET",
