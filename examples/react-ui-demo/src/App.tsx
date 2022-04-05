@@ -12,11 +12,11 @@ import { BetForm } from './components/BetForm';
 import { WithdrawButton } from './components/WithdrawButton';
 
 
-const juster = Juster.create("mainnet");
+const juster = Juster.create("testnet");
 
 
 function App() {
-  const [eventId, setEventId] = useState<number>(0);
+  const [eventId, setEventId] = useState<number>(69);
   const [event, setEvent] = useState<EventType | null>(null);
   const [position, setPosition] = useState<PositionType | null>(null);
   const [pkh, setPkh] = useState<string | null>(null);
