@@ -4,9 +4,9 @@
   "providerProfitFee": "0.1",
   "networks": {
     "testnet": {
-      "networkName": "ITHACANET",
+      "networkName": "GHOSTNET",
       "contractAddress": "KT1Feq9iRBBhpSBdPF1Y7Sd7iJu7uLqqRf1A",
-      "rpcNode": "https://rpc.tzkt.io/ithacanet/",
+      "rpcNode": "https://rpc.tzkt.io/ghostnet/",
       "graphqlUri": "https://api.ithacanet.juster.fi/v1/graphql",
       "subscriptionUri": "wss://api.ithacanet.juster.fi/v1/graphql"
     },
