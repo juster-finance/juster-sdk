@@ -7,7 +7,7 @@ import { ParameterSchema } from "@taquito/michelson-encoder";
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import config from "./config.json"
 import BigNumber from "bignumber.js";
-import { NetworkType } from '@airgap/beacon-sdk';
+import { NetworkType } from '@airgap/beacon-dapp';
 import {
   Network,
   EntrypointName,
