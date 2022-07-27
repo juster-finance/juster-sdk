@@ -40,6 +40,7 @@ export class Juster {
     network: NetworkType,
     contractAddress: string,
     tezos: TezosToolkit,
+    provider: BeaconWallet,
     entrypoints: Record<string, any>,
     appName: string,
     graphqlUri: string,
@@ -49,13 +50,7 @@ export class Juster {
   ) {
     this._network = network;
     this._tezos = tezos;
-
-    // TODO: is it possible to get wallet provider using tezos instance?
-    // I did not find it, so I am saving this provider to call requestPermissions
-    this._provider = new BeaconWallet({
-      name: appName,
-      preferredNetwork: network
-    });
+    this._provider = provider;
 
     this._tezos.setWalletProvider(this._provider);
     this._contractAddress = contractAddress;
@@ -79,6 +74,8 @@ export class Juster {
   };
 
   static create(
+    tezos: TezosToolkit,
+    provider: BeaconWallet,
     network: Network,
   ) {
     const networkSettings = config.networks[network];
@@ -98,11 +95,11 @@ export class Juster {
       ratioPrecision
     } = config;
 
-    const tezos = new TezosToolkit(rpcNode);
     return new Juster(
       (<any>NetworkType)[networkName],
       contractAddress,
       tezos,
+      provider,
       entrypoints,
       appName,
       graphqlUri,

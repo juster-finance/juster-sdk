@@ -10,13 +10,23 @@ import { EventComponent } from './components/Event';
 import { ProvideLiquidityForm } from './components/ProvideLiquidityForm';
 import { BetForm } from './components/BetForm';
 import { WithdrawButton } from './components/WithdrawButton';
+import { TezosToolkit } from "@taquito/taquito";
+import { BeaconWallet } from '@taquito/beacon-wallet';
+import { NetworkType } from '@airgap/beacon-dapp';
 
-
-const juster = Juster.create("testnet");
+const rpcNode = "https://rpc.tzkt.io/ghostnet/";
+const network = NetworkType["GHOSTNET"];
+const appName = "Juster";
+const tezos = new TezosToolkit(rpcNode);
+const provider = new BeaconWallet({
+  name: appName,
+  preferredNetwork: network
+});
+const juster = Juster.create(tezos, provider, "testnet");
 
 
 function App() {
-  const [eventId, setEventId] = useState<number>(9020);
+  const [eventId, setEventId] = useState<number>(10313);
   const [event, setEvent] = useState<EventType | null>(null);
   const [position, setPosition] = useState<PositionType | null>(null);
   const [pkh, setPkh] = useState<string | null>(null);
