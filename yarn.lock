@@ -1203,7 +1203,7 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@genql/cli@^2.6.0":
+"@genql/cli@^2.10.0":
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/@genql/cli/-/cli-2.10.0.tgz#ab39444b0a7ee041d1fa5183f10a23b8c1d6d1f9"
   integrity sha512-X47y17qT8M0LAwIE9Wu0jMWm4dW9Y8c8dT7iDsmV3gkKZXAnRBoXUVcrZY+RrZLp8N7orDPyhE7pXAMFf2CcaA==
@@ -1223,23 +1223,7 @@
     rimraf "^2.6.3"
     yargs "^15.3.1"
 
-"@genql/runtime@2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@genql/runtime/-/runtime-2.6.0.tgz#7942e7b48fe74f38bdff47da2ac6cae205258fe5"
-  integrity sha512-AqkFwApU3W0G8jbAiPrAS+7KYxSnFB/4gCN1BPkcKBLa2Y58jATLHSt5FNY+I18xF9M7rlLcCaM9T8ZCtCoMCw==
-  dependencies:
-    "@types/qs" "^6.9.0"
-    "@types/ws" "^6.0.1"
-    graphql-query-batcher "^1.0.1"
-    isomorphic-unfetch "^3.0.0"
-    lodash "^4.17.20"
-    subscriptions-transport-ws "^0.9.16"
-    tslib "^2.0.0"
-    utility-types "^3.10.0"
-    ws "^6.1.4"
-    zen-observable-ts "^0.8.21"
-
-"@genql/runtime@^2.10.0":
+"@genql/runtime@2.10.0", "@genql/runtime@^2.10.0":
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/@genql/runtime/-/runtime-2.10.0.tgz#7177a6ce7d6815873d5e668c5b72d94294b45fab"
   integrity sha512-hWy4fkHAk0OUW/cmjAOhbE3PnR9YfwaE8DRl5oEf7r9K6Owju8ogTDV3RMkG6Vm57H9xYxI5+am5ImAUbqPH8A==
@@ -1799,14 +1783,6 @@
   dependencies:
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
-
-"@juster-finance/gql-client@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@juster-finance/gql-client/-/gql-client-0.0.7.tgz#cf944a345361820f93b6b2d8e3aa1c4f6a4606f6"
-  integrity sha512-Zl0czE2idWcwRFl2oarc6JoKg8Af0nMTIrqAGApolKBwMvpelsgRCJlGDiuGVmma/JN7c99zjg3KIsVGQGCWyA==
-  dependencies:
-    "@genql/runtime" "2.6.0"
-    graphql "^15.5.0"
 
 "@lerna/add@4.0.0":
   version "4.0.0"
