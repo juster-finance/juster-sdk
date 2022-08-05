@@ -2,7 +2,7 @@ import BigNumber from "bignumber.js";
 import {
   BetType,
   EventType,
-  PositionType
+  CorePositionType
 } from './types'
 
 
@@ -111,7 +111,7 @@ export function estimateBetReward(
  * @returns user position for the given event and pool
  */
 export function calculatePosition(
-  position: PositionType,
+  position: CorePositionType,
   event: EventType,
   pool: BetType,
 

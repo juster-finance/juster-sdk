@@ -13,16 +13,31 @@ import {
   EntrypointName,
   BetType,
   EventType,
-  PositionType
+  CorePositionType,
+  PoolPositionKeyType,
+  PendingEntryType,
+  PendingEntriesType,
+  PoolPositionType,
+  PoolPositionsType,
+  ClaimType,
+  ClaimsType
 } from './types'
-import { createClient, Client } from '@juster-finance/gql-client'
+import {
+  createClient,
+  Client,
+  QueryRequest
+} from '@juster-finance/gql-client'
 import {
   deserializeEvent,
-  deserializePosition
+  deserializePosition,
+  deserializePendingEntries,
+  deserializePoolPositions,
+  deserializeClaims
 } from './serialization'
 
 
-export class Juster {
+// TODO: move this to separate file
+export class JusterBaseContract {
   protected _network: NetworkType;
   protected _tezos: TezosToolkit;
   protected _provider: BeaconWallet;
@@ -30,11 +45,6 @@ export class Juster {
   protected _entrypoints: Map<string, ParameterSchema>;
   protected _genqlClient: Client;
   protected _xtzDecimals: BigNumber;
-  protected _ratioPrecision: BigNumber;
-
-  public providerProfitFee: BigNumber;
-  public unsubscribeFromEvent: () => void;
-  public unsubscribeFromPosition: () => void;
 
   constructor(
     network: NetworkType,
@@ -42,11 +52,8 @@ export class Juster {
     tezos: TezosToolkit,
     provider: BeaconWallet,
     entrypoints: Record<string, any>,
-    appName: string,
     graphqlUri: string,
     subscriptionUri: string,
-    providerProfitFee: string,
-    ratioPrecision: string,
   ) {
     this._network = network;
     this._tezos = tezos;
@@ -65,56 +72,13 @@ export class Juster {
       subscription: {url: subscriptionUri}
     });
 
-    this.unsubscribeFromEvent = () => {};
-    this.unsubscribeFromPosition = () => {};
-
     this._xtzDecimals = new BigNumber(1000000);
-    this._ratioPrecision = new BigNumber(ratioPrecision);
-    this.providerProfitFee = new BigNumber(providerProfitFee);
-  };
-
-  static create(
-    tezos: TezosToolkit,
-    provider: BeaconWallet,
-    network: Network,
-  ) {
-    const networkSettings = config.networks[network];
-
-    const {
-      contractAddress,
-      rpcNode,
-      graphqlUri,
-      subscriptionUri,
-      networkName
-    } = networkSettings;
-
-    const {
-      appName,
-      entrypoints,
-      providerProfitFee,
-      ratioPrecision
-    } = config;
-
-    return new Juster(
-      (<any>NetworkType)[networkName],
-      contractAddress,
-      tezos,
-      provider,
-      entrypoints,
-      appName,
-      graphqlUri,
-      subscriptionUri,
-      providerProfitFee,
-      ratioPrecision
-    );
   };
 
   /**
    * Request permissions for BeaconWallet
    */
   sync(): Promise<void> {
-    // Calls request permissions:
-
     return this._provider.requestPermissions({
       network: {
         type: this._network
@@ -126,8 +90,6 @@ export class Juster {
    * Return user address (public key hash)
    */
   getPkh(): Promise<string> {
-    // TODO: consider saving this PKH inside sync and returing string here
-    // instead of promise?
     return this._provider.getPKH()
   }
 
@@ -152,7 +114,82 @@ export class Juster {
       entrypoint,
       args).send({ amount, mutez });
   };
+}
 
+// TODO: move this to separate file [2]:
+export class JusterCore extends JusterBaseContract {
+  protected _ratioPrecision: BigNumber;
+  public providerProfitFee: BigNumber;
+
+  public unsubscribeFromEvent: () => void;
+  public unsubscribeFromPosition: () => void;
+
+  constructor(
+    network: NetworkType,
+    contractAddress: string,
+    tezos: TezosToolkit,
+    provider: BeaconWallet,
+    entrypoints: Record<string, any>,
+    graphqlUri: string,
+    subscriptionUri: string,
+    providerProfitFee: string,
+    ratioPrecision: string,
+  ) {
+
+    super(
+      network,
+      contractAddress,
+      tezos,
+      provider,
+      entrypoints,
+      graphqlUri,
+      subscriptionUri,
+    );
+
+    this.unsubscribeFromEvent = () => {};
+    this.unsubscribeFromPosition = () => {};
+
+    this._ratioPrecision = new BigNumber(ratioPrecision);
+    this.providerProfitFee = new BigNumber(providerProfitFee);
+  };
+
+  // TODO: looks like genql provider should be only one too, need to discuss what is the best solution
+  static create(
+    tezos: TezosToolkit,
+    provider: BeaconWallet,
+    network: Network,
+  ) {
+
+    const networkSettings = config.networks[network];
+
+    const {
+      justerCoreAddress,
+      graphqlUri,
+      subscriptionUri,
+      networkName
+    } = networkSettings;
+
+    const {
+      entrypoints,
+      providerProfitFee,
+      ratioPrecision
+    } = config;
+
+    return new JusterCore(
+      (<any>NetworkType)[networkName],
+      justerCoreAddress,
+      tezos,
+      provider,
+      entrypoints["justerCore"],
+      graphqlUri,
+      subscriptionUri,
+      providerProfitFee,
+      ratioPrecision
+    );
+  };
+
+  // TODO: create with super() or it might be better to have separate create()?
+  // -- anyway need to have create() with raise not implemented in the second case
   /**
    * Calling bet entrypoint
    *
@@ -217,6 +254,9 @@ export class Juster {
     const args = [eventId, participantAddress];
     return this.callMethodSend("withdraw", args);
   };
+
+  // TODO: _makeGetEventQuery(); _makeGetPositionQuery(); and reuse this query
+  // in both get / subscribe
 
   /**
    * Performs request to graphql API with event data for given eventId
@@ -291,15 +331,15 @@ export class Juster {
    *
    * @param eventId nat number of event
    * @param participantAddress address of the user
-   * @returns promise with PositionType
+   * @returns promise with CorePositionType
    */
   getPosition(
     eventId: number,
     participantAddress: string
-  ): Promise<PositionType> {
+  ): Promise<CorePositionType> {
 
     // TODO: turn off auto deserialization of numbers
-    const positionPromise: Promise<PositionType> = this._genqlClient.query({
+    const positionPromise: Promise<CorePositionType> = this._genqlClient.query({
       position: [
         {
           where: {
@@ -333,14 +373,14 @@ export class Juster {
    *
    * @param eventId nat number of event
    * @param participantAddress address of the user
-   * @param updateCallback function with PositionType arg that called each time
+   * @param updateCallback function with CorePositionType arg that called each time
    *    new update received
    * @returns unsubscribe function
    */
    async subscribeToPosition(
     eventId: number,
     participantAddress: string,
-    updateCallback: (event: PositionType) => void
+    updateCallback: (event: CorePositionType) => void
   ): Promise<void> {
 
     this.unsubscribeFromPosition();
@@ -369,4 +409,252 @@ export class Juster {
 
   this.unsubscribeFromPosition = unsubscribe;
   }
+}
+
+// TODO: move this to separate file [3]:
+export class JusterPool extends JusterBaseContract {
+  protected _shareDecimals: BigNumber;
+
+  public unsubscribeFromPendingEntries: () => void;
+  public unsubscribeFromPoolPositions: () => void;
+  public unsubscribeFromClaims: () => void;
+
+  constructor(
+    network: NetworkType,
+    contractAddress: string,
+    tezos: TezosToolkit,
+    provider: BeaconWallet,
+    entrypoints: Record<string, any>,
+    graphqlUri: string,
+    subscriptionUri: string,
+    shareDecimals: string,
+  ) {
+
+    super(
+      network,
+      contractAddress,
+      tezos,
+      provider,
+      entrypoints,
+      graphqlUri,
+      subscriptionUri,
+    );
+
+    this.unsubscribeFromPendingEntries = () => {};
+    this.unsubscribeFromPoolPositions = () => {};
+    this.unsubscribeFromClaims = () => {};
+
+    this._shareDecimals = new BigNumber(shareDecimals);
+  };
+
+  static create(
+    tezos: TezosToolkit,
+    provider: BeaconWallet,
+    network: Network,
+  ) {
+
+    const networkSettings = config.networks[network];
+
+    const {
+      justerPoolAddress,
+      graphqlUri,
+      subscriptionUri,
+      networkName
+    } = networkSettings;
+
+    const {
+      entrypoints,
+      poolShareDecimals
+    } = config;
+
+    return new JusterPool(
+      (<any>NetworkType)[networkName],
+      justerPoolAddress,
+      tezos,
+      provider,
+      entrypoints["justerPool"],
+      graphqlUri,
+      subscriptionUri,
+      poolShareDecimals
+    );
+  };
+
+  // TODO: make description
+  depositLiquidity(amount: BigNumber): Promise<TransactionWalletOperation> {
+    return this.callMethodSend("depositLiquidity", [], amount.toNumber());
+  };
+
+  // TODO: make description
+  claimLiquidity(
+    positionId: number,
+    shares: BigNumber,
+  ): Promise<TransactionWalletOperation> {
+    const args = [
+      positionId,
+      shares.times(this._shareDecimals).integerValue().toNumber()
+    ];
+    return this.callMethodSend("claimLiquidity", args);
+  };
+
+  // TODO: make description
+  withdrawLiquidity(
+    positions: Array<PoolPositionKeyType>
+  ): Promise<TransactionWalletOperation> {
+    return this.callMethodSend("withdrawLiquidity", positions);
+  };
+
+  // TODO: make description
+  _makeGetPendingEntriesQuery(
+    userAddress: string
+  ): QueryRequest {
+    return {
+      entryLiquidity: [
+        {
+          where: {
+            user: {address: {_eq: userAddress}},
+            status: {_eq: "PENDING"}
+          }
+        },
+        {
+          acceptTime: true,
+          amount: true,
+          id: true
+        }
+      ]
+    }
+  }
+
+  // TODO: make description
+  getPendingEntries(
+    userAddress: string
+  ): Promise<PendingEntriesType> {
+    const entriesPromise: Promise<PendingEntriesType> = this._genqlClient.query(
+      this._makeGetPendingEntriesQuery(userAddress)
+    ).then(result => {
+      // TODO: check if there are any errors while request?
+      return deserializePendingEntries(result.entryLiquidity)
+  });
+
+  return entriesPromise
+  }
+
+  // TODO: add description
+  async subscribeToPendingEntries(
+    userAddress: string,
+    updateCallback: (pendingEntries: PendingEntriesType) => void
+  ): Promise<void> {
+    this.unsubscribeFromPendingEntries();
+    const { unsubscribe } = this._genqlClient.subscription(
+      this._makeGetPendingEntriesQuery(userAddress)
+    ).subscribe({
+      next: (result) => updateCallback(deserializePendingEntries(result.entryLiquidity)),
+      error: console.error,
+  });
+
+  this.unsubscribeFromPendingEntries = unsubscribe;
+  }
+
+  // TODO: make description
+  _makeGetPositions(
+    userAddress: string
+  ): QueryRequest {
+    return {
+      poolPosition: [
+        {
+          where: {
+            user: {address: {_eq: userAddress}}
+          }
+        },
+        {
+          shares: true,
+          id: true
+        }
+      ]
+    }
+  }
+
+  // TODO: make description
+  getPositions(
+    userAddress: string
+  ): Promise<PoolPositionsType> {
+    const positionsPromise: Promise<PoolPositionsType> = this._genqlClient.query(
+      this._makeGetPositions(userAddress)
+    ).then(result => {
+      // TODO: check if there are any errors while request?
+      return deserializePoolPositions(result.poolPosition)
+  });
+
+  return positionsPromise
+  }
+
+  // TODO: add description
+  async subscribeToPoolPositions(
+    userAddress: string,
+    updateCallback: (positions: PoolPositionsType) => void
+  ): Promise<void> {
+    this.unsubscribeFromPoolPositions();
+    const { unsubscribe } = this._genqlClient.subscription(
+      this._makeGetPositions(userAddress)
+    ).subscribe({
+      next: (result) => updateCallback(deserializePoolPositions(result.poolPosition)),
+      error: console.error,
+    });
+
+    this.unsubscribeFromPoolPositions = unsubscribe;
+  }
+
+  // TODO: make description
+  _makeGetClaims(
+    userAddress: string
+  ): QueryRequest {
+    return {
+      claim: [
+        {
+          where: {
+            user: {address: {_eq: userAddress}}
+          }
+        },
+        {
+          positionId: true,
+          eventId: true,
+          amount: true,
+          withdrawn: true,
+          id: true
+        }
+      ]
+    }
+  }
+
+  // TODO: make description
+  getClaims(
+    userAddress: string
+  ): Promise<ClaimsType> {
+    const claimsPromise: Promise<ClaimsType> = this._genqlClient.query(
+      this._makeGetClaims(userAddress)
+    ).then(result => {
+      // TODO: check if there are any errors while request?
+      return deserializeClaims(result.claim)
+  });
+
+  return claimsPromise
+  }
+
+  // TODO: add description
+  async subscribeToClaims(
+    userAddress: string,
+    updateCallback: (positions: ClaimsType) => void
+  ): Promise<void> {
+    this.unsubscribeFromClaims();
+    const { unsubscribe } = this._genqlClient.subscription(
+      this._makeGetClaims(userAddress)
+    ).subscribe({
+      next: (result) => updateCallback(deserializeClaims(result.claim)),
+      error: console.error,
+    });
+
+    this.unsubscribeFromClaims = unsubscribe;
+  }
+
+  // TODO: calculateSharePrice helper
+  // TODO: calculateClaimAmount helper
 }
