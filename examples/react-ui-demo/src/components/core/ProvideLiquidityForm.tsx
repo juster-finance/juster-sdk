@@ -1,6 +1,6 @@
 import React, { FunctionComponent, FormEvent, useState, ChangeEvent } from 'react';
 import {
-  Juster,
+  JusterCore,
   EventType,
   calculateRatio,
   estimateShares
@@ -10,10 +10,10 @@ import BigNumber from "bignumber.js";
 type ProvideLiquidityProps = {
   eventId: number;
   event: EventType | null;
-  juster: Juster
+  justerCore: JusterCore
 };
 
-export const ProvideLiquidityForm: FunctionComponent<ProvideLiquidityProps> = ({ eventId, event, juster }) => {
+export const ProvideLiquidityForm: FunctionComponent<ProvideLiquidityProps> = ({ eventId, event, justerCore }) => {
   // TODO: make hook to use juster?
 
   const [amount, setAmount] = useState<BigNumber>(new BigNumber(0));
@@ -59,11 +59,11 @@ export const ProvideLiquidityForm: FunctionComponent<ProvideLiquidityProps> = ({
   // TODO: add slippage percent here? how to show it? maybe show min/max ratio?
   const handleProvideLiquidity = async (e: FormEvent<HTMLButtonElement>) => {
 
-    juster.provideLiquidity(
+    justerCore.provideLiquidity(
       eventId, event.poolAboveEq, event.poolBelow, maxSlippage, amount)
       .then((op) => {
         console.log(`Hash: ${op.opHash}`);
-    
+
         op.confirmation()
           .then((result) => {
             console.log(result);

@@ -1,15 +1,15 @@
 import React, { FunctionComponent, FormEvent, useState, ChangeEvent } from 'react';
 import {
-  Juster,
+  JusterCore,
 } from '@juster-finance/sdk';
 
 type WithdrawProps = {
   eventId: number;
   pkh: string | null;
-  juster: Juster
+  justerCore: JusterCore
 };
 
-export const WithdrawButton: FunctionComponent<WithdrawProps> = ({ eventId, pkh, juster }) => {
+export const WithdrawButton: FunctionComponent<WithdrawProps> = ({ eventId, pkh, justerCore }) => {
   // TODO: make hook to use juster?
 
   if (pkh === null) {
@@ -19,10 +19,10 @@ export const WithdrawButton: FunctionComponent<WithdrawProps> = ({ eventId, pkh,
   const handleWithdraw = async (e: FormEvent<HTMLButtonElement>) => {
 
     // TODO: check that minimal win amount calculated in mutez!
-    juster.withdraw(eventId, pkh!)
+    justerCore.withdraw(eventId, pkh!)
       .then((op) => {
         console.log(`Hash: ${op.opHash}`);
-    
+
         op.confirmation()
           .then((result) => {
             console.log(result);
@@ -36,7 +36,7 @@ export const WithdrawButton: FunctionComponent<WithdrawProps> = ({ eventId, pkh,
       })
       .catch((err) => console.log(err));
   };
-  
+
   return (
     <div>
       <button

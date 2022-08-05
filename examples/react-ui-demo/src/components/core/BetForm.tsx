@@ -1,6 +1,6 @@
 import React, { FunctionComponent, FormEvent, useState, ChangeEvent } from 'react';
 import {
-  Juster,
+  JusterCore,
   EventType,
   calculateRatio,
   BetType,
@@ -11,10 +11,10 @@ import BigNumber from "bignumber.js";
 type BetProps = {
   eventId: number;
   event: EventType | null;
-  juster: Juster
+  justerCore: JusterCore
 };
 
-export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster }) => {
+export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, justerCore }) => {
   // TODO: make hook to use juster?
 
   const [amount, setAmount] = useState<BigNumber>(new BigNumber(0));
@@ -105,10 +105,10 @@ export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster })
   const handleBet = async (e: FormEvent<HTMLButtonElement>) => {
 
     // TODO: check that minimal win amount calculated in mutez!
-    juster.bet(eventId, betType, amount, minimalWinAmount)
+    justerCore.bet(eventId, betType, amount, minimalWinAmount)
       .then((op) => {
         console.log(`Hash: ${op.opHash}`);
-    
+
         op.confirmation()
           .then((result) => {
             console.log(result);
