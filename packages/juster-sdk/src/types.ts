@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 
 export type Network = "mainnet" | "testnet";
 export type CoreEntrypointName = "bet" | "provideLiquidity" | "withdraw";
-export type PoolEntrypointName = "depositLiquidity" | "claimLiquidity" | "withdrawLiquidity";
+export type PoolEntrypointName = "depositLiquidity" | "claimLiquidity" | "withdrawLiquidity" | "approveLiquidity";
 export type EntrypointName = CoreEntrypointName | PoolEntrypointName;
 export type BetType = "aboveEq" | "below";
 export type EventType = {

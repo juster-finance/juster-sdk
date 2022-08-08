@@ -140,6 +140,18 @@ export class JusterPool extends JusterBaseContract {
   };
 
   /**
+   * Calling approveLiquidity entrypoint to approve entry
+   *
+   * @param entryId is number of entry to be approved
+   * @returns promise with TransactionWalletOperation
+   */
+  approveLiquidity(
+    entryId: number
+  ): Promise<TransactionWalletOperation> {
+    return this.callMethodSend("approveLiquidity", [entryId]);
+  };
+
+  /**
    * Preparing QueryReqest for getting pending entries for a given userAddress
    *
    * @param userAddress string with user address

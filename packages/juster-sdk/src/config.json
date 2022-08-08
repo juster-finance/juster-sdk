@@ -159,11 +159,17 @@
         "annots": [
           "%withdrawLiquidity"
         ]
-    },
+      },
       "depositLiquidity": {
         "prim": "unit",
         "annots": [
           "%depositLiquidity"
+        ]
+      },
+      "approveLiquidity": {
+        "prim": "nat",
+        "annots": [
+          "%approveLiquidity"
         ]
       }
     }
