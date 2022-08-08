@@ -238,7 +238,8 @@ export class JusterPool extends JusterBaseInstrument {
       poolPosition: [
         {
           where: {
-            user: {address: {_eq: userAddress}}
+            user: {address: {_eq: userAddress}},
+            shares: {_gt: "0"}
           }
         },
         {
