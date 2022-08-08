@@ -18,10 +18,8 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
   const defaultShares: Array<BigNumber> = poolPositions.map(position => position.shares);
 
   // sharesAmounts is array of entered shares in inputs for each position
-  console.log("default shares", defaultShares);
   const [sharesAmounts, setSharesAmounts] = useState<Array<BigNumber>>(defaultShares);
   useEffect(() => { setSharesAmounts(defaultShares) }, [poolPositions]);
-  console.log("start shares", sharesAmounts);
 
   const handleSharesChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const newAmount = new BigNumber(e.target.value);

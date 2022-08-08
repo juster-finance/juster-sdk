@@ -12,7 +12,8 @@ import {
   CorePositionType,
   PendingEntriesType,
   PoolPositionsType,
-  ClaimsType
+  ClaimsType,
+  PoolType
 } from '@juster-finance/sdk';
 
 import { PoolTab } from './components/tabs/Pool';
@@ -45,6 +46,7 @@ function App() {
   const [pendingEntries, setPendingEntries] = useState<PendingEntriesType>([]);
   const [poolPositions, setPoolPositions] = useState<PoolPositionsType>([]);
   const [claims, setClaims] = useState<ClaimsType>([]);
+  const [pool, setPool] = useState<PoolType | null>(null);
 
   const update = async (
     eventId: number,
@@ -97,6 +99,7 @@ function App() {
         (updClaims) => {setClaims(updClaims)}
       );
 
+      justerPool.subscribeToPool((updPool) => {setPool(updPool)});
       });
   };
 
@@ -113,8 +116,10 @@ function App() {
         pendingEntries={pendingEntries}
         poolPositions={poolPositions}
         claims={claims}
+        pool={pool}
       />
     ),
+
     core: (
       <CoreTab
         pkh={pkh}
