@@ -98,8 +98,6 @@ export class JusterCore extends JusterBaseContract {
     );
   };
 
-  // TODO: create with super() or it might be better to have separate create()?
-  // -- anyway need to have create() with raise not implemented in the second case
   /**
    * Calling bet entrypoint
    *
@@ -165,19 +163,16 @@ export class JusterCore extends JusterBaseContract {
     return this.callMethodSend("withdraw", args);
   };
 
-  // TODO: _makeGetEventQuery(); _makeGetPositionQuery(); and reuse this query
-  // in both get / subscribe
-
   /**
-   * Performs request to graphql API with event data for given eventId
+   * Preparing QueryReqest for getting event by its id
    *
    * @param eventId nat number of event
-   * @returns promise with EventType
+   * @returns QueryRequest with graphql request for event
    */
-  getEvent(
+  _makeGetEvent(
     eventId: number
-  ): Promise<EventType> {
-    const eventPromise: Promise<EventType> = this._genqlClient.query({
+  ): QueryRequest {
+    return {
       eventByPk: [
         {
           id: eventId
@@ -191,7 +186,21 @@ export class JusterCore extends JusterBaseContract {
           liquidityPercent: true
         }
       ]
-    }).then(result => {
+    }
+  }
+
+  /**
+   * Performs request to graphql API with event data for given eventId
+   *
+   * @param eventId nat number of event
+   * @returns promise with EventType
+   */
+  getEvent(
+    eventId: number
+  ): Promise<EventType> {
+    const eventPromise: Promise<EventType> = this._genqlClient.query(
+      this._makeGetEvent(eventId)
+    ).then(result => {
       // TODO: check if there are any errors while request?
       return deserializeEvent(result.eventByPk)
   });
@@ -213,26 +222,45 @@ export class JusterCore extends JusterBaseContract {
   ): Promise<void> {
 
     this.unsubscribeFromEvent();
-    const { unsubscribe } = this._genqlClient.subscription({
-      eventByPk: [
-        {
-          id: eventId
-        },
-        {
-          poolAboveEq: true,
-          poolBelow: true,
-          totalLiquidityShares: true,
-          createdTime: true,
-          betsCloseTime: true,
-          liquidityPercent: true
-        }
-      ]
-    }).subscribe({
+    const { unsubscribe } = this._genqlClient.subscription(
+      this._makeGetEvent(eventId)
+    ).subscribe({
       next: (result) => updateCallback(deserializeEvent(result.eventByPk)),
       error: console.error,
   });
 
   this.unsubscribeFromEvent = unsubscribe;
+  }
+
+  /**
+   * Preparing QueryReqest for getting user position by
+   * participantAddress and eventId
+   *
+   * @param eventId nat number of event
+   * @param participantAddress address of the user
+   * @returns QueryRequest with graphql request for position
+   */
+  _makeGetPosition(
+    eventId: number,
+    participantAddress: string
+  ): QueryRequest {
+    return {
+      position: [
+        {
+          where: {
+            user: {address: {_eq: participantAddress}},
+            eventId: {_eq: eventId}
+          }
+        },
+        {
+          liquidityProvidedAboveEq: true,
+          liquidityProvidedBelow: true,
+          rewardAboveEq: true,
+          rewardBelow: true,
+          shares: true,
+        }
+      ]
+    }
   }
 
   /**
@@ -249,23 +277,9 @@ export class JusterCore extends JusterBaseContract {
   ): Promise<CorePositionType> {
 
     // TODO: turn off auto deserialization of numbers
-    const positionPromise: Promise<CorePositionType> = this._genqlClient.query({
-      position: [
-        {
-          where: {
-            user: {address: {_eq: participantAddress}},
-            eventId: {_eq: eventId}
-          }
-        },
-        {
-          liquidityProvidedAboveEq: true,
-          liquidityProvidedBelow: true,
-          rewardAboveEq: true,
-          rewardBelow: true,
-          shares: true,
-        }
-      ]
-    }).then(result => {
+    const positionPromise: Promise<CorePositionType> = this._genqlClient.query(
+      this._makeGetPosition(eventId, participantAddress)
+    ).then(result => {
         // TODO: is it good to select 0 object? What happens if there are more
         // items in array? (should not happen)
         const rawPosition = result.position[0];
@@ -294,26 +308,10 @@ export class JusterCore extends JusterBaseContract {
   ): Promise<void> {
 
     this.unsubscribeFromPosition();
-    const { unsubscribe } = this._genqlClient.subscription({
-      position: [
-        {
-          where: {
-            user: {address: {_eq: participantAddress}},
-            eventId: {_eq: eventId}
-          }
-        },
-        {
-          liquidityProvidedAboveEq: true,
-          liquidityProvidedBelow: true,
-          rewardAboveEq: true,
-          rewardBelow: true,
-          shares: true,
-        }
-      ]
-    }).subscribe({
-      // TODO: I feel that this is too complicated and there is smth wrong doing this:
-      next: (result) => updateCallback(
-        deserializePosition(result.position[0])),
+    const { unsubscribe } = this._genqlClient.subscription(
+      this._makeGetPosition(eventId, participantAddress)
+    ).subscribe({
+      next: (result) => updateCallback(deserializePosition(result.position[0])),
       error: console.error,
   });
 
