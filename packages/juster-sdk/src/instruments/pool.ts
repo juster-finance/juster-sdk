@@ -140,7 +140,7 @@ export class JusterPool extends JusterBaseInstrument {
   withdrawLiquidity(
     claims: ClaimKeys
   ): Promise<TransactionWalletOperation> {
-    return this.callMethodSend("withdrawLiquidity", claims);
+    return this.callMethodSend("withdrawLiquidity", [claims]);
   };
 
   /**
