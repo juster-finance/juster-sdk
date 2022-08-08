@@ -23,10 +23,12 @@ export type CorePositionType = {
   providedBelow: BigNumber
 }
 
-export type PoolPositionKeyType = {
+export type ClaimKey = {
   eventId: number,
   positionId: number
 }
+
+export type ClaimKeys = Array<ClaimKey>
 
 export type PendingEntryType = {
   acceptTime: Date,

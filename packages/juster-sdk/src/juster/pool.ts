@@ -14,7 +14,7 @@ import { NetworkType } from '@airgap/beacon-dapp';
 
 import {
   Network,
-  PoolPositionKeyType,
+  ClaimKeys,
   PendingEntryType,
   PendingEntriesType,
   PoolPositionType,
@@ -99,12 +99,23 @@ export class JusterPool extends JusterBaseContract {
     );
   };
 
-  // TODO: make description
+  /**
+   * Calling depositLiquidity entrypoint to add new liquidity entry
+   *
+   * @param amount added liquidity amount
+   * @returns promise with TransactionWalletOperation
+   */
   depositLiquidity(amount: BigNumber): Promise<TransactionWalletOperation> {
     return this.callMethodSend("depositLiquidity", [], amount.toNumber());
   };
 
-  // TODO: make description
+  /**
+   * Calling claimLiquidity entrypoint to claim given amount of shares
+   *
+   * @param positionId id of position to make claim from
+   * @param shares amount of shares to claim
+   * @returns promise with TransactionWalletOperation
+   */
   claimLiquidity(
     positionId: number,
     shares: BigNumber,
@@ -116,14 +127,24 @@ export class JusterPool extends JusterBaseContract {
     return this.callMethodSend("claimLiquidity", args);
   };
 
-  // TODO: make description
+  /**
+   * Calling withdrawLiquidity entrypoint to withdraw given claims
+   *
+   * @param claims array with claim keys to be withdrawn
+   * @returns promise with TransactionWalletOperation
+   */
   withdrawLiquidity(
-    positions: Array<PoolPositionKeyType>
+    claims: ClaimKeys
   ): Promise<TransactionWalletOperation> {
-    return this.callMethodSend("withdrawLiquidity", positions);
+    return this.callMethodSend("withdrawLiquidity", claims);
   };
 
-  // TODO: make description
+  /**
+   * Preparing QueryReqest for getting pending entries for a given userAddress
+   *
+   * @param userAddress string with user address
+   * @returns QueryRequest with graphql request for event
+   */
   _makeGetPendingEntriesQuery(
     userAddress: string
   ): QueryRequest {
@@ -144,7 +165,13 @@ export class JusterPool extends JusterBaseContract {
     }
   }
 
-  // TODO: make description
+  /**
+   * Performs request to graphql API for list of pending entries for a
+   * given userAddress
+   *
+   * @param userAddress string with user address
+   * @returns promise with PendingEntriesType
+   */
   getPendingEntries(
     userAddress: string
   ): Promise<PendingEntriesType> {
@@ -158,7 +185,15 @@ export class JusterPool extends JusterBaseContract {
   return entriesPromise
   }
 
-  // TODO: add description
+  /**
+   * Subscribes to pending entries updates, calls updateCallback each time when
+   * new update received
+   *
+   * @param userAddress string with user address
+   * @param updateCallback function with PendingEntriesType arg that called each
+   * time new update received
+   * @returns unsubscribe function
+   */
   async subscribeToPendingEntries(
     userAddress: string,
     updateCallback: (pendingEntries: PendingEntriesType) => void
@@ -174,7 +209,12 @@ export class JusterPool extends JusterBaseContract {
   this.unsubscribeFromPendingEntries = unsubscribe;
   }
 
-  // TODO: make description
+  /**
+   * Preparing QueryReqest for getting positions for a given userAddress
+   *
+   * @param userAddress string with user address
+   * @returns QueryRequest with graphql request for event
+   */
   _makeGetPositions(
     userAddress: string
   ): QueryRequest {
@@ -193,7 +233,12 @@ export class JusterPool extends JusterBaseContract {
     }
   }
 
-  // TODO: make description
+  /**
+   * Performs request to graphql API for list of positions for a given userAddress
+   *
+   * @param userAddress string with user address
+   * @returns promise with PoolPositionsType
+   */
   getPositions(
     userAddress: string
   ): Promise<PoolPositionsType> {
@@ -207,7 +252,15 @@ export class JusterPool extends JusterBaseContract {
   return positionsPromise
   }
 
-  // TODO: add description
+  /**
+   * Subscribes to pool positions, calls updateCallback each time when
+   * new update received
+   *
+   * @param userAddress string with user address
+   * @param updateCallback function with PoolPositionsType arg that called each
+   * time new update received
+   * @returns unsubscribe function
+   */
   async subscribeToPoolPositions(
     userAddress: string,
     updateCallback: (positions: PoolPositionsType) => void
@@ -223,7 +276,12 @@ export class JusterPool extends JusterBaseContract {
     this.unsubscribeFromPoolPositions = unsubscribe;
   }
 
-  // TODO: make description
+  /**
+   * Preparing QueryReqest for getting claims for a given userAddress
+   *
+   * @param userAddress string with user address
+   * @returns QueryRequest with graphql request for event
+   */
   _makeGetClaims(
     userAddress: string
   ): QueryRequest {
@@ -245,7 +303,12 @@ export class JusterPool extends JusterBaseContract {
     }
   }
 
-  // TODO: make description
+  /**
+   * Performs request to graphql API for list of claims for a given userAddress
+   *
+   * @param userAddress string with user address
+   * @returns promise with ClaimsType
+   */
   getClaims(
     userAddress: string
   ): Promise<ClaimsType> {
@@ -259,7 +322,14 @@ export class JusterPool extends JusterBaseContract {
   return claimsPromise
   }
 
-  // TODO: add description
+  /**
+   * Subscribes to claims, calls updateCallback each time when new update received
+   *
+   * @param userAddress string with user address
+   * @param updateCallback function with ClaimsType arg that called each
+   * time new update received
+   * @returns unsubscribe function
+   */
   async subscribeToClaims(
     userAddress: string,
     updateCallback: (positions: ClaimsType) => void
