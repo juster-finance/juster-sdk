@@ -42,9 +42,9 @@ function App() {
   const [position, setPosition] = useState<CorePositionType | null>(null);
   const [pkh, setPkh] = useState<string | null>(null);
 
-  const [pendingEntries, setPendingEntries] = useState<PendingEntriesType | []>([]);
-  const [poolPositions, setPoolPositions] = useState<PoolPositionsType | []>([]);
-  const [claims, setClaims] = useState<ClaimsType | []>([]);
+  const [pendingEntries, setPendingEntries] = useState<PendingEntriesType>([]);
+  const [poolPositions, setPoolPositions] = useState<PoolPositionsType>([]);
+  const [claims, setClaims] = useState<ClaimsType>([]);
 
   const update = async (
     eventId: number,
