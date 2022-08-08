@@ -150,6 +150,7 @@ function App() {
       >
         update
       </button>
+      <hr/>
       { tabsContent[tab] }
       <hr/>
     </div>

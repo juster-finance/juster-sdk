@@ -44,7 +44,8 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
   // TODO: calculate estimated position price
 
   return (
-    <div className="Grid">Pool Positions:
+    <div className="Grid">
+      <h3>Pool Positions:</h3>
       {poolPositions.length > 0 &&
         <table className="Table">
           <thead>

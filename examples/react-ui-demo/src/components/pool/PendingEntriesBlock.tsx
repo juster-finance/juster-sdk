@@ -34,7 +34,8 @@ export const PendingEntriesBlock: FunctionComponent<PendingEntriesProps> = ({ pk
   };
 
   return (
-    <div className="Grid">Pending Entries:
+    <div className="Grid">
+      <h3>Pending Entries:</h3>
       {pendingEntries.length > 0 &&
         <table className="Table">
           <thead>

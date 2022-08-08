@@ -13,7 +13,8 @@ export type ClaimsBlockProps = {
 export const ClaimsBlock: FunctionComponent<ClaimsBlockProps> = ({ pkh, justerPool, claims }) => {
 
   return (
-    <div className="Grid">Claims:
+    <div className="Grid">
+      <h3>Claims:</h3>
       {claims.length > 0 &&
         <table className="Table">
           <thead>

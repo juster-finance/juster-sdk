@@ -40,20 +40,25 @@ export const DepositForm: FunctionComponent<DepositFormProps> = ({ pkh, justerPo
   };
 
   return (
-    <div className="Grid">Deposit:
-      <p>
-        <span>Amount:</span>
-        <input
-          onChange={handleAmountChange}
-          defaultValue={amount.toFixed(6) || ''}/>
-      </p>
-      <p>
-        <span>Expected shares:</span>
-        <span>{estimatedShares.toFixed(6)}</span>
-      </p>
-      <button onClick={handleDeposit}>
-          deposit
-        </button>
+    <div className="Grid">
+      <h3>Deposit:</h3>
+      {pkh &&
+        <div>
+          <p>
+            <span>Amount:</span>
+            <input
+              onChange={handleAmountChange}
+              defaultValue={amount.toFixed(6) || ''}/>
+          </p>
+          <p>
+            <span>Expected shares:</span>
+            <span>{estimatedShares.toFixed(6)}</span>
+          </p>
+          <button onClick={handleDeposit}>
+              deposit
+          </button>
+        </div>
+      }
     </div>
   );
 };
