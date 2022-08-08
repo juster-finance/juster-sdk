@@ -94,7 +94,7 @@ function App() {
         (updPoolPositions) => {setPoolPositions(updPoolPositions)}
       );
 
-      justerPool.subscribeToClaims(
+      justerPool.subscribeToWithdrawableClaims(
         pkh,
         (updClaims) => {setClaims(updClaims)}
       );
