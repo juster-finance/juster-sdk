@@ -3,7 +3,7 @@ import {
   BetType,
   EventType,
   CorePositionType
-} from './types'
+} from '../types'
 
 
 // TODO: rename it to just estimateFee, because multiplier 1-fee?

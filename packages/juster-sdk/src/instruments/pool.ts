@@ -29,10 +29,10 @@ import {
   deserializeClaims
 } from '../serialization'
 
-import { JusterBaseContract } from './baseContract'
+import { JusterBaseInstrument } from './baseInstrument'
 
 
-export class JusterPool extends JusterBaseContract {
+export class JusterPool extends JusterBaseInstrument {
   protected _shareDecimals: BigNumber;
 
   public unsubscribeFromPendingEntries: () => void;

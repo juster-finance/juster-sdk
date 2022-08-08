@@ -18,7 +18,7 @@ import { NetworkType } from '@airgap/beacon-dapp';
 import { EntrypointName } from '../types'
 
 
-export class JusterBaseContract {
+export class JusterBaseInstrument {
   protected _network: NetworkType;
   protected _tezos: TezosToolkit;
   protected _provider: BeaconWallet;

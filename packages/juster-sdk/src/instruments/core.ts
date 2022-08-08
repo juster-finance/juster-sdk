@@ -24,10 +24,10 @@ import {
   deserializePosition
 } from '../serialization'
 
-import { JusterBaseContract } from './baseContract'
+import { JusterBaseInstrument } from './baseInstrument'
 
 
-export class JusterCore extends JusterBaseContract {
+export class JusterCore extends JusterBaseInstrument {
   protected _ratioPrecision: BigNumber;
   public providerProfitFee: BigNumber;
 
