@@ -298,14 +298,16 @@ export class JusterPool extends JusterBaseInstrument {
    * @param userAddress string with user address
    * @returns QueryRequest with graphql request for event
    */
-  _makeGetClaims(
+  _makeGetWithdrawableClaims(
     userAddress: string
   ): QueryRequest {
     return {
       claim: [
         {
           where: {
-            user: {address: {_eq: userAddress}}
+            user: {address: {_eq: userAddress}},
+            event: {result: {_is_null: false}},
+            withdrawn: {_eq: false}
           }
         },
         {
@@ -325,11 +327,11 @@ export class JusterPool extends JusterBaseInstrument {
    * @param userAddress string with user address
    * @returns promise with ClaimsType
    */
-  getClaims(
+  getWithdrawableClaims(
     userAddress: string
   ): Promise<ClaimsType> {
     const claimsPromise: Promise<ClaimsType> = this._genqlClient.query(
-      this._makeGetClaims(userAddress)
+      this._makeGetWithdrawableClaims(userAddress)
     ).then(result => {
       // TODO: check if there are any errors while request?
       return deserializeClaims(result.claim)
@@ -346,13 +348,13 @@ export class JusterPool extends JusterBaseInstrument {
    * time new update received
    * @returns unsubscribe function
    */
-  async subscribeToClaims(
+  async subscribeToWithdrawableClaims(
     userAddress: string,
     updateCallback: (positions: ClaimsType) => void
   ): Promise<void> {
     this.unsubscribeFromClaims();
     const { unsubscribe } = this._genqlClient.subscription(
-      this._makeGetClaims(userAddress)
+      this._makeGetWithdrawableClaims(userAddress)
     ).subscribe({
       next: (result) => updateCallback(deserializeClaims(result.claim)),
       error: console.error,
