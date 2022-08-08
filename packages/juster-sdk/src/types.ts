@@ -55,3 +55,8 @@ export type ClaimType = {
 
 export type ClaimsType = Array<ClaimType>
 
+export type PoolType = {
+  totalLiquidity: BigNumber,
+  totalShares: BigNumber
+}
+

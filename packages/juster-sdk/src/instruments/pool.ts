@@ -20,13 +20,15 @@ import {
   PoolPositionType,
   PoolPositionsType,
   ClaimType,
-  ClaimsType
+  ClaimsType,
+  PoolType
 } from '../types'
 
 import {
   deserializePendingEntries,
   deserializePoolPositions,
-  deserializeClaims
+  deserializeClaims,
+  deserializePool
 } from '../serialization'
 
 import { JusterBaseInstrument } from './baseInstrument'
@@ -38,6 +40,7 @@ export class JusterPool extends JusterBaseInstrument {
   public unsubscribeFromPendingEntries: () => void;
   public unsubscribeFromPoolPositions: () => void;
   public unsubscribeFromClaims: () => void;
+  public unsubscribeFromPool: () => void;
 
   constructor(
     network: NetworkType,
@@ -63,6 +66,7 @@ export class JusterPool extends JusterBaseInstrument {
     this.unsubscribeFromPendingEntries = () => {};
     this.unsubscribeFromPoolPositions = () => {};
     this.unsubscribeFromClaims = () => {};
+    this.unsubscribeFromPool = () => {};
 
     this._shareDecimals = new BigNumber(shareDecimals);
   };
@@ -357,7 +361,64 @@ export class JusterPool extends JusterBaseInstrument {
     this.unsubscribeFromClaims = unsubscribe;
   }
 
-  // TODO: calculateSharePrice helper
-  // TODO: calculateClaimAmount helper
+  /**
+   * Preparing QueryReqest for getting Pool
+   *
+   * @returns QueryRequest with graphql request for event
+   */
+  _makeGetPool(): QueryRequest {
+    return {
+      pool: [
+        {
+          where: {
+            address: {_eq: this._contractAddress}
+          }
+        },
+        {
+          totalLiquidity: true,
+          totalShares: true
+          // TODO: need to get activeLiquidity + activeEvents list [require dipdup upd]
+        }
+      ]
+    }
+  }
+
+  /**
+   * Performs request to graphql API for pool data
+   *
+   * @returns promise with PoolPositionsType
+   */
+  getPool(): Promise<PoolType> {
+    const poolPromise: Promise<PoolType> = this._genqlClient.query(
+      this._makeGetPool()
+    ).then(result => {
+      // TODO: check if there are any errors while request?
+      // TODO: handle error if there is no pools returned?
+      return deserializePool(result.pool[0])
+  });
+
+  return poolPromise
+  }
+
+  /**
+   * Subscribes to pool stats, calls updateCallback each time when new update received
+   *
+   * @param updateCallback function with PoolPositionsType arg that called each
+   * time new update received
+   * @returns unsubscribe function
+   */
+  async subscribeToPool(
+    updateCallback: (positions: PoolType) => void
+  ): Promise<void> {
+    this.unsubscribeFromPool();
+    const { unsubscribe } = this._genqlClient.subscription(
+      this._makeGetPool()
+    ).subscribe({
+      next: (result) => updateCallback(deserializePool(result.pool[0])),
+      error: console.error,
+    });
+
+    this.unsubscribeFromPool = unsubscribe;
+  }
 }
 

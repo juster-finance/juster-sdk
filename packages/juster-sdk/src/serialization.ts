@@ -6,7 +6,8 @@ import {
   PoolPositionType,
   PoolPositionsType,
   ClaimType,
-  ClaimsType
+  ClaimsType,
+  PoolType
 } from '../src/types'
 import BigNumber from "bignumber.js";
 
@@ -90,5 +91,12 @@ export const deserializeClaims = (rawClaims: Array<any>): ClaimsType => {
       withdrawn: rawClaim.withdrawn
     }
   });
+};
+
+export const deserializePool = (rawPool: any): PoolType => {
+  return {
+    totalLiquidity: new BigNumber(rawPool.totalLiquidity),
+    totalShares: new BigNumber(rawPool.totalShares)
+  };
 };
 
