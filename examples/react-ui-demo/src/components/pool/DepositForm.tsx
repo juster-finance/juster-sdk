@@ -1,8 +1,9 @@
 import React, { FunctionComponent, FormEvent, useState, ChangeEvent } from 'react';
+import BigNumber from "bignumber.js";
 import {
   JusterPool
 } from '@juster-finance/sdk';
-import BigNumber from "bignumber.js";
+import { processOperationSucceed, processOperationError } from '../../utility'
 
 export type DepositFormProps = {
   pkh: string | null,
@@ -23,20 +24,8 @@ export const DepositForm: FunctionComponent<DepositFormProps> = ({ pkh, justerPo
 
   const handleDeposit = async (e: FormEvent<HTMLButtonElement>) => {
     justerPool.depositLiquidity(amount)
-      .then((op) => {
-        console.log(`Hash: ${op.opHash}`);
-        op.confirmation()
-          .then((result) => {
-            console.log(result);
-            if (result.completed) {
-              console.log('Transaction correctly processed!');
-            } else {
-              console.log('An error has occurred');
-            }
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
+      .then(processOperationSucceed)
+      .catch(processOperationError);
   };
 
   return (
@@ -46,6 +35,10 @@ export const DepositForm: FunctionComponent<DepositFormProps> = ({ pkh, justerPo
         <input
           onChange={handleAmountChange}
           defaultValue={amount.toFixed(6) || ''}/>
+      </p>
+      <p>
+        <span>Expected shares:</span>
+        <span>...</span>
       </p>
       <button onClick={handleDeposit}>
           deposit

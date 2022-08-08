@@ -1,11 +1,12 @@
 import React, { FunctionComponent, FormEvent, useState, ChangeEvent } from 'react';
+import BigNumber from "bignumber.js";
 import {
   JusterCore,
   EventType,
   calculateRatio,
   estimateShares
 } from '@juster-finance/sdk';
-import BigNumber from "bignumber.js";
+import { processOperationSucceed, processOperationError } from '../../utility'
 
 type ProvideLiquidityProps = {
   eventId: number;
@@ -60,22 +61,9 @@ export const ProvideLiquidityForm: FunctionComponent<ProvideLiquidityProps> = ({
   const handleProvideLiquidity = async (e: FormEvent<HTMLButtonElement>) => {
 
     justerCore.provideLiquidity(
-      eventId, event.poolAboveEq, event.poolBelow, maxSlippage, amount)
-      .then((op) => {
-        console.log(`Hash: ${op.opHash}`);
-
-        op.confirmation()
-          .then((result) => {
-            console.log(result);
-            if (result.completed) {
-              console.log('Transaction correctly processed!');
-            } else {
-              console.log('An error has occurred');
-            }
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
+        eventId, event.poolAboveEq, event.poolBelow, maxSlippage, amount)
+      .then(processOperationSucceed)
+      .catch(processOperationError);
   };
 
   return (

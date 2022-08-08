@@ -3,6 +3,7 @@ import {
   JusterPool,
   PendingEntriesType
 } from '@juster-finance/sdk';
+import { processOperationSucceed, processOperationError } from '../../utility'
 
 export type PendingEntriesProps = {
   pkh: string | null,
@@ -16,20 +17,8 @@ export const PendingEntriesBlock: FunctionComponent<PendingEntriesProps> = ({ pk
     const button = e.target as HTMLButtonElement;
     const entryId: number = parseInt(button.name);
     justerPool.approveLiquidity(entryId)
-      .then((op) => {
-        console.log(`Hash: ${op.opHash}`);
-        op.confirmation()
-          .then((result) => {
-            console.log(result);
-            if (result.completed) {
-              console.log('Transaction correctly processed!');
-            } else {
-              console.log('An error has occurred');
-            }
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
+      .then(processOperationSucceed)
+      .catch(processOperationError);
   };
 
   return (
@@ -41,6 +30,7 @@ export const PendingEntriesBlock: FunctionComponent<PendingEntriesProps> = ({ pk
               <th>entry id</th>
               <th>amount provided</th>
               <th>accept time after</th>
+              <th>expected shares</th>
               <th>action</th>
             </tr>
           </thead>
@@ -51,6 +41,7 @@ export const PendingEntriesBlock: FunctionComponent<PendingEntriesProps> = ({ pk
                       <td>{entry.id}</td>
                       <td>{entry.amount.toFixed(6)} xtz</td>
                       <td>{entry.acceptTime.toLocaleDateString()}</td>
+                      <td>...</td>
                       <td>
                         <button name={entry.id.toString()} onClick={handleApprove}>approve</button>
                       </td>

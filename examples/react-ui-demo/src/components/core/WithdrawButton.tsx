@@ -3,6 +3,8 @@ import {
   JusterCore,
 } from '@juster-finance/sdk';
 
+import { processOperationSucceed, processOperationError } from '../../utility'
+
 type WithdrawProps = {
   eventId: number;
   pkh: string | null;
@@ -20,21 +22,8 @@ export const WithdrawButton: FunctionComponent<WithdrawProps> = ({ eventId, pkh,
 
     // TODO: check that minimal win amount calculated in mutez!
     justerCore.withdraw(eventId, pkh!)
-      .then((op) => {
-        console.log(`Hash: ${op.opHash}`);
-
-        op.confirmation()
-          .then((result) => {
-            console.log(result);
-            if (result.completed) {
-              console.log('Transaction correctly processed!');
-            } else {
-              console.log('An error has occurred');
-            }
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
+      .then(processOperationSucceed)
+      .catch(processOperationError);
   };
 
   return (
