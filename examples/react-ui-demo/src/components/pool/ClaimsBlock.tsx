@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react';
+import { WithdrawClaimButton } from './WithdrawClaimButton'
 import {
   JusterPool,
   ClaimsType
@@ -9,6 +10,7 @@ export type ClaimsBlockProps = {
   justerPool: JusterPool,
   claims: ClaimsType
 };
+
 
 export const ClaimsBlock: FunctionComponent<ClaimsBlockProps> = ({ pkh, justerPool, claims }) => {
 
@@ -34,7 +36,12 @@ export const ClaimsBlock: FunctionComponent<ClaimsBlockProps> = ({ pkh, justerPo
                       <td>{claim.eventId}</td>
                       <td>{claim.amount.toFixed(6)} xtz</td>
                       <td>{claim.withdrawn ? "yay" : "not yet"}</td>
-                      <td>{!claim.withdrawn ? <button>withdraw</button> : ""}</td>
+                      <td>
+                        <WithdrawClaimButton
+                          claim={claim}
+                          justerPool={justerPool}
+                        />
+                      </td>
                     </tr>
                   )
                 }
