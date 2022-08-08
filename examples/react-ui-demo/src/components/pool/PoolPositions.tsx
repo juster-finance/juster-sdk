@@ -3,17 +3,20 @@ import BigNumber from "bignumber.js";
 
 import {
   JusterPool,
-  PoolPositionsType
+  PoolPositionsType,
+  PoolType,
+  estimateSharePrice
 } from '@juster-finance/sdk';
 import { processOperationSucceed, processOperationError } from '../../utility'
 
 export type PoolPositionsProps = {
   pkh: string | null,
   justerPool: JusterPool,
-  poolPositions: PoolPositionsType
+  poolPositions: PoolPositionsType,
+  pool: PoolType | null
 };
 
-export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, justerPool, poolPositions }) => {
+export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, justerPool, poolPositions, pool }) => {
 
   const defaultShares: Array<BigNumber> = poolPositions.map(position => position.shares);
 
@@ -41,7 +44,13 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
       .catch(processOperationError);
   };
 
-  // TODO: calculate estimated position price
+  const calcExpectedAmountFmt = (amount: BigNumber) => {
+    if (pool !== null) {
+      return amount.times(estimateSharePrice(pool)).toFixed(6)
+    }
+    return "-"
+  };
+
 
   return (
     <div className="Grid">
@@ -62,7 +71,7 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
                     <tr key={position.id}>
                       <td>{position.id}</td>
                       <td>{position.shares.toFixed(6)}</td>
-                      <td>...</td>
+                      <td>{calcExpectedAmountFmt(position.shares)}</td>
                       <td>
                         <input
                           name={index.toString()}

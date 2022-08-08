@@ -52,6 +52,7 @@ export const PoolTab: FunctionComponent<PoolTabProps> = ({
         pkh={pkh}
         justerPool={justerPool}
         poolPositions={poolPositions}
+        pool={pool}
       />
 
       <hr/>
