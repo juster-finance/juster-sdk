@@ -3,7 +3,6 @@ import {
   JusterPool,
   ClaimsType
 } from '@juster-finance/sdk';
-import BigNumber from "bignumber.js";
 
 export type ClaimsBlockProps = {
   pkh: string | null,

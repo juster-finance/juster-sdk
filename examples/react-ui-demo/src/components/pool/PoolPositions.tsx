@@ -3,7 +3,6 @@ import {
   JusterPool,
   PoolPositionsType
 } from '@juster-finance/sdk';
-import BigNumber from "bignumber.js";
 
 export type PoolPositionsProps = {
   pkh: string | null,
@@ -34,7 +33,7 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
                       <td>{position.id}</td>
                       <td>{position.shares.toFixed(6)}</td>
                       <td>...</td>
-                      <td><input /><button>claim</button></td>
+                      <td><input placeholder="shares to claim"/><button>claim</button></td>
                     </tr>
                   )
                 }

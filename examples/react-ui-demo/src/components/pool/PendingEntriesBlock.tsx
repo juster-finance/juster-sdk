@@ -3,7 +3,6 @@ import {
   JusterPool,
   PendingEntriesType
 } from '@juster-finance/sdk';
-import BigNumber from "bignumber.js";
 
 export type PendingEntriesProps = {
   pkh: string | null,

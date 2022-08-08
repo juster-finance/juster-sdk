@@ -15,16 +15,8 @@ import {
   ClaimsType
 } from '@juster-finance/sdk';
 
-import { PositionComponent } from './components/core/Position';
-import { EventComponent } from './components/core/Event';
-import { ProvideLiquidityForm } from './components/core/ProvideLiquidityForm';
-import { BetForm } from './components/core/BetForm';
-import { WithdrawButton } from './components/core/WithdrawButton';
-
-import { DepositForm } from './components/pool/DepositForm';
-import { PendingEntriesBlock } from './components/pool/PendingEntriesBlock';
-import { PoolPositions } from './components/pool/PoolPositions';
-import { ClaimsBlock } from './components/pool/ClaimsBlock';
+import { PoolTab } from './components/tabs/Pool';
+import { CoreTab } from './components/tabs/Core';
 
 // TODO: move this initialization code somewhere?
 const rpcNode = "https://rpc.tzkt.io/ghostnet/";
@@ -38,8 +30,13 @@ const provider = new BeaconWallet({
 const justerCore = JusterCore.create(tezos, provider, "testnet");
 const justerPool = JusterPool.create(tezos, provider, "testnet");
 
+type Tabs = "pool" | "core";
+
 
 function App() {
+  // TODO: this component state is getting very complex, probably there is a way
+  // to fix it:
+  const [tab, setTab] = useState<Tabs>("pool");
   const [eventId, setEventId] = useState<number>(10313);
   const [event, setEvent] = useState<EventType | null>(null);
   const [position, setPosition] = useState<CorePositionType | null>(null);
@@ -49,7 +46,6 @@ function App() {
   const [poolPositions, setPoolPositions] = useState<PoolPositionsType | []>([]);
   const [claims, setClaims] = useState<ClaimsType | []>([]);
 
-  // TODO: remove this update and button (?)
   const update = async (
     eventId: number,
     pkh: string | null
@@ -64,6 +60,8 @@ function App() {
 
     setPkh(pkh);
     setEventId(eventId);
+    // TODO: add here justerPool getPendingEntries, getPositions, getClaims
+    // to test how it works
   };
 
   const handleSync = async (e: FormEvent<HTMLButtonElement>) => {
@@ -106,110 +104,49 @@ function App() {
   // TODO: so there will be one main block with both sync/update with two tabs
   // TODO: select event option
   // TODO: check vulnerabilities in github
-  /*
+
+  const tabsContent = {
+    pool: (
+      <PoolTab
+        pkh={pkh}
+        justerPool={justerPool}
+        pendingEntries={pendingEntries}
+        poolPositions={poolPositions}
+        claims={claims}
+      />
+    ),
+    core: (
+      <CoreTab
+        pkh={pkh}
+        justerCore={justerCore}
+        position={position}
+        event={event}
+        eventId={eventId}
+      />
+    )
+  };
+
+  // TODO: make selectable tabs ?
   return (
     <div className="App">
       <header className="App-header">
-        Juster SDK Core Demo
+        Juster SDK Demo
+        <br />
+        { tab }
       </header>
-      <div>
-        <button
-          onClick={handleSync}
-        >
-          sync
-        </button>
+      <button
+        onClick={handleSync}
+      >
+        sync
+      </button>
 
-        <button
-          onClick={(e) => update(eventId, pkh)}
-        >
-          update
-        </button>
-
-        <hr/>
-        <EventComponent
-          eventId={eventId}
-          event={event}
-        />
-
-        <hr/>
-        <PositionComponent
-          position={position}
-          event={event}
-          pkh={pkh}
-          juster={juster}
-        />
-
-        <hr/>
-        <ProvideLiquidityForm
-          eventId={eventId}
-          event={event}
-          juster={juster}
-        />
-
-        <hr/>
-        <BetForm
-          eventId={eventId}
-          event={event}
-          juster={juster}
-        />
-
-        <hr/>
-        <WithdrawButton
-          eventId={eventId}
-          pkh={pkh}
-          juster={juster}/>
-
-      </div>
-    </div>
-  );
-  */
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        Juster SDK Pool Demo
-      </header>
-      <div>
-        <button
-          onClick={handleSync}
-        >
-          sync
-        </button>
-
-        <button
-          onClick={(e) => update(eventId, pkh)}
-        >
-          update
-        </button>
-
-        <hr/>
-        <DepositForm
-          pkh={pkh}
-          justerPool={justerPool}
-        />
-
-        <hr/>
-        <PendingEntriesBlock
-          pkh={pkh}
-          justerPool={justerPool}
-          pendingEntries={pendingEntries}
-        />
-
-        <hr/>
-        <PoolPositions
-          pkh={pkh}
-          justerPool={justerPool}
-          poolPositions={poolPositions}
-        />
-
-        <hr/>
-        <ClaimsBlock
-          pkh={pkh}
-          justerPool={justerPool}
-          claims={claims}
-        />
-
-      </div>
+      <button
+        onClick={(e) => update(eventId, pkh)}
+      >
+        update
+      </button>
+      { tabsContent[tab] }
+      <hr/>
     </div>
   );
 }
