@@ -36,7 +36,7 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
     const button = e.target as HTMLButtonElement;
     const buttonIndex: number = parseInt(button.name);
     const shares = sharesAmounts[buttonIndex];
-    const positionId = poolPositions[buttonIndex].id;
+    const positionId = poolPositions[buttonIndex].positionId;
     console.log("claim shares", sharesAmounts);
 
     justerPool.claimLiquidity(positionId, shares)
@@ -59,7 +59,8 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
         <table className="Table">
           <thead>
             <tr>
-              <th>position id</th>
+              <th>id in db</th>
+              <th>id in pool</th>
               <th>shares</th>
               <th>estimated price</th>
               <th>claim from position</th>
@@ -70,6 +71,7 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
                   return (
                     <tr key={position.id}>
                       <td>{position.id}</td>
+                      <td>{position.positionId}</td>
                       <td>{position.shares.toFixed(6)}</td>
                       <td>{calcExpectedAmountFmt(position.shares)}</td>
                       <td>

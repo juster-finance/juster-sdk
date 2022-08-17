@@ -33,14 +33,16 @@ export type ClaimKeys = Array<ClaimKey>
 export type PendingEntryType = {
   acceptTime: Date,
   amount: BigNumber
-  id: number
+  id: number,
+  entryId: number
 }
 
 export type PendingEntriesType = Array<PendingEntryType>
 
 export type PoolPositionType = {
   shares: BigNumber
-  id: number
+  id: number,
+  positionId: number
 }
 
 export type PoolPositionsType = Array<PoolPositionType>

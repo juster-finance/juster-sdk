@@ -40,7 +40,8 @@ export const PendingEntriesBlock: FunctionComponent<PendingEntriesProps> = ({ pk
         <table className="Table">
           <thead>
             <tr>
-              <th>entry id</th>
+              <th>id in db</th>
+              <th>id in pool</th>
               <th>amount provided</th>
               <th>accept time after</th>
               <th>expected shares</th>
@@ -52,11 +53,12 @@ export const PendingEntriesBlock: FunctionComponent<PendingEntriesProps> = ({ pk
                   return (
                     <tr key={entry.id}>
                       <td>{entry.id}</td>
+                      <td>{entry.entryId}</td>
                       <td>{entry.amount.toFixed(6)} xtz</td>
                       <td>{entry.acceptTime.toLocaleDateString()}</td>
                       <td>{calcExpectedSharesFmt(entry.amount)}</td>
                       <td>
-                        <button name={entry.id.toString()} onClick={handleApprove}>approve</button>
+                        <button name={entry.entryId.toString()} onClick={handleApprove}>approve</button>
                       </td>
                     </tr>
                   )

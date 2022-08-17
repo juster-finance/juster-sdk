@@ -168,6 +168,7 @@ export class JusterPool extends JusterBaseInstrument {
       entryLiquidity: [
         {
           where: {
+            pool: {address: {_eq: this._contractAddress}},
             user: {address: {_eq: userAddress}},
             status: {_eq: "PENDING"}
           }
@@ -175,7 +176,8 @@ export class JusterPool extends JusterBaseInstrument {
         {
           acceptTime: true,
           amount: true,
-          id: true
+          id: true,
+          entryId: true
         }
       ]
     }
@@ -238,12 +240,14 @@ export class JusterPool extends JusterBaseInstrument {
       poolPosition: [
         {
           where: {
+            pool: {address: {_eq: this._contractAddress}},
             user: {address: {_eq: userAddress}},
             shares: {_gt: "0"}
           }
         },
         {
           shares: true,
+          positionId: true,
           id: true
         }
       ]
@@ -306,6 +310,7 @@ export class JusterPool extends JusterBaseInstrument {
       claim: [
         {
           where: {
+            pool: {address: {_eq: this._contractAddress}},
             user: {address: {_eq: userAddress}},
             event: {result: {_is_null: false}},
             withdrawn: {_eq: false}

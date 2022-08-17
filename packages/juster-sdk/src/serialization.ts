@@ -67,6 +67,7 @@ export const deserializePendingEntries = (rawEntries: Array<any>): PendingEntrie
     return {
       acceptTime: new Date(rawEntry.acceptTime),
       amount: new BigNumber(rawEntry.amount),
+      entryId: rawEntry.entryId,
       id: rawEntry.id
     }
   });
@@ -76,6 +77,7 @@ export const deserializePoolPositions = (rawPositions: Array<any>): PoolPosition
   return rawPositions.map((rawPosition: any): PoolPositionType => {
     return {
       shares: new BigNumber(rawPosition.shares),
+      positionId: rawPosition.positionId,
       id: rawPosition.id
     }
   });
