@@ -317,7 +317,9 @@ export class JusterPool extends JusterBaseInstrument {
           }
         },
         {
-          positionId: true,
+          position: {
+            positionId: true
+          },
           eventId: true,
           amount: true,
           withdrawn: true,

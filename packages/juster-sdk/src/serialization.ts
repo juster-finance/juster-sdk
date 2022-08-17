@@ -87,7 +87,7 @@ export const deserializeClaims = (rawClaims: Array<any>): ClaimsType => {
   return rawClaims.map((rawClaim: any): ClaimType => {
     return {
       id: rawClaim.id,
-      positionId: rawClaim.positionId,
+      positionId: rawClaim.position.positionId,
       eventId: rawClaim.eventId,
       amount: new BigNumber(rawClaim.amount),
       withdrawn: rawClaim.withdrawn
