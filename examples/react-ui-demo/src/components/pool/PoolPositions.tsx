@@ -63,7 +63,8 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
               <th>id in pool</th>
               <th>shares</th>
               <th>estimated price</th>
-              <th>claim from position</th>
+              <th>claim amount</th>
+              <th>withdraw</th>
             </tr>
           </thead>
           <tbody>
@@ -79,6 +80,8 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
                           name={index.toString()}
                           onChange={handleSharesChange}
                           defaultValue={defaultShares[index].toFixed(6)}/>
+                      </td>
+                      <td>
                         <button
                           name={index.toString()}
                           onClick={handleClaim}>
