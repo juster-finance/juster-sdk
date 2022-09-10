@@ -33,6 +33,14 @@ import {
 
 import { JusterBaseInstrument } from './baseInstrument'
 
+import { createClient } from '@juster-finance/gql-client'
+
+const poolRequest = {
+  totalLiquidity: true,
+  totalShares: true,
+  activeLiquidity: true,
+  address: true
+}
 
 export class JusterPool extends JusterBaseInstrument {
   protected _shareDecimals: BigNumber;
@@ -384,11 +392,7 @@ export class JusterPool extends JusterBaseInstrument {
             address: {_eq: this._contractAddress}
           }
         },
-        {
-          totalLiquidity: true,
-          totalShares: true
-          // TODO: need to get activeLiquidity + activeEvents list [require dipdup upd]
-        }
+        poolRequest
       ]
     }
   }
@@ -432,3 +436,20 @@ export class JusterPool extends JusterBaseInstrument {
   }
 }
 
+export const getAllPools = (
+  network: Network
+): Promise<Array<PoolType>> => {
+    // TODO: consider moving client from config creation to separate func?
+    const networkSettings = config.networks[network];
+    const { graphqlUri } = networkSettings;
+    const client = createClient({ url: graphqlUri });
+    const poolsPromise: Promise<Array<PoolType>> = client.query({
+      pool: poolRequest
+    }).then(result => {
+      return result.pool.map(pool => {
+        return deserializePool(pool)
+      })
+  });
+
+  return poolsPromise
+}

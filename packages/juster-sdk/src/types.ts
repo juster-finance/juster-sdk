@@ -59,6 +59,8 @@ export type ClaimsType = Array<ClaimType>
 
 export type PoolType = {
   totalLiquidity: BigNumber,
-  totalShares: BigNumber
+  totalShares: BigNumber,
+  activeLiquidity: BigNumber,
+  address: string
 }
 

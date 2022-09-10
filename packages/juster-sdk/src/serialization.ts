@@ -98,7 +98,9 @@ export const deserializeClaims = (rawClaims: Array<any>): ClaimsType => {
 export const deserializePool = (rawPool: any): PoolType => {
   return {
     totalLiquidity: new BigNumber(rawPool.totalLiquidity),
-    totalShares: new BigNumber(rawPool.totalShares)
+    totalShares: new BigNumber(rawPool.totalShares),
+    activeLiquidity: new BigNumber(rawPool.activeLiquidity),
+    address: rawPool.address
   };
 };
 
