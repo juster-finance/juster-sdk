@@ -13,7 +13,8 @@ import {
   PendingEntriesType,
   PoolPositionsType,
   ClaimsType,
-  PoolType
+  PoolStateType,
+  getAllPools
 } from '@juster-finance/sdk';
 
 import { PoolTab } from './components/tabs/Pool';
@@ -21,13 +22,14 @@ import { CoreTab } from './components/tabs/Core';
 
 // TODO: move this initialization code somewhere?
 const rpcNode = "https://rpc.tzkt.io/ghostnet/";
-const network = NetworkType["GHOSTNET"];
 const appName = "Juster";
 const tezos = new TezosToolkit(rpcNode);
 const provider = new BeaconWallet({
   name: appName,
-  preferredNetwork: network
+  preferredNetwork: NetworkType["GHOSTNET"]
 });
+
+const network = "testnet";
 const justerCore = JusterCore.create(tezos, provider, "testnet");
 const justerPool = JusterPool.create(tezos, provider, "testnet");
 
@@ -46,7 +48,7 @@ function App() {
   const [pendingEntries, setPendingEntries] = useState<PendingEntriesType>([]);
   const [poolPositions, setPoolPositions] = useState<PoolPositionsType>([]);
   const [claims, setClaims] = useState<ClaimsType>([]);
-  const [pool, setPool] = useState<PoolType | null>(null);
+  const [poolState, setPoolState] = useState<PoolStateType | null>(null);
 
   const update = async (
     eventId: number,
@@ -68,6 +70,8 @@ function App() {
 
   const handleSync = async (e: FormEvent<HTMLButtonElement>) => {
     await justerCore.sync();
+    const pools = await getAllPools("testnet");
+    console.log("pools:", pools);
 
     justerCore.getPkh().then((pkh) => {
       console.log("newPkh: ", pkh);
@@ -99,7 +103,7 @@ function App() {
         (updClaims) => {setClaims(updClaims)}
       );
 
-      justerPool.subscribeToPool((updPool) => {setPool(updPool)});
+      justerPool.subscribeToLastPoolState((updPoolState) => {setPoolState(updPoolState)});
       });
   };
 
@@ -116,7 +120,7 @@ function App() {
         pendingEntries={pendingEntries}
         poolPositions={poolPositions}
         claims={claims}
-        pool={pool}
+        poolState={poolState}
       />
     ),
 

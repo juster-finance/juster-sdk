@@ -4,7 +4,7 @@ import BigNumber from "bignumber.js";
 import {
   JusterPool,
   PendingEntriesType,
-  PoolType,
+  PoolStateType,
   estimateSharePrice
 } from '@juster-finance/sdk';
 import { processOperationSucceed, processOperationError } from '../../utility'
@@ -13,10 +13,10 @@ export type PendingEntriesProps = {
   pkh: string | null,
   justerPool: JusterPool,
   pendingEntries: PendingEntriesType,
-  pool: PoolType | null
+  poolState: PoolStateType | null
 };
 
-export const PendingEntriesBlock: FunctionComponent<PendingEntriesProps> = ({ pkh, justerPool, pendingEntries, pool }) => {
+export const PendingEntriesBlock: FunctionComponent<PendingEntriesProps> = ({ pkh, justerPool, pendingEntries, poolState }) => {
 
   const handleApprove = async (e: FormEvent<HTMLButtonElement>) => {
     const button = e.target as HTMLButtonElement;
@@ -27,8 +27,8 @@ export const PendingEntriesBlock: FunctionComponent<PendingEntriesProps> = ({ pk
   };
 
   const calcExpectedSharesFmt = (amount: BigNumber) => {
-    if (pool !== null) {
-      return amount.div(estimateSharePrice(pool)).toFixed(6)
+    if (poolState !== null) {
+      return amount.div(estimateSharePrice(poolState)).toFixed(6)
     }
     return "-"
   };
@@ -51,8 +51,8 @@ export const PendingEntriesBlock: FunctionComponent<PendingEntriesProps> = ({ pk
           <tbody>
             {pendingEntries.map(entry => {
                   return (
-                    <tr key={entry.id}>
-                      <td>{entry.id}</td>
+                    <tr key={entry.poolEntryId}>
+                      <td>{entry.poolEntryId}</td>
                       <td>{entry.entryId}</td>
                       <td>{entry.amount.toFixed(6)} xtz</td>
                       <td>{entry.acceptTime.toLocaleDateString()}</td>

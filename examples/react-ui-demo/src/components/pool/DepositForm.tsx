@@ -2,7 +2,7 @@ import React, { FunctionComponent, FormEvent, useState, ChangeEvent } from 'reac
 import BigNumber from "bignumber.js";
 import {
   JusterPool,
-  PoolType,
+  PoolStateType,
   estimateSharePrice
 } from '@juster-finance/sdk';
 import { processOperationSucceed, processOperationError } from '../../utility'
@@ -10,11 +10,11 @@ import { processOperationSucceed, processOperationError } from '../../utility'
 export type DepositFormProps = {
   pkh: string | null,
   justerPool: JusterPool,
-  pool: PoolType | null
+  poolState: PoolStateType | null
 };
 
 
-export const DepositForm: FunctionComponent<DepositFormProps> = ({ pkh, justerPool, pool }) => {
+export const DepositForm: FunctionComponent<DepositFormProps> = ({ pkh, justerPool, poolState }) => {
 
   // TODO: show input with button that makes transaction deposit
   // TODO: handle not loaded?
@@ -25,11 +25,11 @@ export const DepositForm: FunctionComponent<DepositFormProps> = ({ pkh, justerPo
     const newAmount = new BigNumber(e.target.value)
     setAmount(newAmount);
 
-    if (pool !== null) {
-      const newEstimatedShares = newAmount.div(estimateSharePrice(pool));
+    if (poolState !== null) {
+      const newEstimatedShares = newAmount.div(estimateSharePrice(poolState));
       setEstimatedShares(newEstimatedShares);
       console.log("new estimated", newEstimatedShares);
-      console.log("pool", pool.totalShares.toFixed(6));
+      console.log("pool state", poolState.totalShares.toFixed(6));
     };
   };
 
