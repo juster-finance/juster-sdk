@@ -1,9 +1,9 @@
 import BigNumber from "bignumber.js";
-import { PoolType } from '../types'
+import { PoolStateType } from '../types'
 
 
-export function estimateSharePrice(pool: PoolType): BigNumber {
-  return pool.totalLiquidity.div(pool.totalShares);
+export function estimateSharePrice(state: PoolStateType): BigNumber {
+  return state.totalLiquidity.div(state.totalShares);
 }
 
 /* TODO:

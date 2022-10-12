@@ -7,7 +7,7 @@ import {
   PoolPositionsType,
   ClaimType,
   ClaimsType,
-  PoolType
+  PoolStateType
 } from '../src/types'
 import BigNumber from "bignumber.js";
 
@@ -68,7 +68,7 @@ export const deserializePendingEntries = (rawEntries: Array<any>): PendingEntrie
       acceptTime: new Date(rawEntry.acceptTime),
       amount: new BigNumber(rawEntry.amount),
       entryId: rawEntry.entryId,
-      id: rawEntry.id
+      poolEntryId: rawEntry.poolEntryId
     }
   });
 };
@@ -78,7 +78,7 @@ export const deserializePoolPositions = (rawPositions: Array<any>): PoolPosition
     return {
       shares: new BigNumber(rawPosition.shares),
       positionId: rawPosition.positionId,
-      id: rawPosition.id
+      poolPositionId: rawPosition.poolPositionId
     }
   });
 };
@@ -95,12 +95,11 @@ export const deserializeClaims = (rawClaims: Array<any>): ClaimsType => {
   });
 };
 
-export const deserializePool = (rawPool: any): PoolType => {
+export const deserializePoolState = (rawPoolState: any): PoolStateType => {
   return {
-    totalLiquidity: new BigNumber(rawPool.totalLiquidity),
-    totalShares: new BigNumber(rawPool.totalShares),
-    activeLiquidity: new BigNumber(rawPool.activeLiquidity),
-    address: rawPool.address
+    totalLiquidity: new BigNumber(rawPoolState.totalLiquidity),
+    totalShares: new BigNumber(rawPoolState.totalShares),
+    activeLiquidity: new BigNumber(rawPoolState.activeLiquidity)
   };
 };
 

@@ -21,26 +21,21 @@ import {
   PoolPositionsType,
   ClaimType,
   ClaimsType,
-  PoolType
+  PoolType,
+  PoolStateType
 } from '../types'
 
 import {
   deserializePendingEntries,
   deserializePoolPositions,
   deserializeClaims,
-  deserializePool
+  deserializePoolState
 } from '../serialization'
 
 import { JusterBaseInstrument } from './baseInstrument'
 
 import { createClient } from '@juster-finance/gql-client'
 
-const poolRequest = {
-  totalLiquidity: true,
-  totalShares: true,
-  activeLiquidity: true,
-  address: true
-}
 
 export class JusterPool extends JusterBaseInstrument {
   protected _shareDecimals: BigNumber;
@@ -48,7 +43,7 @@ export class JusterPool extends JusterBaseInstrument {
   public unsubscribeFromPendingEntries: () => void;
   public unsubscribeFromPoolPositions: () => void;
   public unsubscribeFromClaims: () => void;
-  public unsubscribeFromPool: () => void;
+  public unsubscribeFromLastPoolState: () => void;
 
   constructor(
     network: NetworkType,
@@ -74,7 +69,7 @@ export class JusterPool extends JusterBaseInstrument {
     this.unsubscribeFromPendingEntries = () => {};
     this.unsubscribeFromPoolPositions = () => {};
     this.unsubscribeFromClaims = () => {};
-    this.unsubscribeFromPool = () => {};
+    this.unsubscribeFromLastPoolState = () => {};
 
     this._shareDecimals = new BigNumber(shareDecimals);
   };
@@ -184,7 +179,7 @@ export class JusterPool extends JusterBaseInstrument {
         {
           acceptTime: true,
           amount: true,
-          id: true,
+          poolEntryId: true,
           entryId: true
         }
       ]
@@ -256,7 +251,7 @@ export class JusterPool extends JusterBaseInstrument {
         {
           shares: true,
           positionId: true,
-          id: true
+          poolPositionId: true
         }
       ]
     }
@@ -384,15 +379,21 @@ export class JusterPool extends JusterBaseInstrument {
    *
    * @returns QueryRequest with graphql request for event
    */
-  _makeGetPool(): QueryRequest {
+  _makeGetLastPoolState(): QueryRequest {
     return {
-      pool: [
+      poolState: [
         {
           where: {
-            address: {_eq: this._contractAddress}
+            pool: {
+              address: {_eq: this._contractAddress}
+            }
           }
         },
-        poolRequest
+        {
+          totalLiquidity: true,
+          totalShares: true,
+          activeLiquidity: true
+        }
       ]
     }
   }
@@ -400,18 +401,18 @@ export class JusterPool extends JusterBaseInstrument {
   /**
    * Performs request to graphql API for pool data
    *
-   * @returns promise with PoolPositionsType
+   * @returns promise with PoolStateType
    */
-  getPool(): Promise<PoolType> {
-    const poolPromise: Promise<PoolType> = this._genqlClient.query(
-      this._makeGetPool()
+  getLastPoolState(): Promise<PoolStateType> {
+    const poolStatePromise: Promise<PoolStateType> = this._genqlClient.query(
+      this._makeGetLastPoolState()
     ).then(result => {
       // TODO: check if there are any errors while request?
       // TODO: handle error if there is no pools returned?
-      return deserializePool(result.pool[0])
+      return deserializePoolState(result.poolState[0])
   });
 
-  return poolPromise
+  return poolStatePromise
   }
 
   /**
@@ -421,18 +422,18 @@ export class JusterPool extends JusterBaseInstrument {
    * time new update received
    * @returns unsubscribe function
    */
-  async subscribeToPool(
-    updateCallback: (positions: PoolType) => void
+  async subscribeToLastPoolState(
+    updateCallback: (positions: PoolStateType) => void
   ): Promise<void> {
-    this.unsubscribeFromPool();
+    this.unsubscribeFromLastPoolState();
     const { unsubscribe } = this._genqlClient.subscription(
-      this._makeGetPool()
+      this._makeGetLastPoolState()
     ).subscribe({
-      next: (result) => updateCallback(deserializePool(result.pool[0])),
+      next: (result) => updateCallback(deserializePoolState(result.poolState[0])),
       error: console.error,
     });
 
-    this.unsubscribeFromPool = unsubscribe;
+    this.unsubscribeFromLastPoolState = unsubscribe;
   }
 }
 
@@ -444,10 +445,10 @@ export const getAllPools = (
     const { graphqlUri } = networkSettings;
     const client = createClient({ url: graphqlUri });
     const poolsPromise: Promise<Array<PoolType>> = client.query({
-      pool: poolRequest
+      pool: {address: true}
     }).then(result => {
       return result.pool.map(pool => {
-        return deserializePool(pool)
+        return {address: pool.address}
       })
   });
 

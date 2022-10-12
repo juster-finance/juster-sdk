@@ -33,7 +33,7 @@ export type ClaimKeys = Array<ClaimKey>
 export type PendingEntryType = {
   acceptTime: Date,
   amount: BigNumber
-  id: number,
+  poolEntryId: number,
   entryId: number
 }
 
@@ -41,7 +41,7 @@ export type PendingEntriesType = Array<PendingEntryType>
 
 export type PoolPositionType = {
   shares: BigNumber
-  id: number,
+  poolPositionId: number,
   positionId: number
 }
 
@@ -57,10 +57,13 @@ export type ClaimType = {
 
 export type ClaimsType = Array<ClaimType>
 
-export type PoolType = {
+export type PoolStateType = {
   totalLiquidity: BigNumber,
   totalShares: BigNumber,
-  activeLiquidity: BigNumber,
+  activeLiquidity: BigNumber
+}
+
+export type PoolType = {
   address: string
 }
 
