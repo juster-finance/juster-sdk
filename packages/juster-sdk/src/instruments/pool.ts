@@ -444,12 +444,21 @@ export const getAllPools = (
     const networkSettings = config.networks[network];
     const { graphqlUri } = networkSettings;
     const client = createClient({ url: graphqlUri });
+
+    const deserializePool = (pool: PoolType) => {
+      return {address: pool.address}
+    };
+
+    const selectTrusted = (pool: PoolType) => {
+      // TODO: check that contract code is the same as reference
+      // TODO: check that contract created by trusted address
+      return true
+    };
+
     const poolsPromise: Promise<Array<PoolType>> = client.query({
       pool: {address: true}
     }).then(result => {
-      return result.pool.map(pool => {
-        return {address: pool.address}
-      })
+      return result.pool.map(deserializePool).filter(selectTrusted)
   });
 
   return poolsPromise
