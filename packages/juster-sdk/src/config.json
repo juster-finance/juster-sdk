@@ -11,7 +11,8 @@
         "tz1bgvq6y5RdjAUzBNNovqoAgBXv77dbkdhT"
       ],
       "graphqlUri": "https://api.ithacanet-pool.juster.fi/v1/graphql",
-      "subscriptionUri": "wss://api.ithacanet-pool.juster.fi/v1/graphql"
+      "subscriptionUri": "wss://api.ithacanet-pool.juster.fi/v1/graphql",
+      "tzktApiBaseUrl": "https://api.ghostnet.tzkt.io/"
     },
     "mainnet": {
       "networkName": "MAINNET",
@@ -21,7 +22,8 @@
         "TODO:"
       ],
       "graphqlUri": "https://juster.dipdup.net/v1/graphql",
-      "subscriptionUri": "wss://juster.dipdup.net/v1/graphql"
+      "subscriptionUri": "wss://juster.dipdup.net/v1/graphql",
+      "tzktApiBaseUrl": "https://api.tzkt.io/"
     }
   },
   "entrypoints": {

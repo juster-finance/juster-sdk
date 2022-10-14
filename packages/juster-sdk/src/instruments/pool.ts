@@ -34,8 +34,9 @@ import {
 
 import { JusterBaseInstrument } from './baseInstrument'
 
-import { createClient } from '@juster-finance/gql-client'
+import { requestSimilarPools } from '../tzkt'
 
+import { createClient } from '@juster-finance/gql-client'
 
 export class JusterPool extends JusterBaseInstrument {
   protected _shareDecimals: BigNumber;
@@ -444,19 +445,25 @@ export class JusterPool extends JusterBaseInstrument {
   }
 }
 
-export const getAllPools = (
+export const getAllPools = async (
   network: Network
 ): Promise<Array<PoolType>> => {
     // TODO: consider moving client from config creation to separate func?
-    const networkSettings = config.networks[network];
-    const { graphqlUri } = networkSettings;
+    const {
+      graphqlUri,
+      tzktApiBaseUrl,
+      justerPoolReferenceAddress
+    } = config.networks[network];
+
     const client = createClient({ url: graphqlUri });
 
     const deserializePool = (pool: PoolType) => {
       return {address: pool.address}
     };
 
-    // TODO: select all same to the reference contracts
+    const similarPools = await requestSimilarPools(
+      tzktApiBaseUrl, justerPoolReferenceAddress);
+    console.log("similar pools:", similarPools);
 
     const selectTrusted = (pool: PoolType) => {
       // TODO: check that contract code is the same as reference
