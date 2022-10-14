@@ -31,7 +31,10 @@ const provider = new BeaconWallet({
 
 const network = "testnet";
 const justerCore = JusterCore.create(tezos, provider, "testnet");
-const justerPool = JusterPool.create(tezos, provider, "testnet");
+
+// NOTE: pool address hardcoded to allow default pool object creation (instead of making it null)
+let justerPool = JusterPool.create(
+  tezos, provider, "testnet", "KT1T4zTEZQLbFeKoR8sRihozyS4DAnyicYE3");
 
 type Tabs = "pool" | "core";
 
@@ -72,6 +75,8 @@ function App() {
     await justerCore.sync();
     const pools = await getAllPools("testnet");
     console.log("pools:", pools);
+    justerPool.unsubscribeAll();
+    justerPool = JusterPool.create(tezos, provider, "testnet", pools[0].address);
 
     justerCore.getPkh().then((pkh) => {
       console.log("newPkh: ", pkh);

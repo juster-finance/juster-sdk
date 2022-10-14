@@ -6,14 +6,20 @@
     "testnet": {
       "networkName": "GHOSTNET",
       "justerCoreAddress": "KT1Feq9iRBBhpSBdPF1Y7Sd7iJu7uLqqRf1A",
-      "justerPoolAddress": "KT1T4zTEZQLbFeKoR8sRihozyS4DAnyicYE3",
+      "justerPoolReferenceAddress": "KT1T4zTEZQLbFeKoR8sRihozyS4DAnyicYE3",
+      "trustedOriginationSenders": [
+        "tz1bgvq6y5RdjAUzBNNovqoAgBXv77dbkdhT"
+      ],
       "graphqlUri": "https://api.ithacanet-pool.juster.fi/v1/graphql",
       "subscriptionUri": "wss://api.ithacanet-pool.juster.fi/v1/graphql"
     },
     "mainnet": {
       "networkName": "MAINNET",
       "justerCoreAddress": "KT1D6XTy8oAHkUWdzuQrzySECCDMnANEchQq",
-      "justerPoolAddress": "TODO:",
+      "justerPoolReferenceAddress": "TODO:",
+      "trustedOriginationSenders": [
+        "TODO:"
+      ],
       "graphqlUri": "https://juster.dipdup.net/v1/graphql",
       "subscriptionUri": "wss://juster.dipdup.net/v1/graphql"
     }

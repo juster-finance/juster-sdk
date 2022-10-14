@@ -78,12 +78,12 @@ export class JusterPool extends JusterBaseInstrument {
     tezos: TezosToolkit,
     provider: BeaconWallet,
     network: Network,
+    poolAddress: string,
   ) {
 
     const networkSettings = config.networks[network];
 
     const {
-      justerPoolAddress,
       graphqlUri,
       subscriptionUri,
       networkName
@@ -96,7 +96,7 @@ export class JusterPool extends JusterBaseInstrument {
 
     return new JusterPool(
       (<any>NetworkType)[networkName],
-      justerPoolAddress,
+      poolAddress,
       tezos,
       provider,
       entrypoints["justerPool"],
@@ -435,6 +435,13 @@ export class JusterPool extends JusterBaseInstrument {
 
     this.unsubscribeFromLastPoolState = unsubscribe;
   }
+
+  async unsubscribeAll(): Promise<void> {
+    this.unsubscribeFromPendingEntries();
+    this.unsubscribeFromPoolPositions();
+    this.unsubscribeFromClaims();
+    this.unsubscribeFromLastPoolState();
+  }
 }
 
 export const getAllPools = (
@@ -448,6 +455,8 @@ export const getAllPools = (
     const deserializePool = (pool: PoolType) => {
       return {address: pool.address}
     };
+
+    // TODO: select all same to the reference contracts
 
     const selectTrusted = (pool: PoolType) => {
       // TODO: check that contract code is the same as reference
