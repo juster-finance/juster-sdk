@@ -448,11 +448,11 @@ export class JusterPool extends JusterBaseInstrument {
 export const getAllPools = async (
   network: Network
 ): Promise<Array<PoolType>> => {
-    // TODO: consider moving client from config creation to separate func?
     const {
       graphqlUri,
       tzktApiBaseUrl,
-      justerPoolReferenceAddress
+      justerPoolReferenceAddress,
+      trustedOriginationSenders
     } = config.networks[network];
 
     const client = createClient({ url: graphqlUri });
@@ -463,18 +463,19 @@ export const getAllPools = async (
 
     const similarPools = await requestSimilarPools(
       tzktApiBaseUrl, justerPoolReferenceAddress);
-    console.log("similar pools:", similarPools);
+    const trustedPoolAddresses = similarPools.filter(poolData => {
+      return trustedOriginationSenders.includes(poolData.creator.address)
+    }).map(poolData => {return poolData.address});
 
-    const selectTrusted = (pool: PoolType) => {
-      // TODO: check that contract code is the same as reference
-      // TODO: check that contract created by trusted address
-      return true
+    const checkIsTrusted = (pool: PoolType) => {
+      return trustedPoolAddresses.includes(pool.address)
     };
 
+    // TODO: consider adding filtering by balance?
     const poolsPromise: Promise<Array<PoolType>> = client.query({
       pool: {address: true}
     }).then(result => {
-      return result.pool.map(deserializePool).filter(selectTrusted)
+      return result.pool.map(deserializePool).filter(checkIsTrusted)
   });
 
   return poolsPromise
