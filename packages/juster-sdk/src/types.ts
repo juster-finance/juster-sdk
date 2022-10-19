@@ -42,7 +42,12 @@ export type PendingEntriesType = Array<PendingEntryType>
 export type PoolPositionType = {
   shares: BigNumber
   poolPositionId: number,
-  positionId: number
+  positionId: number,
+  totalDeposited: BigNumber,
+  realizedProfit: BigNumber,
+  entrySharePrice: BigNumber,
+  withdrawnShares: BigNumber,
+  withdrawnAmount: BigNumber
 }
 
 export type PoolPositionsType = Array<PoolPositionType>

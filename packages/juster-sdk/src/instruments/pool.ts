@@ -252,7 +252,14 @@ export class JusterPool extends JusterBaseInstrument {
         {
           shares: true,
           positionId: true,
-          poolPositionId: true
+          poolPositionId: true,
+          realizedProfit: true,
+          entrySharePrice: true,
+          withdrawnShares: true,
+          withdrawnAmount: true,
+          entry: {
+            amount: true
+          }
         }
       ]
     }

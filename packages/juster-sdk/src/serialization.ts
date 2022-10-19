@@ -78,7 +78,12 @@ export const deserializePoolPositions = (rawPositions: Array<any>): PoolPosition
     return {
       shares: new BigNumber(rawPosition.shares),
       positionId: rawPosition.positionId,
-      poolPositionId: rawPosition.poolPositionId
+      poolPositionId: rawPosition.poolPositionId,
+      totalDeposited: new BigNumber(rawPosition.entry.amount),
+      realizedProfit: new BigNumber(rawPosition.realizedProfit),
+      entrySharePrice: new BigNumber(rawPosition.entrySharePrice),
+      withdrawnShares: new BigNumber(rawPosition.withdrawnShares),
+      withdrawnAmount: new BigNumber(rawPosition.withdrawnAmount)
     }
   });
 };
