@@ -388,7 +388,9 @@ export class JusterPool extends JusterBaseInstrument {
             pool: {
               address: {_eq: this._contractAddress}
             }
-          }
+          },
+          limit: 1,
+          order_by: [{counter: "desc"}]
         },
         {
           totalLiquidity: true,
