@@ -245,8 +245,7 @@ export class JusterPool extends JusterBaseInstrument {
         {
           where: {
             pool: {address: {_eq: this._contractAddress}},
-            user: {address: {_eq: userAddress}},
-            shares: {_gt: "0"}
+            user: {address: {_eq: userAddress}}
           }
         },
         {
