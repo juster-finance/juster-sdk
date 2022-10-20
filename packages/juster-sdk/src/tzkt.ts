@@ -23,17 +23,15 @@ export const requestSimilarPools = async (
   tzktApiBaseUrl: string,
   referenceAddress: string
 ): Promise<Array<TzKTSameContract>> => {
-  return fetch(`${tzktApiBaseUrl}v1/contracts/${referenceAddress}/same`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(response.statusText)
-      }
+  const url = `${tzktApiBaseUrl}v1/contracts/${referenceAddress}/same`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(response.statusText)
+  };
 
-      return response.json().then(jsonResponse => {
-        return jsonResponse.map(
-          (contract: any) => deserializeTzKTSameContract(contract)
-        );
-      });
-    })
+  const jsonResponse = await response.json();
+  return jsonResponse.map(
+    (contract: any) => deserializeTzKTSameContract(contract)
+  );
 }
 

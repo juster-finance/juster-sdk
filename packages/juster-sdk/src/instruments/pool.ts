@@ -1,5 +1,4 @@
 import {
-  ContractMethod,
   TezosToolkit,
   TransactionWalletOperation,
 } from "@taquito/taquito";
@@ -15,11 +14,8 @@ import { NetworkType } from '@airgap/beacon-dapp';
 import {
   Network,
   ClaimKeys,
-  PendingEntryType,
   PendingEntriesType,
-  PoolPositionType,
   PoolPositionsType,
-  ClaimType,
   ClaimsType,
   PoolType,
   PoolStateType

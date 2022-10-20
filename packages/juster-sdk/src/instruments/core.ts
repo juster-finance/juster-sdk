@@ -1,5 +1,4 @@
 import {
-  ContractMethod,
   TezosToolkit,
   TransactionWalletOperation,
 } from "@taquito/taquito";
