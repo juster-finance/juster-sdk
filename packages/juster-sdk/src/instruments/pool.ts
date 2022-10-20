@@ -5,7 +5,10 @@ import {
 
 import { BeaconWallet } from '@taquito/beacon-wallet';
 
-import { QueryRequest } from '@juster-finance/gql-client'
+import {
+  QueryRequest,
+  createClient
+} from '@juster-finance/gql-client'
 
 import config from "../config.json"
 import BigNumber from "bignumber.js";
@@ -31,8 +34,6 @@ import {
 import { JusterBaseInstrument } from './baseInstrument'
 
 import { requestSimilarPools } from '../tzkt'
-
-import { createClient } from '@juster-finance/gql-client'
 
 export class JusterPool extends JusterBaseInstrument {
   protected _shareDecimals: BigNumber;
@@ -63,10 +64,10 @@ export class JusterPool extends JusterBaseInstrument {
       subscriptionUri,
     );
 
-    this.unsubscribeFromPendingEntries = () => {};
-    this.unsubscribeFromPoolPositions = () => {};
-    this.unsubscribeFromClaims = () => {};
-    this.unsubscribeFromLastPoolState = () => {};
+    this.unsubscribeFromPendingEntries = () => undefined;
+    this.unsubscribeFromPoolPositions = () => undefined;
+    this.unsubscribeFromClaims = () => undefined;
+    this.unsubscribeFromLastPoolState = () => undefined;
 
     this._shareDecimals = new BigNumber(shareDecimals);
   };
@@ -92,7 +93,7 @@ export class JusterPool extends JusterBaseInstrument {
     } = config;
 
     return new JusterPool(
-      (<any>NetworkType)[networkName],
+      networkName as NetworkType,
       poolAddress,
       tezos,
       provider,

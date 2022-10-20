@@ -103,7 +103,7 @@ export function estimateBetReward(
  * Calculates current user position for one of the outcomes using storage data
  *
  * @param position participant status returned from graphql (based on dipdup-bets
- model)
+ * model)
  * @param event Juster event that used to calculate position
  * @param pool either AboveEq or Below pool
  * @param profitFee fraction that cutted from provider profits

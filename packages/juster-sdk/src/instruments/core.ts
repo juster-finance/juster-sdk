@@ -55,8 +55,8 @@ export class JusterCore extends JusterBaseInstrument {
       subscriptionUri,
     );
 
-    this.unsubscribeFromEvent = () => {};
-    this.unsubscribeFromPosition = () => {};
+    this.unsubscribeFromEvent = () => undefined;
+    this.unsubscribeFromPosition = () => undefined;
 
     this._ratioPrecision = new BigNumber(ratioPrecision);
     this.providerProfitFee = new BigNumber(providerProfitFee);
@@ -85,7 +85,7 @@ export class JusterCore extends JusterBaseInstrument {
     } = config;
 
     return new JusterCore(
-      (<any>NetworkType)[networkName],
+      networkName as NetworkType,
       justerCoreAddress,
       tezos,
       provider,
