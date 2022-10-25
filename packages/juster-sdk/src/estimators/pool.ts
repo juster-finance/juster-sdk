@@ -24,7 +24,8 @@ export function aggregatePositions(
   const totalShares = activeShares.plus(withdrawnShares);
   const estimatedSharePrice = estimateSharePrice(poolState);
   const entrySharePrice = totalDeposited.div(totalShares);
-  const unrealizedProfit = estimatedSharePrice.minus(entrySharePrice).times(activeShares);
+  const positionsProfits = positions.map(pos => estimatedSharePrice.minus(pos.entrySharePrice).times(pos.shares));
+  const unrealizedProfit = positionsProfits.reduce((sum, profit) => sum.plus(profit), new BigNumber(0));
 
   return {
     totalDeposited: totalDeposited,
