@@ -79,6 +79,7 @@ export type PoolActionType = (
   | 'POOL_DISBANDED'
   | 'DEPOSITS_PAUSED'
   | 'DEPOSITS_UNPAUSED'
+  | 'EMPTY_STATE'
 );
 
 export type PoolStateType = {
