@@ -52,7 +52,8 @@ export type PoolPositionType = {
   realizedProfit: BigNumber,
   entrySharePrice: BigNumber,
   withdrawnShares: BigNumber,
-  withdrawnAmount: BigNumber
+  withdrawnAmount: BigNumber,
+  lockedEstimateAmount: BigNumber
 }
 
 export type ClaimType = {

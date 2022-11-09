@@ -260,6 +260,7 @@ export class JusterPool extends JusterBaseInstrument {
           withdrawnShares: true,
           withdrawnAmount: true,
           depositedAmount: true,
+          lockedEstimateAmount: true
         }
       ]
     }

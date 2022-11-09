@@ -15,7 +15,8 @@ export function makeUserPosition(
   const unrealizedProfit = estimatedPositionsValue
     .plus(position.withdrawnAmount)
     .minus(position.depositedAmount)
-    .minus(position.realizedProfit);
+    .minus(position.realizedProfit)
+    .plus(position.lockedEstimateAmount);
 
   return {
     totalDeposited: position.depositedAmount,

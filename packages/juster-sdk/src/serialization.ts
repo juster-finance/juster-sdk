@@ -89,7 +89,8 @@ const emptyPoolPosition: PoolPositionType = {
   realizedProfit: new BigNumber(0),
   entrySharePrice: new BigNumber(0),
   withdrawnShares: new BigNumber(0),
-  withdrawnAmount: new BigNumber(0)
+  withdrawnAmount: new BigNumber(0),
+  lockedEstimateAmount: new BigNumber(0)
 };
 
 export const deserializePoolPosition = (rawPosition: pool_position): PoolPositionType => {
@@ -107,7 +108,8 @@ export const deserializePoolPosition = (rawPosition: pool_position): PoolPositio
     realizedProfit: new BigNumber(rawPosition.realizedProfit),
     entrySharePrice: new BigNumber(rawPosition.entrySharePrice),
     withdrawnShares: new BigNumber(rawPosition.withdrawnShares),
-    withdrawnAmount: new BigNumber(rawPosition.withdrawnAmount)
+    withdrawnAmount: new BigNumber(rawPosition.withdrawnAmount),
+    lockedEstimateAmount: new BigNumber(rawPosition.lockedEstimateAmount)
   }
 };
 
