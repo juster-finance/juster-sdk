@@ -3,16 +3,15 @@ import BigNumber from "bignumber.js";
 
 import {
   JusterPool,
-  PoolPositionsType,
-  PoolStateType,
-  estimateSharePrice
+  PoolPositionType,
+  PoolStateType
 } from '@juster-finance/sdk';
 import { processOperationSucceed, processOperationError } from '../../utility'
 
 export type PoolPositionsProps = {
   pkh: string | null,
   justerPool: JusterPool,
-  poolPositions: PoolPositionsType,
+  poolPositions: Array<PoolPositionType>,
   poolState: PoolStateType | null
 };
 
@@ -36,17 +35,17 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
     const button = e.target as HTMLButtonElement;
     const buttonIndex: number = parseInt(button.name);
     const shares = sharesAmounts[buttonIndex];
-    const positionId = poolPositions[buttonIndex].positionId;
+    const provider = poolPositions[buttonIndex].provider;
     console.log("claim shares", sharesAmounts);
 
-    justerPool.claimLiquidity(positionId, shares)
+    justerPool.claimLiquidity(provider, shares)
       .then(processOperationSucceed)
       .catch(processOperationError);
   };
 
   const calcExpectedAmountFmt = (amount: BigNumber) => {
     if (poolState !== null) {
-      return amount.times(estimateSharePrice(poolState)).toFixed(6)
+      return amount.times(poolState.sharePrice).toFixed(6)
     }
     return "-"
   };
@@ -59,8 +58,7 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
         <table className="Table">
           <thead>
             <tr>
-              <th>id in db</th>
-              <th>id in pool</th>
+              <th>provider</th>
               <th>shares</th>
               <th>estimated price</th>
               <th>claim amount</th>
@@ -70,9 +68,8 @@ export const PoolPositions: FunctionComponent<PoolPositionsProps> = ({ pkh, just
           <tbody>
             {poolPositions.map((position, index) => {
                   return (
-                    <tr key={position.poolPositionId}>
-                      <td>{position.poolPositionId}</td>
-                      <td>{position.positionId}</td>
+                    <tr key={position.provider}>
+                      <td>{position.provider}</td>
                       <td>{position.shares.toFixed(6)}</td>
                       <td>{calcExpectedAmountFmt(position.shares)}</td>
                       <td>

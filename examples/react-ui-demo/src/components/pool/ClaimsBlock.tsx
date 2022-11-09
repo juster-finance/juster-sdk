@@ -17,7 +17,7 @@ export const ClaimsBlock: FunctionComponent<ClaimsBlockProps> = ({ pkh, justerPo
 
   const handleWithdrawAll = async (e: FormEvent<HTMLButtonElement>) => {
     // TODO: limit claims to 30
-    justerPool.withdrawLiquidity(claims)
+    justerPool.withdrawClaims(claims)
       .then(processOperationSucceed)
       .catch(processOperationError);
   };
@@ -30,7 +30,7 @@ export const ClaimsBlock: FunctionComponent<ClaimsBlockProps> = ({ pkh, justerPo
           <table className="Table">
             <thead>
               <tr>
-                <th>position id</th>
+                <th>provider</th>
                 <th>event id</th>
                 <th>amount</th>
                 <th>is withdrawn</th>
@@ -41,10 +41,10 @@ export const ClaimsBlock: FunctionComponent<ClaimsBlockProps> = ({ pkh, justerPo
               {claims.map(claim => {
                     return (
                       <tr key={claim.id}>
-                        <td>{claim.positionId}</td>
+                        <td>{claim.provider}</td>
                         <td>{claim.eventId}</td>
                         <td>{claim.amount.toFixed(6)} xtz</td>
-                        <td>{claim.withdrawn ? "yay" : "not yet"}</td>
+                        <td>{claim.isWithdrawn ? "yay" : "not yet"}</td>
                         <td>
                           <WithdrawClaimButton
                             claim={claim}

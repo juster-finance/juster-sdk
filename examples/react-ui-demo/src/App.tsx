@@ -11,7 +11,7 @@ import {
   EventType,
   CorePositionType,
   PendingEntriesType,
-  PoolPositionsType,
+  PoolPositionType,
   ClaimsType,
   PoolStateType,
   getAllPools
@@ -30,11 +30,12 @@ const provider = new BeaconWallet({
 });
 
 const network = "testnet";
-const justerCore = JusterCore.create(tezos, provider, "testnet");
+const justerCore = JusterCore.create(tezos, provider, network);
 
 // NOTE: pool address hardcoded to allow default pool object creation (instead of making it null)
+// TODO: try to initiate justerPool inside useEffect
 let justerPool = JusterPool.create(
-  tezos, provider, "testnet", "KT1T4zTEZQLbFeKoR8sRihozyS4DAnyicYE3");
+  tezos, provider, network, "KT1VPXd6MA7D5s4zhQXTFqujETNiaCxnpntq");
 
 type Tabs = "pool" | "core";
 
@@ -49,9 +50,12 @@ function App() {
   const [pkh, setPkh] = useState<string | null>(null);
 
   const [pendingEntries, setPendingEntries] = useState<PendingEntriesType>([]);
-  const [poolPositions, setPoolPositions] = useState<PoolPositionsType>([]);
+  const [poolPosition, setPoolPosition] = useState<PoolPositionType | null>(null);
   const [claims, setClaims] = useState<ClaimsType>([]);
   const [poolState, setPoolState] = useState<PoolStateType | null>(null);
+
+  // TODO: don't like this hardcoded address again:
+  const [poolAddress, setPoolAddress] = useState<string>("KT1JtoKmceBrbcKP75eZFWaQiZQYTwxeN9XF");
 
   const update = async (
     eventId: number,
@@ -100,7 +104,7 @@ function App() {
 
       justerPool.subscribeToPoolPositions(
         pkh,
-        (updPoolPositions) => {setPoolPositions(updPoolPositions)}
+        (updPoolPosition) => {setPoolPosition(updPoolPosition)}
       );
 
       justerPool.subscribeToWithdrawableClaims(
@@ -123,7 +127,7 @@ function App() {
         pkh={pkh}
         justerPool={justerPool}
         pendingEntries={pendingEntries}
-        poolPositions={poolPositions}
+        poolPosition={poolPosition}
         claims={claims}
         poolState={poolState}
       />

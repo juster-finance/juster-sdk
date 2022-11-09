@@ -1,34 +1,34 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import BigNumber from "bignumber.js";
 
 import {
   JusterPool,
-  PoolPositionsType,
+  PoolPositionType,
   PoolStateType,
   AggregatedPositionType,
-  aggregatePositions
+  makeUserPosition
 } from '@juster-finance/sdk';
 
 export type AggregatedUserPositionProps = {
   pkh: string | null,
   justerPool: JusterPool,
-  userPositions: PoolPositionsType,
+  userPosition: PoolPositionType | null,
   poolState: PoolStateType | null
 };
 
-export const AggregatedUserPosition: FunctionComponent<AggregatedUserPositionProps> = ({ pkh, justerPool, userPositions, poolState }) => {
-
+export const AggregatedUserPosition: FC<AggregatedUserPositionProps> = (props) => {
+  const { pkh, justerPool, userPosition, poolState } = props;
   const [aggPosition, setAggPosition] = useState<AggregatedPositionType | null>(null);
   useEffect(() => {
-    if (poolState !== null) {
-      setAggPosition(aggregatePositions(userPositions, poolState))
+    if ((poolState !== null) && (userPosition !== null)) {
+      setAggPosition(makeUserPosition(userPosition, poolState))
     }
-  }, [userPositions, poolState]);
+  }, [userPosition, poolState]);
 
   return (
     <div className="Grid">
       <h3>Aggregated User Position:</h3>
-      {userPositions.length > 0 && aggPosition &&
+      {userPosition && aggPosition &&
         <table className="Table">
           <thead>
             <tr>
@@ -82,5 +82,3 @@ export const AggregatedUserPosition: FunctionComponent<AggregatedUserPositionPro
     </div>
   );
 };
-
-

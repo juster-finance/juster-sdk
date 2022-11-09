@@ -18,7 +18,7 @@ export const WithdrawClaimButton: FunctionComponent<WitdrawClaimButtonProps> = (
 }) => {
 
   const handleWithdraw = async (e: FormEvent<HTMLButtonElement>) => {
-    justerPool.withdrawLiquidity([claim])
+    justerPool.withdrawClaims([claim])
       .then(processOperationSucceed)
       .catch(processOperationError);
   };

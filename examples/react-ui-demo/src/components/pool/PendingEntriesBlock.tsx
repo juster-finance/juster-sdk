@@ -4,8 +4,7 @@ import BigNumber from "bignumber.js";
 import {
   JusterPool,
   PendingEntriesType,
-  PoolStateType,
-  estimateSharePrice
+  PoolStateType
 } from '@juster-finance/sdk';
 import { processOperationSucceed, processOperationError } from '../../utility'
 
@@ -21,14 +20,14 @@ export const PendingEntriesBlock: FunctionComponent<PendingEntriesProps> = ({ pk
   const handleApprove = async (e: FormEvent<HTMLButtonElement>) => {
     const button = e.target as HTMLButtonElement;
     const entryId: number = parseInt(button.name);
-    justerPool.approveLiquidity(entryId)
+    justerPool.approveEntry(entryId)
       .then(processOperationSucceed)
       .catch(processOperationError);
   };
 
   const calcExpectedSharesFmt = (amount: BigNumber) => {
     if (poolState !== null) {
-      return amount.div(estimateSharePrice(poolState)).toFixed(6)
+      return amount.div(poolState.sharePrice).toFixed(6)
     }
     return "-"
   };

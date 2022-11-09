@@ -2,8 +2,7 @@ import React, { FunctionComponent, FormEvent, useState, ChangeEvent } from 'reac
 import BigNumber from "bignumber.js";
 import {
   JusterPool,
-  PoolStateType,
-  estimateSharePrice
+  PoolStateType
 } from '@juster-finance/sdk';
 import { processOperationSucceed, processOperationError } from '../../utility'
 
@@ -26,7 +25,7 @@ export const DepositForm: FunctionComponent<DepositFormProps> = ({ pkh, justerPo
     setAmount(newAmount);
 
     if (poolState !== null) {
-      const newEstimatedShares = newAmount.div(estimateSharePrice(poolState));
+      const newEstimatedShares = newAmount.div(poolState.sharePrice);
       setEstimatedShares(newEstimatedShares);
       console.log("new estimated", newEstimatedShares);
       console.log("pool state", poolState.totalShares.toFixed(6));

@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import {
   JusterPool,
   PendingEntriesType,
-  PoolPositionsType,
+  PoolPositionType,
   ClaimsType,
   PoolStateType
 } from '@juster-finance/sdk';
@@ -18,7 +18,7 @@ export type PoolTabProps = {
   pkh: string | null,
   justerPool: JusterPool,
   pendingEntries: PendingEntriesType,
-  poolPositions: PoolPositionsType,
+  poolPosition: PoolPositionType | null,
   claims: ClaimsType,
   poolState: PoolStateType | null
 };
@@ -27,11 +27,12 @@ export const PoolTab: FunctionComponent<PoolTabProps> = ({
   pkh,
   justerPool,
   pendingEntries,
-  poolPositions,
+  poolPosition,
   claims,
   poolState
 }) => {
 
+  const poolPositions: Array<PoolPositionType> = poolPosition == null ? [] : [poolPosition];
   return (
     <div>
       <DepositForm
@@ -60,7 +61,7 @@ export const PoolTab: FunctionComponent<PoolTabProps> = ({
       <AggregatedUserPosition
         pkh={pkh}
         justerPool={justerPool}
-        userPositions={poolPositions}
+        userPosition={poolPosition}
         poolState={poolState}
       />
 
@@ -74,4 +75,3 @@ export const PoolTab: FunctionComponent<PoolTabProps> = ({
     </div>
   );
 };
-
