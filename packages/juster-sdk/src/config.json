@@ -4,9 +4,9 @@
   "poolShareDecimals": "1000000",
   "networks": {
     "testnet": {
-      "networkName": "GHOSTNET",
+      "networkName": "ghostnet",
       "justerCoreAddress": "KT1Feq9iRBBhpSBdPF1Y7Sd7iJu7uLqqRf1A",
-      "justerPoolReferenceAddress": "KT1T4zTEZQLbFeKoR8sRihozyS4DAnyicYE3",
+      "justerPoolReferenceAddress": "KT1JtoKmceBrbcKP75eZFWaQiZQYTwxeN9XF",
       "trustedOriginationSenders": [
         "tz1bgvq6y5RdjAUzBNNovqoAgBXv77dbkdhT"
       ],
@@ -15,7 +15,7 @@
       "tzktApiBaseUrl": "https://api.ghostnet.tzkt.io/"
     },
     "mainnet": {
-      "networkName": "MAINNET",
+      "networkName": "mainnet",
       "justerCoreAddress": "KT1D6XTy8oAHkUWdzuQrzySECCDMnANEchQq",
       "justerPoolReferenceAddress": "TODO:",
       "trustedOriginationSenders": [
@@ -127,9 +127,9 @@
         "prim": "pair",
         "args": [
           {
-            "prim": "nat",
+            "prim": "address",
             "annots": [
-              "%positionId"
+              "%provider"
             ]
           },
           {
@@ -143,7 +143,7 @@
           "%claimLiquidity"
         ]
       },
-      "withdrawLiquidity": {
+      "withdrawClaims": {
         "prim": "list",
         "args": [
           {
@@ -156,16 +156,16 @@
                 ]
               },
               {
-                "prim": "nat",
+                "prim": "address",
                 "annots": [
-                  "%positionId"
+                  "%provider"
                 ]
               }
             ]
           }
         ],
         "annots": [
-          "%withdrawLiquidity"
+          "%withdrawClaims"
         ]
       },
       "depositLiquidity": {
@@ -174,10 +174,16 @@
           "%depositLiquidity"
         ]
       },
-      "approveLiquidity": {
+      "approveEntry": {
         "prim": "nat",
         "annots": [
-          "%approveLiquidity"
+          "%approveEntry"
+        ]
+      },
+      "cancelEntry": {
+        "prim": "nat",
+        "annots": [
+          "%cancelEntry"
         ]
       }
     }

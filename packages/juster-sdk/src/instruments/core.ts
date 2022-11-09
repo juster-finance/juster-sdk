@@ -5,7 +5,7 @@ import {
 
 import { BeaconWallet } from '@taquito/beacon-wallet';
 
-import { QueryRequest } from '@juster-finance/gql-client'
+import { event, position, QueryRequest } from '@juster-finance/gql-client'
 
 import config from "../config.json"
 import BigNumber from "bignumber.js";
@@ -201,7 +201,7 @@ export class JusterCore extends JusterBaseInstrument {
       this._makeGetEvent(eventId)
     ).then(result => {
       // TODO: check if there are any errors while request?
-      return deserializeEvent(result.eventByPk)
+      return deserializeEvent(result.eventByPk as event)
   });
 
   return eventPromise
@@ -224,7 +224,7 @@ export class JusterCore extends JusterBaseInstrument {
     const { unsubscribe } = this._genqlClient.subscription(
       this._makeGetEvent(eventId)
     ).subscribe({
-      next: (result) => updateCallback(deserializeEvent(result.eventByPk)),
+      next: (result) => updateCallback(deserializeEvent(result.eventByPk as event)),
       error: console.error,
   });
 
@@ -284,7 +284,7 @@ export class JusterCore extends JusterBaseInstrument {
         const rawPosition = result.position[0];
 
         // TODO: check if there are any errors while request?
-        return deserializePosition(rawPosition)
+        return deserializePosition(rawPosition as position)
     });
 
     return positionPromise
@@ -310,7 +310,7 @@ export class JusterCore extends JusterBaseInstrument {
     const { unsubscribe } = this._genqlClient.subscription(
       this._makeGetPosition(eventId, participantAddress)
     ).subscribe({
-      next: (result) => updateCallback(deserializePosition(result.position[0])),
+      next: (result) => updateCallback(deserializePosition(result.position[0] as position)),
       error: console.error,
   });
 

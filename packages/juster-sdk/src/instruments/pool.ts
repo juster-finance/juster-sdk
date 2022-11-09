@@ -7,7 +7,11 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 
 import {
   QueryRequest,
-  createClient
+  createClient,
+  entry_liquidity,
+  pool_position,
+  claim,
+  pool_state
 } from '@juster-finance/gql-client'
 
 import config from "../config.json"
@@ -18,7 +22,7 @@ import {
   Network,
   ClaimKeys,
   PendingEntriesType,
-  PoolPositionsType,
+  PoolPositionType,
   ClaimsType,
   PoolType,
   PoolStateType
@@ -26,7 +30,7 @@ import {
 
 import {
   deserializePendingEntries,
-  deserializePoolPositions,
+  deserializePoolPosition,
   deserializeClaims,
   deserializePoolState
 } from '../serialization'
@@ -39,7 +43,7 @@ export class JusterPool extends JusterBaseInstrument {
   protected _shareDecimals: BigNumber;
 
   public unsubscribeFromPendingEntries: () => void;
-  public unsubscribeFromPoolPositions: () => void;
+  public unsubscribeFromPoolPosition: () => void;
   public unsubscribeFromClaims: () => void;
   public unsubscribeFromLastPoolState: () => void;
 
@@ -65,7 +69,7 @@ export class JusterPool extends JusterBaseInstrument {
     );
 
     this.unsubscribeFromPendingEntries = () => undefined;
-    this.unsubscribeFromPoolPositions = () => undefined;
+    this.unsubscribeFromPoolPosition = () => undefined;
     this.unsubscribeFromClaims = () => undefined;
     this.unsubscribeFromLastPoolState = () => undefined;
 
@@ -117,43 +121,43 @@ export class JusterPool extends JusterBaseInstrument {
   /**
    * Calling claimLiquidity entrypoint to claim given amount of shares
    *
-   * @param positionId id of position to make claim from
+   * @param provider is user address to make claim from
    * @param shares amount of shares to claim
    * @returns promise with TransactionWalletOperation
    */
   claimLiquidity(
-    positionId: number,
+    provider: string,
     shares: BigNumber,
   ): Promise<TransactionWalletOperation> {
     const args = [
-      positionId,
+      provider,
       shares.times(this._shareDecimals).integerValue().toNumber()
     ];
     return this.callMethodSend("claimLiquidity", args);
   };
 
   /**
-   * Calling withdrawLiquidity entrypoint to withdraw given claims
+   * Calling withdrawClaims entrypoint to withdraw given claims
    *
    * @param claims array with claim keys to be withdrawn
    * @returns promise with TransactionWalletOperation
    */
-  withdrawLiquidity(
+  withdrawClaims(
     claims: ClaimKeys
   ): Promise<TransactionWalletOperation> {
-    return this.callMethodSend("withdrawLiquidity", [claims]);
+    return this.callMethodSend("withdrawClaims", [claims]);
   };
 
   /**
-   * Calling approveLiquidity entrypoint to approve entry
+   * Calling approveEntry entrypoint to approve entry
    *
    * @param entryId is number of entry to be approved
    * @returns promise with TransactionWalletOperation
    */
-  approveLiquidity(
+  approveEntry(
     entryId: number
   ): Promise<TransactionWalletOperation> {
-    return this.callMethodSend("approveLiquidity", [entryId]);
+    return this.callMethodSend("approveEntry", [entryId]);
   };
 
   /**
@@ -198,7 +202,7 @@ export class JusterPool extends JusterBaseInstrument {
       this._makeGetPendingEntriesQuery(userAddress)
     ).then(result => {
       // TODO: check if there are any errors while request?
-      return deserializePendingEntries(result.entryLiquidity)
+      return deserializePendingEntries(result.entryLiquidity as Array<entry_liquidity>)
   });
 
   return entriesPromise
@@ -221,7 +225,8 @@ export class JusterPool extends JusterBaseInstrument {
     const { unsubscribe } = this._genqlClient.subscription(
       this._makeGetPendingEntriesQuery(userAddress)
     ).subscribe({
-      next: (result) => updateCallback(deserializePendingEntries(result.entryLiquidity)),
+      next: (result) => updateCallback(
+        deserializePendingEntries(result.entryLiquidity as Array<entry_liquidity>)),
       error: console.error,
   });
 
@@ -234,7 +239,7 @@ export class JusterPool extends JusterBaseInstrument {
    * @param userAddress string with user address
    * @returns QueryRequest with graphql request for event
    */
-  _makeGetPositions(
+  _makeGetPosition(
     userAddress: string
   ): QueryRequest {
     return {
@@ -247,37 +252,36 @@ export class JusterPool extends JusterBaseInstrument {
         },
         {
           shares: true,
-          positionId: true,
-          poolPositionId: true,
+          user: {
+            address: true
+          },
           realizedProfit: true,
           entrySharePrice: true,
           withdrawnShares: true,
           withdrawnAmount: true,
-          entry: {
-            amount: true
-          }
+          depositedAmount: true,
         }
       ]
     }
   }
 
   /**
-   * Performs request to graphql API for list of positions for a given userAddress
+   * Performs request to graphql API for user position stats
    *
    * @param userAddress string with user address
    * @returns promise with PoolPositionsType
    */
-  getPositions(
+  getPosition(
     userAddress: string
-  ): Promise<PoolPositionsType> {
-    const positionsPromise: Promise<PoolPositionsType> = this._genqlClient.query(
-      this._makeGetPositions(userAddress)
+  ): Promise<PoolPositionType> {
+    const positionPromise: Promise<PoolPositionType> = this._genqlClient.query(
+      this._makeGetPosition(userAddress)
     ).then(result => {
       // TODO: check if there are any errors while request?
-      return deserializePoolPositions(result.poolPosition)
+      return deserializePoolPosition(result.poolPosition[0] as pool_position)
   });
 
-  return positionsPromise
+  return positionPromise
   }
 
   /**
@@ -291,17 +295,18 @@ export class JusterPool extends JusterBaseInstrument {
    */
   async subscribeToPoolPositions(
     userAddress: string,
-    updateCallback: (positions: PoolPositionsType) => void
+    updateCallback: (positions: PoolPositionType) => void
   ): Promise<void> {
-    this.unsubscribeFromPoolPositions();
+    this.unsubscribeFromPoolPosition();
     const { unsubscribe } = this._genqlClient.subscription(
-      this._makeGetPositions(userAddress)
+      this._makeGetPosition(userAddress)
     ).subscribe({
-      next: (result) => updateCallback(deserializePoolPositions(result.poolPosition)),
+      next: (result) => updateCallback(
+        deserializePoolPosition(result.poolPosition[0] as pool_position)),
       error: console.error,
     });
 
-    this.unsubscribeFromPoolPositions = unsubscribe;
+    this.unsubscribeFromPoolPosition = unsubscribe;
   }
 
   /**
@@ -324,8 +329,8 @@ export class JusterPool extends JusterBaseInstrument {
           }
         },
         {
-          position: {
-            positionId: true
+          user: {
+            address: true
           },
           eventId: true,
           amount: true,
@@ -349,7 +354,7 @@ export class JusterPool extends JusterBaseInstrument {
       this._makeGetWithdrawableClaims(userAddress)
     ).then(result => {
       // TODO: check if there are any errors while request?
-      return deserializeClaims(result.claim)
+      return deserializeClaims(result.claim as Array<claim>)
   });
 
   return claimsPromise
@@ -371,7 +376,8 @@ export class JusterPool extends JusterBaseInstrument {
     const { unsubscribe } = this._genqlClient.subscription(
       this._makeGetWithdrawableClaims(userAddress)
     ).subscribe({
-      next: (result) => updateCallback(deserializeClaims(result.claim)),
+      next: (result) => updateCallback(
+        deserializeClaims(result.claim as Array<claim>)),
       error: console.error,
     });
 
@@ -398,7 +404,15 @@ export class JusterPool extends JusterBaseInstrument {
         {
           totalLiquidity: true,
           totalShares: true,
-          activeLiquidity: true
+          activeLiquidity: true,
+          withdrawableLiquidity: true,
+          entryLiquidity: true,
+          sharePrice: true,
+          timestamp: true,
+          level: true,
+          counter: true,
+          action: true,
+          opgHash: true
         }
       ]
     }
@@ -415,7 +429,7 @@ export class JusterPool extends JusterBaseInstrument {
     ).then(result => {
       // TODO: check if there are any errors while request?
       // TODO: handle error if there is no pools returned?
-      return deserializePoolState(result.poolState[0])
+      return deserializePoolState(result.poolState[0] as pool_state)
   });
 
   return poolStatePromise
@@ -435,7 +449,8 @@ export class JusterPool extends JusterBaseInstrument {
     const { unsubscribe } = this._genqlClient.subscription(
       this._makeGetLastPoolState()
     ).subscribe({
-      next: (result) => updateCallback(deserializePoolState(result.poolState[0])),
+      next: (result) => updateCallback(
+        deserializePoolState(result.poolState[0] as pool_state)),
       error: console.error,
     });
 
@@ -444,7 +459,7 @@ export class JusterPool extends JusterBaseInstrument {
 
   async unsubscribeAll(): Promise<void> {
     this.unsubscribeFromPendingEntries();
-    this.unsubscribeFromPoolPositions();
+    this.unsubscribeFromPoolPosition();
     this.unsubscribeFromClaims();
     this.unsubscribeFromLastPoolState();
   }
