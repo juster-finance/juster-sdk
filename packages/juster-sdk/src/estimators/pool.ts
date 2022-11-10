@@ -2,14 +2,14 @@ import BigNumber from "bignumber.js";
 import {
   PoolStateType,
   PoolPositionType,
-  AggregatedPositionType
+  SummaryPositionType
 } from '../types'
 
 
-export function makeUserPosition(
+export function makeSummaryPosition(
   position: PoolPositionType,
   lastPoolState: PoolStateType
-): AggregatedPositionType {
+): SummaryPositionType {
 
   const estimatedPositionsValue = position.shares.times(lastPoolState.sharePrice);
   const unrealizedProfit = estimatedPositionsValue
@@ -27,7 +27,8 @@ export function makeUserPosition(
     withdrawnShares: position.withdrawnShares,
     withdrawnAmount: position.withdrawnAmount,
     realizedProfit: position.realizedProfit,
-    unrealizedProfit: unrealizedProfit
+    unrealizedProfit: unrealizedProfit,
+    lockedInClaims: position.lockedEstimateAmount
   }
 }
 

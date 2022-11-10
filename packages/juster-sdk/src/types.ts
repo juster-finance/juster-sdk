@@ -101,7 +101,7 @@ export type PoolType = {
   address: string
 }
 
-export type AggregatedPositionType = {
+export type SummaryPositionType = {
   totalDeposited: BigNumber,
   entrySharePrice: BigNumber,
   currentSharePrice: BigNumber,
@@ -110,5 +110,6 @@ export type AggregatedPositionType = {
   withdrawnShares: BigNumber,
   withdrawnAmount: BigNumber,
   realizedProfit: BigNumber,
-  unrealizedProfit: BigNumber
+  unrealizedProfit: BigNumber,
+  lockedInClaims: BigNumber
 }
