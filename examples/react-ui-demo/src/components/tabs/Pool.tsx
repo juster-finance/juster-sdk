@@ -11,7 +11,7 @@ import { DepositForm } from '../pool/DepositForm';
 import { PendingEntriesBlock } from '../pool/PendingEntriesBlock';
 import { PoolPositions } from '../pool/PoolPositions';
 import { ClaimsBlock } from '../pool/ClaimsBlock';
-import { AggregatedUserPosition } from '../pool/AggregatedUserPosition';
+import { UserSummary } from '../pool/UserSummary';
 
 
 export type PoolTabProps = {
@@ -58,7 +58,7 @@ export const PoolTab: FunctionComponent<PoolTabProps> = ({
       />
 
       <hr/>
-      <AggregatedUserPosition
+      <UserSummary
         pkh={pkh}
         justerPool={justerPool}
         userPosition={poolPosition}

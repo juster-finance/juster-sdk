@@ -5,29 +5,29 @@ import {
   JusterPool,
   PoolPositionType,
   PoolStateType,
-  AggregatedPositionType,
-  makeUserPosition
+  SummaryPositionType,
+  makeSummaryPosition
 } from '@juster-finance/sdk';
 
-export type AggregatedUserPositionProps = {
+export type UserSummaryProps = {
   pkh: string | null,
   justerPool: JusterPool,
   userPosition: PoolPositionType | null,
   poolState: PoolStateType | null
 };
 
-export const AggregatedUserPosition: FC<AggregatedUserPositionProps> = (props) => {
+export const UserSummary: FC<UserSummaryProps> = (props) => {
   const { pkh, justerPool, userPosition, poolState } = props;
-  const [aggPosition, setAggPosition] = useState<AggregatedPositionType | null>(null);
+  const [aggPosition, setAggPosition] = useState<SummaryPositionType | null>(null);
   useEffect(() => {
     if ((poolState !== null) && (userPosition !== null)) {
-      setAggPosition(makeUserPosition(userPosition, poolState))
+      setAggPosition(makeSummaryPosition(userPosition, poolState))
     }
   }, [userPosition, poolState]);
 
   return (
     <div className="Grid">
-      <h3>Aggregated User Position:</h3>
+      <h3>User Summary:</h3>
       {userPosition && aggPosition &&
         <table className="Table">
           <thead>
@@ -75,6 +75,10 @@ export const AggregatedUserPosition: FC<AggregatedUserPositionProps> = (props) =
             <tr>
               <td>unrealized profit</td>
               <td>{ aggPosition.unrealizedProfit.toFixed(6) }</td>
+            </tr>
+            <tr>
+              <td>locked in claims</td>
+              <td>{ aggPosition.lockedInClaims.toFixed(6) }</td>
             </tr>
           </tbody>
         </table>
