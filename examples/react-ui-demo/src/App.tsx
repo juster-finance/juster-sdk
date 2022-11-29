@@ -29,13 +29,13 @@ const provider = new BeaconWallet({
   preferredNetwork: NetworkType["GHOSTNET"]
 });
 
-const network = "testnet";
+const network = "mainnet";
 const justerCore = JusterCore.create(tezos, provider, network);
 
 // NOTE: pool address hardcoded to allow default pool object creation (instead of making it null)
 // TODO: try to initiate justerPool inside useEffect
 let justerPool = JusterPool.create(
-  tezos, provider, network, "KT1VPXd6MA7D5s4zhQXTFqujETNiaCxnpntq");
+  tezos, provider, network, "KT1JKiMQWE8hcSGq8j89mYDEY4DLpTE4vEaD");
 
 type Tabs = "pool" | "core";
 
@@ -55,7 +55,7 @@ function App() {
   const [poolState, setPoolState] = useState<PoolStateType | null>(null);
 
   // TODO: don't like this hardcoded address again:
-  const [poolAddress, setPoolAddress] = useState<string>("KT1JtoKmceBrbcKP75eZFWaQiZQYTwxeN9XF");
+  const [poolAddress, setPoolAddress] = useState<string>("KT1JKiMQWE8hcSGq8j89mYDEY4DLpTE4vEaD");
 
   const update = async (
     eventId: number,
@@ -77,10 +77,10 @@ function App() {
 
   const handleSync = async (e: FormEvent<HTMLButtonElement>) => {
     await justerCore.sync();
-    const pools = await getAllPools("testnet");
+    const pools = await getAllPools(network);
     console.log("pools:", pools);
     justerPool.unsubscribeAll();
-    justerPool = JusterPool.create(tezos, provider, "testnet", pools[0].address);
+    justerPool = JusterPool.create(tezos, provider, network, pools[0].address);
 
     justerCore.getPkh().then((pkh) => {
       console.log("newPkh: ", pkh);
