@@ -39,7 +39,7 @@ export type ClaimKeys = Array<ClaimKey>
 export type PendingEntryType = {
   acceptTime: Date,
   amount: BigNumber
-  poolEntryId: number,
+  poolEntryId: string,
   entryId: number
 }
 

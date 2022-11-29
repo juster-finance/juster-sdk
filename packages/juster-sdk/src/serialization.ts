@@ -77,7 +77,7 @@ export const deserializePendingEntries = (rawEntries: Array<entry_liquidity>): P
       acceptTime: new Date(rawEntry.acceptTime),
       amount: new BigNumber(rawEntry.amount),
       entryId: rawEntry.entryId,
-      poolEntryId: parseInt(rawEntry.poolEntryId)
+      poolEntryId: rawEntry.poolEntryId
     }
   });
 };
