@@ -17,12 +17,12 @@
     "mainnet": {
       "networkName": "mainnet",
       "justerCoreAddress": "KT1D6XTy8oAHkUWdzuQrzySECCDMnANEchQq",
-      "justerPoolReferenceAddress": "TODO:",
+      "justerPoolReferenceAddress": "KT1VWjtgFCM1bs3QRcqHcP31dowjDgdgVtxR",
       "trustedOriginationSenders": [
-        "TODO:"
+        "tz1Lbp9byNSXY8rKYJ4RXmW8iPXYVBvYNCoF"
       ],
-      "graphqlUri": "https://juster.dipdup.net/v1/graphql",
-      "subscriptionUri": "wss://juster.dipdup.net/v1/graphql",
+      "graphqlUri": "https://api.juster.fi/v1/graphql",
+      "subscriptionUri": "wss://api.juster.fi/v1/graphql",
       "tzktApiBaseUrl": "https://api.tzkt.io/"
     }
   },
