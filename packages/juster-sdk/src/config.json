@@ -6,7 +6,7 @@
     "testnet": {
       "networkName": "ghostnet",
       "justerCoreAddress": "KT1Feq9iRBBhpSBdPF1Y7Sd7iJu7uLqqRf1A",
-      "justerPoolReferenceAddress": "KT1JtoKmceBrbcKP75eZFWaQiZQYTwxeN9XF",
+      "justerPoolReferenceAddress": "KT1M6fueToCaYBTeG25XZEFCa7YXcNDMn12x",
       "trustedOriginationSenders": [
         "tz1bgvq6y5RdjAUzBNNovqoAgBXv77dbkdhT"
       ],
