@@ -1,6 +1,6 @@
 {
   "name": "@juster-finance/sdk",
-  "version": "0.0.9",
+  "version": "0.1.1",
   "description": "Utilities used to interact with Juster Protocol contract and backend API",
   "main": "dist/lib/index.js",
   "types": "dist/types/index.d.ts",
@@ -31,7 +31,7 @@
     "typescript": "^4.3.3"
   },
   "dependencies": {
-    "@juster-finance/gql-client": "^0.0.7",
+    "@juster-finance/gql-client": "^0.1.0",
     "@taquito/beacon-wallet": "^13.0.0",
     "@taquito/taquito": "^13.0.0",
     "bignumber.js": "^9.0.1"

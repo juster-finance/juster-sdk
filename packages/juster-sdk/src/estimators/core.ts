@@ -2,8 +2,8 @@ import BigNumber from "bignumber.js";
 import {
   BetType,
   EventType,
-  PositionType
-} from './types'
+  CorePositionType
+} from '../types'
 
 
 // TODO: rename it to just estimateFee, because multiplier 1-fee?
@@ -56,7 +56,7 @@ import {
  *
  * @param event Juster event where the bet goes to
  * @param pool either AboveEq or Below pool
- * @param value the bet amount in BigNumber format
+ * @param betValue the bet amount in BigNumber format
  * @returns calculated possible winning amount for this event state
  */
 export function estimateBetReward(
@@ -103,15 +103,14 @@ export function estimateBetReward(
  * Calculates current user position for one of the outcomes using storage data
  *
  * @param position participant status returned from graphql (based on dipdup-bets
- model)
+ * model)
  * @param event Juster event that used to calculate position
  * @param pool either AboveEq or Below pool
- * @param profitFee fraction that cutted from provider profits, measured in nat number
- * @param precision total fractions used to measure profitFee, nat number
+ * @param profitFee fraction that cutted from provider profits
  * @returns user position for the given event and pool
  */
 export function calculatePosition(
-  position: PositionType,
+  position: CorePositionType,
   event: EventType,
   pool: BetType,
 

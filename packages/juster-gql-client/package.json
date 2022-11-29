@@ -1,6 +1,6 @@
 {
   "name": "@juster-finance/gql-client",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Justed GraphQL client",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -15,13 +15,13 @@
   },
   "homepage": "https://juster.fi",
   "devDependencies": {
-    "@genql/cli": "^2.6.0"
+    "@genql/cli": "^2.10.0"
   },
   "dependencies": {
-    "@genql/runtime": "2.6.0",
+    "@genql/runtime": "2.10.0",
     "graphql": "^15.5.0"
   },
   "scripts": {
-    "build": "genql --esm --endpoint https://api.hangzhounet.juster.fi/v1/graphql --output ./dist"
+    "build": "genql --esm --endpoint https://api.ithacanet-pool.juster.fi/v1/graphql --output ./dist"
   }
 }

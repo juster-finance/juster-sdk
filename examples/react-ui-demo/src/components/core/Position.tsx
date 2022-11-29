@@ -1,20 +1,20 @@
 import React, { FunctionComponent } from 'react';
 import {
   EventType,
-  PositionType,
+  CorePositionType,
   calculatePosition,
-  Juster
+  JusterCore
 } from '@juster-finance/sdk';
 
 export type PositionProps = {
-  position: PositionType | null,
+  position: CorePositionType | null,
   event: EventType | null,
   pkh: string | null,
-  juster: Juster
+  justerCore: JusterCore
 };
 
 
-export const PositionComponent: FunctionComponent<PositionProps> = ({ position, event, pkh, juster }) => {
+export const PositionComponent: FunctionComponent<PositionProps> = ({ position, event, pkh, justerCore }) => {
 
   const isNotLoaded = (
     (position === null)
@@ -28,11 +28,11 @@ export const PositionComponent: FunctionComponent<PositionProps> = ({ position, 
 
   let positionA: string = position === null
     ? "-"
-    : calculatePosition(position, event!, "aboveEq", juster.providerProfitFee).toFixed(6);
+    : calculatePosition(position, event!, "aboveEq", justerCore.providerProfitFee).toFixed(6);
 
   let positionB: string = position === null
     ? "-"
-    : calculatePosition(position, event!, "below", juster.providerProfitFee).toFixed(6);
+    : calculatePosition(position, event!, "below", justerCore.providerProfitFee).toFixed(6);
 
   let shares: string = position === null
     ? "-"

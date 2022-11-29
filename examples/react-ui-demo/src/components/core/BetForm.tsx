@@ -1,20 +1,21 @@
 import React, { FunctionComponent, FormEvent, useState, ChangeEvent } from 'react';
+import BigNumber from "bignumber.js";
 import {
-  Juster,
+  JusterCore,
   EventType,
   calculateRatio,
   BetType,
   estimateFeeMultiplier
 } from '@juster-finance/sdk';
-import BigNumber from "bignumber.js";
+import { processOperationSucceed, processOperationError } from '../../utility'
 
 type BetProps = {
   eventId: number;
   event: EventType | null;
-  juster: Juster
+  justerCore: JusterCore
 };
 
-export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster }) => {
+export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, justerCore }) => {
   // TODO: make hook to use juster?
 
   const [amount, setAmount] = useState<BigNumber>(new BigNumber(0));
@@ -105,24 +106,11 @@ export const BetForm: FunctionComponent<BetProps> = ({ eventId, event, juster })
   const handleBet = async (e: FormEvent<HTMLButtonElement>) => {
 
     // TODO: check that minimal win amount calculated in mutez!
-    juster.bet(eventId, betType, amount, minimalWinAmount)
-      .then((op) => {
-        console.log(`Hash: ${op.opHash}`);
-    
-        op.confirmation()
-          .then((result) => {
-            console.log(result);
-            if (result.completed) {
-              console.log('Transaction correctly processed!');
-            } else {
-              console.log('An error has occurred');
-            }
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
+    justerCore.bet(eventId, betType, amount, minimalWinAmount)
+      .then(processOperationSucceed)
+      .catch(processOperationError);
   };
-  
+
   return (
     <div className="Grid">Bet:
       <p>

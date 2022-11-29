@@ -1,123 +1,171 @@
 import React, { useState, FormEvent } from 'react';
 import './App.css';
-import {
-  Juster,
-  EventType,
-  PositionType,
-} from '@juster-finance/sdk';
-import { PositionComponent } from './components/Position';
-import { EventComponent } from './components/Event';
-import { ProvideLiquidityForm } from './components/ProvideLiquidityForm';
-import { BetForm } from './components/BetForm';
-import { WithdrawButton } from './components/WithdrawButton';
+
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { NetworkType } from '@airgap/beacon-dapp';
 
+import {
+  JusterCore,
+  JusterPool,
+  EventType,
+  CorePositionType,
+  PendingEntriesType,
+  PoolPositionType,
+  ClaimsType,
+  PoolStateType,
+  getAllPools
+} from '@juster-finance/sdk';
+
+import { PoolTab } from './components/tabs/Pool';
+import { CoreTab } from './components/tabs/Core';
+
+// TODO: move this initialization code somewhere?
 const rpcNode = "https://rpc.tzkt.io/ghostnet/";
-const network = NetworkType["GHOSTNET"];
 const appName = "Juster";
 const tezos = new TezosToolkit(rpcNode);
 const provider = new BeaconWallet({
   name: appName,
-  preferredNetwork: network
+  preferredNetwork: NetworkType["GHOSTNET"]
 });
-const juster = Juster.create(tezos, provider, "testnet");
+
+const network = "mainnet";
+const justerCore = JusterCore.create(tezos, provider, network);
+
+// NOTE: pool address hardcoded to allow default pool object creation (instead of making it null)
+// TODO: try to initiate justerPool inside useEffect
+let justerPool = JusterPool.create(
+  tezos, provider, network, "KT1JKiMQWE8hcSGq8j89mYDEY4DLpTE4vEaD");
+
+type Tabs = "pool" | "core";
 
 
 function App() {
+  // TODO: this component state is getting very complex, probably there is a way
+  // to fix it:
+  const [tab, setTab] = useState<Tabs>("pool");
   const [eventId, setEventId] = useState<number>(10313);
   const [event, setEvent] = useState<EventType | null>(null);
-  const [position, setPosition] = useState<PositionType | null>(null);
+  const [position, setPosition] = useState<CorePositionType | null>(null);
   const [pkh, setPkh] = useState<string | null>(null);
+
+  const [pendingEntries, setPendingEntries] = useState<PendingEntriesType>([]);
+  const [poolPosition, setPoolPosition] = useState<PoolPositionType | null>(null);
+  const [claims, setClaims] = useState<ClaimsType>([]);
+  const [poolState, setPoolState] = useState<PoolStateType | null>(null);
+
+  // TODO: don't like this hardcoded address again:
+  const [poolAddress, setPoolAddress] = useState<string>("KT1JKiMQWE8hcSGq8j89mYDEY4DLpTE4vEaD");
 
   const update = async (
     eventId: number,
     pkh: string | null
   ) => {
-    const updEvent = await juster.getEvent(eventId);
+    const updEvent = await justerCore.getEvent(eventId);
     setEvent(updEvent);
 
     if ((pkh !== null) && (eventId !== null)) {
-      const updPosition = await juster.getPosition(eventId, pkh)
+      const updPosition = await justerCore.getPosition(eventId, pkh)
       setPosition(updPosition);
     };
 
     setPkh(pkh);
     setEventId(eventId);
-  };  
+    // TODO: add here justerPool getPendingEntries, getPositions, getClaims
+    // to test how it works
+  };
 
   const handleSync = async (e: FormEvent<HTMLButtonElement>) => {
-    await juster.sync();
-    juster.getPkh().then((pkh) => {
+    await justerCore.sync();
+    const pools = await getAllPools(network);
+    console.log("pools:", pools);
+    justerPool.unsubscribeAll();
+    justerPool = JusterPool.create(tezos, provider, network, pools[0].address);
+
+    justerCore.getPkh().then((pkh) => {
       console.log("newPkh: ", pkh);
       update(eventId, pkh);
 
-      juster.subscribeToEvent(
+      justerCore.subscribeToEvent(
         eventId,
-        (updEvent) => {setEvent(updEvent)});
-  
-      juster.subscribeToPosition(
+        (updEvent) => {setEvent(updEvent)}
+      );
+
+      justerCore.subscribeToPosition(
         eventId,
         pkh,
-        (updPosition) => {setPosition(updPosition)});
-      });
+        (updPosition) => {setPosition(updPosition)}
+      );
 
+      justerPool.subscribeToPendingEntries(
+        pkh,
+        (updPendingEntries) => {setPendingEntries(updPendingEntries)}
+      );
+
+      justerPool.subscribeToPoolPositions(
+        pkh,
+        (updPoolPosition) => {setPoolPosition(updPoolPosition)}
+      );
+
+      justerPool.subscribeToWithdrawableClaims(
+        pkh,
+        (updClaims) => {setClaims(updClaims)}
+      );
+
+      justerPool.subscribeToLastPoolState((updPoolState) => {setPoolState(updPoolState)});
+      });
   };
 
+  // TODO: move all this code to one component with juster core
+  // TODO: so there will be one main block with both sync/update with two tabs
+  // TODO: select event option
+  // TODO: check vulnerabilities in github
+
+  const tabsContent = {
+    pool: (
+      <PoolTab
+        pkh={pkh}
+        justerPool={justerPool}
+        pendingEntries={pendingEntries}
+        poolPosition={poolPosition}
+        claims={claims}
+        poolState={poolState}
+      />
+    ),
+
+    core: (
+      <CoreTab
+        pkh={pkh}
+        justerCore={justerCore}
+        position={position}
+        event={event}
+        eventId={eventId}
+      />
+    )
+  };
+
+  // TODO: make selectable tabs ?
   return (
     <div className="App">
       <header className="App-header">
         Juster SDK Demo
+        <br />
+        { tab }
       </header>
-      <div>
-        <button
-          onClick={handleSync}
-        >
-          sync
-        </button>
+      <button
+        onClick={handleSync}
+      >
+        sync
+      </button>
 
-        <button
-          onClick={(e) => update(eventId, pkh)}
-        >
-          update
-        </button>
-
-        <hr/>
-        <EventComponent
-          eventId={eventId}
-          event={event}
-        />
-
-        <hr/>
-        <PositionComponent
-          position={position}
-          event={event}
-          pkh={pkh}
-          juster={juster}
-        />
-
-        <hr/>
-        <ProvideLiquidityForm
-          eventId={eventId}
-          event={event}
-          juster={juster}
-        />
-
-        <hr/>
-        <BetForm
-          eventId={eventId}
-          event={event}
-          juster={juster}
-        />
-
-        <hr/>
-        <WithdrawButton
-          eventId={eventId}
-          pkh={pkh}
-          juster={juster}/>
-
-      </div>
+      <button
+        onClick={(e) => update(eventId, pkh)}
+      >
+        update
+      </button>
+      <hr/>
+      { tabsContent[tab] }
+      <hr/>
     </div>
   );
 }

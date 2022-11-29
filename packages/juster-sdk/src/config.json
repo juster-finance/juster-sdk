@@ -1,116 +1,191 @@
 {
-  "appName": "Juster",
   "ratioPrecision": "100000000",
   "providerProfitFee": "0.1",
+  "poolShareDecimals": "1000000",
   "networks": {
     "testnet": {
-      "networkName": "GHOSTNET",
-      "contractAddress": "KT1Feq9iRBBhpSBdPF1Y7Sd7iJu7uLqqRf1A",
-      "rpcNode": "https://rpc.tzkt.io/ghostnet/",
-      "graphqlUri": "https://api.ithacanet.juster.fi/v1/graphql",
-      "subscriptionUri": "wss://api.ithacanet.juster.fi/v1/graphql"
+      "networkName": "ghostnet",
+      "justerCoreAddress": "KT1Feq9iRBBhpSBdPF1Y7Sd7iJu7uLqqRf1A",
+      "justerPoolReferenceAddress": "KT1M6fueToCaYBTeG25XZEFCa7YXcNDMn12x",
+      "trustedOriginationSenders": [
+        "tz1bgvq6y5RdjAUzBNNovqoAgBXv77dbkdhT"
+      ],
+      "graphqlUri": "https://api.ithacanet-pool.juster.fi/v1/graphql",
+      "subscriptionUri": "wss://api.ithacanet-pool.juster.fi/v1/graphql",
+      "tzktApiBaseUrl": "https://api.ghostnet.tzkt.io/"
     },
     "mainnet": {
-      "networkName": "MAINNET",
-      "contractAddress": "KT1D6XTy8oAHkUWdzuQrzySECCDMnANEchQq",
-      "rpcNode": "https://rpc.tzkt.io/mainnet/",
-      "graphqlUri": "https://juster.dipdup.net/v1/graphql",
-      "subscriptionUri": "wss://juster.dipdup.net/v1/graphql"
+      "networkName": "mainnet",
+      "justerCoreAddress": "KT1D6XTy8oAHkUWdzuQrzySECCDMnANEchQq",
+      "justerPoolReferenceAddress": "KT1VWjtgFCM1bs3QRcqHcP31dowjDgdgVtxR",
+      "trustedOriginationSenders": [
+        "tz1Lbp9byNSXY8rKYJ4RXmW8iPXYVBvYNCoF"
+      ],
+      "graphqlUri": "https://api.juster.fi/v1/graphql",
+      "subscriptionUri": "wss://api.juster.fi/v1/graphql",
+      "tzktApiBaseUrl": "https://api.tzkt.io/"
     }
   },
   "entrypoints": {
-    "withdraw": {
-      "prim": "pair",
-      "args": [
-        {
-          "prim": "nat",
-          "annots": [
-            "%eventId"
-          ]
-        },
-        {
-          "prim": "address",
-          "annots": [
-            "%participantAddress"
-          ]
-        }
-      ]
+    "justerCore": {
+      "withdraw": {
+        "prim": "pair",
+        "args": [
+          {
+            "prim": "nat",
+            "annots": [
+              "%eventId"
+            ]
+          },
+          {
+            "prim": "address",
+            "annots": [
+              "%participantAddress"
+            ]
+          }
+        ]
+      },
+      "provideLiquidity": {
+        "prim": "pair",
+        "args": [
+          {
+            "prim": "pair",
+            "args": [
+              {
+                "prim": "nat",
+                "annots": [
+                  "%eventId"
+                ]
+              },
+              {
+                "prim": "nat",
+                "annots": [
+                  "%expectedRatioAboveEq"
+                ]
+              }
+            ]
+          },
+          {
+            "prim": "nat",
+            "annots": [
+              "%expectedRatioBelow"
+            ]
+          },
+          {
+            "prim": "nat",
+            "annots": [
+              "%maxSlippage"
+            ]
+          }
+        ]
+      },
+      "bet": {
+        "prim": "pair",
+        "args": [
+          {
+            "prim": "pair",
+            "args": [
+              {
+                "prim": "or",
+                "args": [
+                  {
+                    "prim": "unit",
+                    "annots": [
+                      "%aboveEq"
+                    ]
+                  },
+                  {
+                    "prim": "unit",
+                    "annots": [
+                      "%below"
+                    ]
+                  }
+                ],
+                "annots": [
+                  "%bet"
+                ]
+              },
+              {
+                "prim": "nat",
+                "annots": [
+                  "%eventId"
+                ]
+              }
+            ]
+          },
+          {
+            "prim": "mutez",
+            "annots": [
+              "%minimalWinAmount"
+            ]
+          }
+        ]
+      }
     },
-    "provideLiquidity": {
-      "prim": "pair",
-      "args": [
-        {
-          "prim": "pair",
-          "args": [
-            {
-              "prim": "nat",
-              "annots": [
-                "%eventId"
-              ]
-            },
-            {
-              "prim": "nat",
-              "annots": [
-                "%expectedRatioAboveEq"
-              ]
-            }
-          ]
-        },
-        {
-          "prim": "nat",
-          "annots": [
-            "%expectedRatioBelow"
-          ]
-        },
-        {
-          "prim": "nat",
-          "annots": [
-            "%maxSlippage"
-          ]
-        }
-      ]
-    },
-    "bet": {
-      "prim": "pair",
-      "args": [
-        {
-          "prim": "pair",
-          "args": [
-            {
-              "prim": "or",
-              "args": [
-                {
-                  "prim": "unit",
-                  "annots": [
-                    "%aboveEq"
-                  ]
-                },
-                {
-                  "prim": "unit",
-                  "annots": [
-                    "%below"
-                  ]
-                }
-              ],
-              "annots": [
-                "%bet"
-              ]
-            },
-            {
-              "prim": "nat",
-              "annots": [
-                "%eventId"
-              ]
-            }
-          ]
-        },
-        {
-          "prim": "mutez",
-          "annots": [
-            "%minimalWinAmount"
-          ]
-        }
-      ]
+    "justerPool": {
+      "claimLiquidity": {
+        "prim": "pair",
+        "args": [
+          {
+            "prim": "address",
+            "annots": [
+              "%provider"
+            ]
+          },
+          {
+            "prim": "nat",
+            "annots": [
+              "%shares"
+            ]
+          }
+        ],
+        "annots": [
+          "%claimLiquidity"
+        ]
+      },
+      "withdrawClaims": {
+        "prim": "list",
+        "args": [
+          {
+            "prim": "pair",
+            "args": [
+              {
+                "prim": "nat",
+                "annots": [
+                  "%eventId"
+                ]
+              },
+              {
+                "prim": "address",
+                "annots": [
+                  "%provider"
+                ]
+              }
+            ]
+          }
+        ],
+        "annots": [
+          "%withdrawClaims"
+        ]
+      },
+      "depositLiquidity": {
+        "prim": "unit",
+        "annots": [
+          "%depositLiquidity"
+        ]
+      },
+      "approveEntry": {
+        "prim": "nat",
+        "annots": [
+          "%approveEntry"
+        ]
+      },
+      "cancelEntry": {
+        "prim": "nat",
+        "annots": [
+          "%cancelEntry"
+        ]
+      }
     }
   }
 }
