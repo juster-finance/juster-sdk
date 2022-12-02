@@ -11,7 +11,8 @@ import {
   entry_liquidity,
   pool_position,
   claim,
-  pool_state
+  pool_state,
+  pool
 } from '@juster-finance/gql-client'
 
 import config from "../config.json"
@@ -32,7 +33,8 @@ import {
   deserializePendingEntries,
   deserializePoolPosition,
   deserializeClaims,
-  deserializePoolState
+  deserializePoolState,
+  deserializePool
 } from '../serialization'
 
 import { JusterBaseInstrument } from './baseInstrument'
@@ -478,10 +480,6 @@ export const getAllPools = async (
 
     const client = createClient({ url: graphqlUri });
 
-    const deserializePool = (pool: PoolType) => {
-      return {address: pool.address}
-    };
-
     const similarPools = await requestSimilarPools(
       tzktApiBaseUrl, justerPoolReferenceAddress);
     const trustedPoolAddresses = similarPools.filter(poolData => {
@@ -494,9 +492,16 @@ export const getAllPools = async (
 
     // TODO: consider adding filtering by balance?
     const poolsPromise: Promise<Array<PoolType>> = client.query({
-      pool: {address: true}
+      pool: {
+        address: true,
+        entryLockPeriod: true,
+        isDepositPaused: true,
+        isDisbandAllow: true,
+        name: true,
+        version: true
+      }
     }).then(result => {
-      return result.pool.map(deserializePool).filter(checkIsTrusted)
+      return (result.pool as Array<pool>).map(deserializePool).filter(checkIsTrusted)
   });
 
   return poolsPromise

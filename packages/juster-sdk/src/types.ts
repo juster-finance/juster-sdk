@@ -98,7 +98,12 @@ export type PoolStateType = {
 }
 
 export type PoolType = {
-  address: string
+  address: string,
+  isDepositPaused: boolean,
+  isDisbanded: boolean,
+  name: string,
+  version: string,
+  entryLockPeriod: number
 }
 
 export type SummaryPositionType = {

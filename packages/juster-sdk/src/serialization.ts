@@ -7,6 +7,7 @@ import {
   PoolActionType,
   ClaimType,
   ClaimsType,
+  PoolType,
   PoolStateType
 } from '../src/types'
 import BigNumber from "bignumber.js";
@@ -18,6 +19,7 @@ import {
   entry_liquidity,
   pool_position,
   claim,
+  pool,
 } from '@juster-finance/gql-client'
 
 
@@ -160,4 +162,15 @@ export const deserializePoolState = (rawPoolState: pool_state): PoolStateType =>
     action: rawPoolState.action as PoolActionType,
     opgHash: rawPoolState.opgHash
   };
+};
+
+export const deserializePool = (rawPool: pool): PoolType => {
+  return {
+    address: rawPool.address,
+    isDepositPaused: rawPool.isDepositPaused,
+    isDisbanded: rawPool.isDisbandAllow,
+    name: rawPool.name as string,
+    version: rawPool.version as string,
+    entryLockPeriod: rawPool.entryLockPeriod
+  }
 };
