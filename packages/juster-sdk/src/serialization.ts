@@ -33,12 +33,6 @@ const emptyEvent: EventType = {
 };
 
 export const deserializeEvent = (rawEvent: event): EventType => {
-  // TODO: where should happen this check that event is empty?
-  if ((rawEvent === undefined) || (rawEvent === null)) {
-    // TODO: maybe it is good to raise some error here?
-    return emptyEvent
-  };
-
   return {
     poolAboveEq: new BigNumber(rawEvent.poolAboveEq),
     poolBelow: new BigNumber(rawEvent.poolBelow),
@@ -49,6 +43,7 @@ export const deserializeEvent = (rawEvent: event): EventType => {
   };
 };
 
+/* TODO: this emptyPosition is not used anymore, should it be removed? */
 const emptyPosition: CorePositionType = {
   rewardAboveEq: new BigNumber(0),
   rewardBelow: new BigNumber(0),
@@ -58,12 +53,6 @@ const emptyPosition: CorePositionType = {
 };
 
 export const deserializePosition = (rawPosition: position): CorePositionType => {
-  // TODO: where should happen this check that position is empty? [2]
-  if ((rawPosition === undefined) || (rawPosition === null)) {
-    // TODO: maybe it is good to raise some error here? [2]
-    return emptyPosition
-  };
-
   return {
     rewardAboveEq: new BigNumber(rawPosition.rewardAboveEq),
     rewardBelow: new BigNumber(rawPosition.rewardBelow),
@@ -96,13 +85,6 @@ const emptyPoolPosition: PoolPositionType = {
 };
 
 export const deserializePoolPosition = (rawPosition: pool_position): PoolPositionType => {
-
-  // TODO: where should happen this check that position is empty? [3]
-  if ((rawPosition === undefined) || (rawPosition === null)) {
-    // TODO: maybe it is good to raise some error here? [3]
-    return emptyPoolPosition
-  };
-
   return {
     shares: new BigNumber(rawPosition.shares),
     provider: rawPosition.user.address,
@@ -142,13 +124,6 @@ const emptyPoolState: PoolStateType = {
 };
 
 export const deserializePoolState = (rawPoolState: pool_state): PoolStateType => {
-
-  // TODO: where should happen this check that pool state is empty? [4]
-  if ((rawPoolState === undefined) || (rawPoolState === null)) {
-    // TODO: maybe it is good to raise some error here? [4]
-    return emptyPoolState
-  };
-
   return {
     totalLiquidity: new BigNumber(rawPoolState.totalLiquidity),
     totalShares: new BigNumber(rawPoolState.totalShares),
