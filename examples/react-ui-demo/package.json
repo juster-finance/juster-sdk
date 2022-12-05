@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "@juster-finance/sdk": "^0.1.2",
-    "@taquito/taquito": "^13.0.0",
-    "@taquito/beacon-wallet": "^13.0.0",
+    "@taquito/taquito": "^14.0.0",
+    "@taquito/beacon-wallet": "^14.0.0",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
