@@ -32,8 +32,8 @@
   },
   "dependencies": {
     "@juster-finance/gql-client": "^0.1.0",
-    "@taquito/beacon-wallet": "^14.0.0",
-    "@taquito/taquito": "^14.0.0",
+    "@taquito/beacon-wallet": "^14.2.0",
+    "@taquito/taquito": "^14.2.0",
     "bignumber.js": "^9.0.1"
   }
 }

@@ -3001,7 +3001,7 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
-"@taquito/beacon-wallet@^14.0.0":
+"@taquito/beacon-wallet@^14.2.0":
   version "14.2.0"
   resolved "https://registry.yarnpkg.com/@taquito/beacon-wallet/-/beacon-wallet-14.2.0.tgz#da723f6a494569248961e3e0305c79daeb2a65e4"
   integrity sha512-B4OoH7sUa6oaYIQjWiu6BpiCXaHgRO75zUB1JwxzGYQCYcAqUQy6KQo8+O8sW+gjY4bQ+V6ESrFTJWO3BKw7ng==
@@ -3049,7 +3049,7 @@
     "@taquito/utils" "*"
     bignumber.js "^9.1.0"
 
-"@taquito/taquito@*", "@taquito/taquito@^14.0.0":
+"@taquito/taquito@*", "@taquito/taquito@^14.2.0":
   version "14.2.0"
   resolved "https://registry.yarnpkg.com/@taquito/taquito/-/taquito-14.2.0.tgz#5ce737663fdb06316798a32da416fedff3696800"
   integrity sha512-JrAUtANIVr02TFI6N87Xnn+KfgDT8hTA6IBeRhGfQnZH8nL1LG6/6q7uHZTw6D4ddfnMvxjgA/916cxAFcskFA==
