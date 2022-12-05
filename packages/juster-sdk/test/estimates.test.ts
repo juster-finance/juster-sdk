@@ -5,30 +5,31 @@ import {
   calculatePosition,
   estimateFeeMultiplier,
   calculateRatio
-} from "../src/estimates";
+} from "../src/estimators/core";
 import rawEvents from "./data/events.json"
 import rawPositions from "./data/positions.json"
 import BigNumber from "bignumber.js";
 import {
   EventType,
-  PositionType
+  CorePositionType
 } from '../src/types'
 import {
   deserializeEvent,
   deserializePosition
 } from '../src/serialization'
+import { event, position } from "@juster-finance/gql-client";
 
 
 const events = new Map<string, EventType>(
   Object.entries(rawEvents).map(([name, event]) => {
-    return [name, deserializeEvent(event)];
+    return [name, deserializeEvent(event as event)];
   })
 );
 
 
-const positions = new Map<string, PositionType>(
+const positions = new Map<string, CorePositionType>(
   Object.entries(rawPositions).map(([name, position]) => {
-    return [name, deserializePosition(position)];
+    return [name, deserializePosition(position as position)];
   })
 );
 
