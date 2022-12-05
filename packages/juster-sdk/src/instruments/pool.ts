@@ -34,7 +34,10 @@ import {
   deserializePoolPosition,
   deserializeClaims,
   deserializePoolState,
-  deserializePool
+  deserializePool,
+  processOrDefault,
+  emptyPoolPosition,
+  emptyPoolState
 } from '../serialization'
 
 import { JusterBaseInstrument } from './baseInstrument'
@@ -279,12 +282,14 @@ export class JusterPool extends JusterBaseInstrument {
   ): Promise<PoolPositionType> {
     const positionPromise: Promise<PoolPositionType> = this._genqlClient.query(
       this._makeGetPosition(userAddress)
-    ).then(result => {
-      // TODO: check if there are any errors while request?
-      return deserializePoolPosition(result.poolPosition[0] as pool_position)
-  });
+    ).then(result => processOrDefault(
+        result.poolPosition[0] as pool_position,
+        emptyPoolPosition,
+        deserializePoolPosition
+      )
+    );
 
-  return positionPromise
+    return positionPromise
   }
 
   /**
@@ -305,7 +310,12 @@ export class JusterPool extends JusterBaseInstrument {
       this._makeGetPosition(userAddress)
     ).subscribe({
       next: (result) => updateCallback(
-        deserializePoolPosition(result.poolPosition[0] as pool_position)),
+        processOrDefault(
+          result.poolPosition[0] as pool_position,
+          emptyPoolPosition,
+          deserializePoolPosition
+        )
+      ),
       error: console.error,
     });
 
@@ -429,13 +439,15 @@ export class JusterPool extends JusterBaseInstrument {
   getLastPoolState(): Promise<PoolStateType> {
     const poolStatePromise: Promise<PoolStateType> = this._genqlClient.query(
       this._makeGetLastPoolState()
-    ).then(result => {
-      // TODO: check if there are any errors while request?
-      // TODO: handle error if there is no pools returned?
-      return deserializePoolState(result.poolState[0] as pool_state)
-  });
+    ).then(
+      result => processOrDefault(
+        result.poolState[0] as pool_state,
+        emptyPoolState,
+        deserializePoolState
+      )
+    );
 
-  return poolStatePromise
+    return poolStatePromise
   }
 
   /**
@@ -453,7 +465,12 @@ export class JusterPool extends JusterBaseInstrument {
       this._makeGetLastPoolState()
     ).subscribe({
       next: (result) => updateCallback(
-        deserializePoolState(result.poolState[0] as pool_state)),
+        processOrDefault(
+          result.poolState[0] as pool_state,
+          emptyPoolState,
+          deserializePoolState
+        )
+      ),
       error: console.error,
     });
 

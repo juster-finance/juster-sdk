@@ -23,7 +23,7 @@ import {
 } from '@juster-finance/gql-client'
 
 
-const emptyEvent: EventType = {
+export const emptyEvent: EventType = {
   poolAboveEq: new BigNumber(0),
   poolBelow: new BigNumber(0),
   totalLiquidityShares: new BigNumber(0),
@@ -43,8 +43,7 @@ export const deserializeEvent = (rawEvent: event): EventType => {
   };
 };
 
-/* TODO: this emptyPosition is not used anymore, should it be removed? */
-const emptyPosition: CorePositionType = {
+export const emptyPosition: CorePositionType = {
   rewardAboveEq: new BigNumber(0),
   rewardBelow: new BigNumber(0),
   shares: new BigNumber(0),
@@ -73,7 +72,7 @@ export const deserializePendingEntries = (rawEntries: Array<entry_liquidity>): P
   });
 };
 
-const emptyPoolPosition: PoolPositionType = {
+export const emptyPoolPosition: PoolPositionType = {
   shares: new BigNumber(0),
   provider: '-',
   depositedAmount: new BigNumber(0),
@@ -109,7 +108,7 @@ export const deserializeClaims = (rawClaims: Array<claim>): ClaimsType => {
   });
 };
 
-const emptyPoolState: PoolStateType = {
+export const emptyPoolState: PoolStateType = {
   totalLiquidity: new BigNumber(0),
   totalShares: new BigNumber(0),
   activeLiquidity: new BigNumber(0),
@@ -149,3 +148,25 @@ export const deserializePool = (rawPool: pool): PoolType => {
     entryLockPeriod: rawPool.entryLockPeriod
   }
 };
+
+/**
+ * Applies @param deserializeFn function to @param someValue if @param someValue
+ * is not undefined or null else returns @param defaultValue
+ *
+ * @param someValue raw value that needs to be processed (may be undefined or null)
+ * @param defaultValue is value returned if someValue is undefined or null
+ * @param deserializeFn one arg function function that applied on someValue
+ * @returns deserialized value if someValue is not empty
+ */
+export function processOrDefault<RawT, ProcessedT>(
+  someValue: RawT | undefined | null,
+  defaultValue: ProcessedT,
+  deserializeFn: (raw: RawT) => ProcessedT
+): ProcessedT {
+  if ((someValue === undefined) || (someValue === null)) {
+    return defaultValue
+  }
+  else {
+    return deserializeFn(someValue)
+  }
+}

@@ -20,7 +20,10 @@ import {
 
 import {
   deserializeEvent,
-  deserializePosition
+  deserializePosition,
+  processOrDefault,
+  emptyPosition,
+  emptyEvent
 } from '../serialization'
 
 import { JusterBaseInstrument } from './baseInstrument'
@@ -199,12 +202,15 @@ export class JusterCore extends JusterBaseInstrument {
   ): Promise<EventType> {
     const eventPromise: Promise<EventType> = this._genqlClient.query(
       this._makeGetEvent(eventId)
-    ).then(result => {
-      // TODO: check if there are any errors while request?
-      return deserializeEvent(result.eventByPk as event)
-  });
+    ).then(
+      result => processOrDefault(
+        result.eventByPk as event,
+        emptyEvent,
+        deserializeEvent
+      )
+    );
 
-  return eventPromise
+    return eventPromise
   }
 
   /**
@@ -224,7 +230,13 @@ export class JusterCore extends JusterBaseInstrument {
     const { unsubscribe } = this._genqlClient.subscription(
       this._makeGetEvent(eventId)
     ).subscribe({
-      next: (result) => updateCallback(deserializeEvent(result.eventByPk as event)),
+      next: (result) => updateCallback(
+        processOrDefault(
+          result.eventByPk as event,
+          emptyEvent,
+          deserializeEvent
+        )
+      ),
       error: console.error,
   });
 
@@ -275,17 +287,15 @@ export class JusterCore extends JusterBaseInstrument {
     participantAddress: string
   ): Promise<CorePositionType> {
 
-    // TODO: turn off auto deserialization of numbers
     const positionPromise: Promise<CorePositionType> = this._genqlClient.query(
       this._makeGetPosition(eventId, participantAddress)
-    ).then(result => {
-        // TODO: is it good to select 0 object? What happens if there are more
-        // items in array? (should not happen)
-        const rawPosition = result.position[0];
-
-        // TODO: check if there are any errors while request?
-        return deserializePosition(rawPosition as position)
-    });
+    ).then(
+      result => processOrDefault(
+        result.position[0] as position,
+        emptyPosition,
+        deserializePosition
+      )
+    );
 
     return positionPromise
   }
@@ -310,11 +320,14 @@ export class JusterCore extends JusterBaseInstrument {
     const { unsubscribe } = this._genqlClient.subscription(
       this._makeGetPosition(eventId, participantAddress)
     ).subscribe({
-      next: (result) => updateCallback(deserializePosition(result.position[0] as position)),
+      next: (result) => processOrDefault(
+        result.position[0] as position,
+        emptyPosition,
+        deserializePosition
+      ),
       error: console.error,
   });
 
   this.unsubscribeFromPosition = unsubscribe;
   }
 }
-
