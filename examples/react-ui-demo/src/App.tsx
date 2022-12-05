@@ -14,7 +14,8 @@ import {
   PoolPositionType,
   ClaimsType,
   PoolStateType,
-  getAllPools
+  getAllPools,
+  PoolType
 } from '@juster-finance/sdk';
 
 import { PoolTab } from './components/tabs/Pool';
@@ -53,6 +54,7 @@ function App() {
   const [poolPosition, setPoolPosition] = useState<PoolPositionType | null>(null);
   const [claims, setClaims] = useState<ClaimsType>([]);
   const [poolState, setPoolState] = useState<PoolStateType | null>(null);
+  const [pools, setPools] = useState<Array<PoolType>>([]);
 
   // TODO: don't like this hardcoded address again:
   const [poolAddress, setPoolAddress] = useState<string>("KT1JKiMQWE8hcSGq8j89mYDEY4DLpTE4vEaD");
@@ -77,10 +79,11 @@ function App() {
 
   const handleSync = async (e: FormEvent<HTMLButtonElement>) => {
     await justerCore.sync();
-    const pools = await getAllPools(network);
-    console.log("pools:", pools);
+    const newPools = await getAllPools(network);
+    setPools(newPools);
+    console.log("pools:", newPools);
     justerPool.unsubscribeAll();
-    justerPool = JusterPool.create(tezos, provider, network, pools[0].address);
+    justerPool = JusterPool.create(tezos, provider, network, newPools[0].address);
 
     justerCore.getPkh().then((pkh) => {
       console.log("newPkh: ", pkh);
@@ -130,6 +133,7 @@ function App() {
         poolPosition={poolPosition}
         claims={claims}
         poolState={poolState}
+        pools={pools}
       />
     ),
 
