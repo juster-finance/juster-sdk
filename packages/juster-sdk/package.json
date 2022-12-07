@@ -1,6 +1,6 @@
 {
   "name": "@juster-finance/sdk",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Utilities used to interact with Juster Protocol contracts and backend API",
   "main": "dist/lib/index.js",
   "types": "dist/types/index.d.ts",
