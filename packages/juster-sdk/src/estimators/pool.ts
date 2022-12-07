@@ -32,6 +32,27 @@ export function makeSummaryPosition(
   }
 }
 
+export function calculateDurationY(
+  dateFrom: Date,
+  dateTo: Date,
+  daysInYear: BigNumber = BigNumber(365.2524)
+): BigNumber {
+  const msInYear = daysInYear.times(24 * 60 * 60 * 1000);
+  const durationMs = dateTo.getTime() - dateFrom.getTime();
+  return BigNumber(durationMs).div(msInYear);
+}
+
+export function calculateAPY(
+  firstPoolState: PoolStateType,
+  lastPoolState: PoolStateType
+): BigNumber {
+  const durationY = calculateDurationY(firstPoolState.timestamp, lastPoolState.timestamp);
+  const firstSharePrice = firstPoolState.sharePrice || BigNumber(1);
+  const lastSharePrice = lastPoolState.sharePrice || BigNumber(1);
+  const priceDynamics = lastSharePrice.div(firstSharePrice);
+  return priceDynamics.pow(BigNumber(1).div(durationY))
+}
+
 /* TODO:
 export function estimateFreeLiquidity(pool: PoolType): BigNumber {
   ?
