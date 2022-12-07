@@ -14,9 +14,12 @@ const poolStates = new Map<string, PoolStateType>(
   })
 );
 
+
+const daysIn2022 = BigNumber(365);
+
+
 test("calculateDuration", async () => {
   let durationY: BigNumber;
-  const daysIn2022 = BigNumber(365);
 
   /* Duration of period that starts and ends at the same time is 0: */
   durationY = calculateDurationY(
@@ -33,4 +36,24 @@ test("calculateDuration", async () => {
     daysIn2022
   );
   expect(durationY.toFixed()).toBe("1");
+});
+
+
+test("calculateAPY", async () => {
+  let apy: BigNumber;
+
+  /* APY measured between same state should be 0%: */
+  apy = calculateAPY(
+    poolStates.get("originatedState")!,
+    poolStates.get("originatedState")!
+  );
+  expect(apy.toFixed()).toBe("0");
+
+  /* Check that x2 price dynamics in one year is 100%: */
+  apy = calculateAPY(
+    poolStates.get("originatedState")!,
+    poolStates.get("profitableState")!,
+    daysIn2022
+  );
+  expect(apy.toFixed()).toBe("1");
 });
