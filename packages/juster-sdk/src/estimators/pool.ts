@@ -32,10 +32,12 @@ export function makeSummaryPosition(
   }
 }
 
+export const daysInGregorianCalendar = new BigNumber(365.2524);
+
 export function calculateDurationY(
   dateFrom: Date,
   dateTo: Date,
-  daysInYear: BigNumber = BigNumber(365.2524)
+  daysInYear: BigNumber = daysInGregorianCalendar
 ): BigNumber {
   const msInYear = daysInYear.times(24 * 60 * 60 * 1000);
   const durationMs = dateTo.getTime() - dateFrom.getTime();
@@ -44,13 +46,30 @@ export function calculateDurationY(
 
 export function calculateAPY(
   firstPoolState: PoolStateType,
-  lastPoolState: PoolStateType
+  lastPoolState: PoolStateType,
+  daysInYear: BigNumber = daysInGregorianCalendar
 ): BigNumber {
-  const durationY = calculateDurationY(firstPoolState.timestamp, lastPoolState.timestamp);
-  const firstSharePrice = firstPoolState.sharePrice || BigNumber(1);
-  const lastSharePrice = lastPoolState.sharePrice || BigNumber(1);
+  const durationY = calculateDurationY(
+    firstPoolState.timestamp,
+    lastPoolState.timestamp,
+    daysInYear
+  );
+
+  // If share price is NaN (there is no shares in pool), it should be safe
+  // to assume that share price is 1.0 (when first shares added it evaluated as 1.0)
+  const fillNan = (price: BigNumber) => price.isNaN() ? BigNumber(1) : price;
+
+  const firstSharePrice = fillNan(firstPoolState.sharePrice);
+  const lastSharePrice = fillNan(lastPoolState.sharePrice);
   const priceDynamics = lastSharePrice.div(firstSharePrice);
-  return priceDynamics.pow(BigNumber(1).div(durationY))
+
+  // To avoid division by zero in the case when both first and last pool state
+  // is the same (so priceDynamics is 1.0), APY recognized as 0%:
+  if (priceDynamics.eq(1)) {
+    return BigNumber(0)
+  } else {
+    return priceDynamics.pow(BigNumber(1).div(durationY)).minus(1)
+  }
 }
 
 /* TODO:
