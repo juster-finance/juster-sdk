@@ -12,7 +12,8 @@ import {
   pool_position,
   claim,
   pool_state,
-  pool
+  pool,
+  order_by
 } from '@juster-finance/gql-client'
 
 import config from "../config.json"
@@ -43,6 +44,7 @@ import {
 import { JusterBaseInstrument } from './baseInstrument'
 
 import { requestSimilarPools } from '../tzkt'
+import { calculateAPY } from "../estimators/pool";
 
 export class JusterPool extends JusterBaseInstrument {
   protected _shareDecimals: BigNumber;
@@ -51,6 +53,7 @@ export class JusterPool extends JusterBaseInstrument {
   public unsubscribeFromPoolPosition: () => void;
   public unsubscribeFromClaims: () => void;
   public unsubscribeFromLastPoolState: () => void;
+  public unsubscribeFromFirstPoolState: () => void;
 
   constructor(
     network: NetworkType,
@@ -77,6 +80,7 @@ export class JusterPool extends JusterBaseInstrument {
     this.unsubscribeFromPoolPosition = () => undefined;
     this.unsubscribeFromClaims = () => undefined;
     this.unsubscribeFromLastPoolState = () => undefined;
+    this.unsubscribeFromFirstPoolState = () => undefined;
 
     this._shareDecimals = new BigNumber(shareDecimals);
   };
@@ -398,21 +402,29 @@ export class JusterPool extends JusterBaseInstrument {
   }
 
   /**
-   * Preparing QueryReqest for getting Pool
+   * Preparing QueryReqest for getting pool state
    *
+   * @param orderBy is desc by default (to request last pool state)
+   * @param dateFrom is minimal date from which state is requested
    * @returns QueryRequest with graphql request for event
    */
-  _makeGetLastPoolState(): QueryRequest {
+  _makeGetPoolState(
+    orderBy: order_by = "desc",
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): QueryRequest {
     return {
       poolState: [
         {
           where: {
             pool: {
               address: {_eq: this._contractAddress}
+            },
+            timestamp: {
+              _gte: dateFrom
             }
           },
           limit: 1,
-          order_by: [{counter: "desc"}]
+          order_by: [{counter: orderBy}]
         },
         {
           totalLiquidity: true,
@@ -432,13 +444,18 @@ export class JusterPool extends JusterBaseInstrument {
   }
 
   /**
-   * Performs request to graphql API for pool data
+   * Performs request to graphql API for pool state
    *
+   * @param orderBy is desc by default (to request last pool state)
+   * @param dateFrom is minimal date from which state is requested
    * @returns promise with PoolStateType
    */
-  getLastPoolState(): Promise<PoolStateType> {
+  getPoolState(
+    orderBy: order_by = "desc",
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): Promise<PoolStateType> {
     const poolStatePromise: Promise<PoolStateType> = this._genqlClient.query(
-      this._makeGetLastPoolState()
+      this._makeGetPoolState(orderBy, dateFrom)
     ).then(
       result => processOrDefault(
         result.poolState[0] as pool_state,
@@ -451,18 +468,21 @@ export class JusterPool extends JusterBaseInstrument {
   }
 
   /**
-   * Subscribes to pool stats, calls updateCallback each time when new update received
+   * Subscribes to pool states, calls updateCallback each time when new update received
    *
    * @param updateCallback function with PoolPositionsType arg that called each
    * time new update received
+   * @param orderBy is desc by default (to request last pool state)
+   * @param dateFrom is minimal date from which state is requested
    * @returns unsubscribe function
    */
-  async subscribeToLastPoolState(
-    updateCallback: (positions: PoolStateType) => void
-  ): Promise<void> {
-    this.unsubscribeFromLastPoolState();
+  _makePoolStateSubscription(
+    updateCallback: (positions: PoolStateType) => void,
+    orderBy: order_by = "desc",
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): () => void {
     const { unsubscribe } = this._genqlClient.subscription(
-      this._makeGetLastPoolState()
+      this._makeGetPoolState(orderBy, dateFrom)
     ).subscribe({
       next: (result) => updateCallback(
         processOrDefault(
@@ -473,8 +493,124 @@ export class JusterPool extends JusterBaseInstrument {
       ),
       error: console.error,
     });
+    return unsubscribe
+  }
 
-    this.unsubscribeFromLastPoolState = unsubscribe;
+  /**
+   * Performs request to graphql API for last pool state
+   *
+   * @returns promise with PoolStateType
+   */
+  getLastPoolState(): Promise<PoolStateType> {
+    return this.getPoolState()
+  }
+
+  /**
+   * Subscribes to last pool state, calls updateCallback each time when new update received
+   *
+   * @param updateCallback function with PoolPositionsType arg that called each
+   * time new update received
+   * @returns unsubscribe function
+   */
+  async subscribeToLastPoolState(
+    updateCallback: (positions: PoolStateType) => void
+  ): Promise<void> {
+    this.unsubscribeFromLastPoolState();
+    this.unsubscribeFromLastPoolState = this._makePoolStateSubscription(updateCallback);
+  }
+
+  /**
+   * performs request to graphql api for first pool state
+   *
+   * @returns promise with poolstatetype
+   */
+  getFirstPoolState(
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): Promise<PoolStateType> {
+    const orderBy: order_by = "asc";
+    return this.getPoolState(orderBy, dateFrom);
+  }
+
+  /**
+   * Subscribes to first pool state, calls updateCallback each time when new update received
+   *
+   * @param updateCallback function with PoolPositionsType arg that called each
+   * time new update received
+   * @param dateFrom is minimal date from which state is requested
+   * @returns unsubscribe function
+   */
+  async subscribeToFirstPoolState(
+    updateCallback: (positions: PoolStateType) => void,
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): Promise<void> {
+    this.unsubscribeFromFirstPoolState();
+    const orderBy: order_by = "asc";
+    this.unsubscribeFromFirstPoolState = this._makePoolStateSubscription(
+      updateCallback,
+      orderBy,
+      dateFrom
+    );
+  }
+
+  /**
+   * performs requests to graphql api to calculate pool APY
+   *
+   * @param dateFrom is minimal date from which APY is calculated
+   * @returns promise with poolstatetype
+   */
+  async getAPY(
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): Promise<BigNumber> {
+    return calculateAPY(
+      await this.getFirstPoolState(dateFrom),
+      await this.getLastPoolState()
+    )
+  }
+
+  async subscribetToAPY(
+    updateCallback: (apy: BigNumber) => void,
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): Promise<void> {
+    this.unsubscribeFromAPY();
+    type OptionalPoolStateType = null | PoolStateType;
+    let firstPoolState: OptionalPoolStateType = null;
+    let lastPoolState: OptionalPoolStateType = null;
+
+    function updateAPY(
+      firstState: OptionalPoolStateType,
+      lastState: OptionalPoolStateType
+    ): void {
+      if ((firstState !== null) && (lastState !== null)) {
+        const newAPY = calculateAPY(firstState, lastState);
+        updateCallback(newAPY)
+      }
+    };
+
+    const firstPoolStateUpdateCallback = (state: PoolStateType) => {
+      firstPoolState = state;
+      updateAPY(firstPoolState, lastPoolState);
+    };
+
+    const lastPoolStateUpdateCallback = (state: PoolStateType) => {
+      lastPoolState = state;
+      updateAPY(firstPoolState, lastPoolState);
+    };
+
+    this.subscribeToFirstPoolState(firstPoolStateUpdateCallback, dateFrom);
+
+    const unsubscribeFromFirstPoolState = this._makePoolStateSubscription(
+      firstPoolStateUpdateCallback,
+      "asc",
+      dateFrom
+    );
+    const unsubscribeFromLastPoolState = this._makePoolStateSubscription(
+      lastPoolStateUpdateCallback
+    );
+
+    this.unsubscribeFromAPY = () => {
+      unsubscribeFromFirstPoolState();
+      unsubscribeFromLastPoolState();
+    };
   }
 
   async unsubscribeAll(): Promise<void> {
@@ -482,6 +618,8 @@ export class JusterPool extends JusterBaseInstrument {
     this.unsubscribeFromPoolPosition();
     this.unsubscribeFromClaims();
     this.unsubscribeFromLastPoolState();
+    this.unsubscribeFromFirstPoolState();
+    this.unsubscribeFromAPY();
   }
 }
 
