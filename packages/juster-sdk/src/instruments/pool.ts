@@ -524,6 +524,7 @@ export class JusterPool extends JusterBaseInstrument {
   /**
    * performs request to graphql api for first pool state
    *
+   * @param dateFrom used to filter pool states starting from a given date
    * @returns promise with PoolStateType
    */
   getFirstPoolState(
@@ -580,46 +581,11 @@ export class JusterPool extends JusterBaseInstrument {
     dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
   ): Promise<void> {
     this.unsubscribeFromAPY();
-    type OptionalPoolStateType = null | PoolStateType;
-    let firstPoolState: OptionalPoolStateType = null;
-    let lastPoolState: OptionalPoolStateType = null;
-
-    function updateAPY(
-      firstState: OptionalPoolStateType,
-      lastState: OptionalPoolStateType
-    ): void {
-      if ((firstState !== null) && (lastState !== null)) {
-        const newAPY = calculateAPY(firstState, lastState);
-        updateCallback(newAPY)
-      }
-    };
-
-    const firstPoolStateUpdateCallback = (state: PoolStateType) => {
-      firstPoolState = state;
-      updateAPY(firstPoolState, lastPoolState);
-    };
-
-    const lastPoolStateUpdateCallback = (state: PoolStateType) => {
-      lastPoolState = state;
-      updateAPY(firstPoolState, lastPoolState);
-    };
-
-    this.subscribeToFirstPoolState(firstPoolStateUpdateCallback, dateFrom);
-
-    const unsubscribeFromFirstPoolState = this._makePoolStateSubscription(
-      firstPoolStateUpdateCallback,
-      "asc",
-      dateFrom
+    const firstState = await this.getFirstPoolState(dateFrom);
+    this.unsubscribeFromAPY = this._makePoolStateSubscription(
+      (newState: PoolStateType) => updateCallback(calculateAPY(firstState, newState))
     );
-    const unsubscribeFromLastPoolState = this._makePoolStateSubscription(
-      lastPoolStateUpdateCallback
-    );
-
-    this.unsubscribeFromAPY = () => {
-      unsubscribeFromFirstPoolState();
-      unsubscribeFromLastPoolState();
-    };
-  }
+  };
 
   async unsubscribeAll(): Promise<void> {
     this.unsubscribeFromPendingEntries();
@@ -631,6 +597,7 @@ export class JusterPool extends JusterBaseInstrument {
   }
 }
 
+// TODO: consider returning JusterPool objects instead?
 export const getAllPools = async (
   network: Network
 ): Promise<Array<PoolType>> => {
