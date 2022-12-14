@@ -54,6 +54,7 @@ export class JusterPool extends JusterBaseInstrument {
   public unsubscribeFromClaims: () => void;
   public unsubscribeFromLastPoolState: () => void;
   public unsubscribeFromFirstPoolState: () => void;
+  public unsubscribeFromAPY: () => void;
 
   constructor(
     network: NetworkType,
@@ -81,6 +82,7 @@ export class JusterPool extends JusterBaseInstrument {
     this.unsubscribeFromClaims = () => undefined;
     this.unsubscribeFromLastPoolState = () => undefined;
     this.unsubscribeFromFirstPoolState = () => undefined;
+    this.unsubscribeFromAPY = () => undefined;
 
     this._shareDecimals = new BigNumber(shareDecimals);
   };
@@ -522,7 +524,7 @@ export class JusterPool extends JusterBaseInstrument {
   /**
    * performs request to graphql api for first pool state
    *
-   * @returns promise with poolstatetype
+   * @returns promise with PoolStateType
    */
   getFirstPoolState(
     dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
@@ -567,7 +569,13 @@ export class JusterPool extends JusterBaseInstrument {
     )
   }
 
-  async subscribetToAPY(
+  /**
+   * Subscribes to pool APY updates, calls updateCallback each time 
+   *
+   * @param dateFrom is minimal date from which APY is calculated
+   * @returns promise with PoolStateType
+   */
+  async subscribeToAPY(
     updateCallback: (apy: BigNumber) => void,
     dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
   ): Promise<void> {
