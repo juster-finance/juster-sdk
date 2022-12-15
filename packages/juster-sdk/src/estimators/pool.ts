@@ -63,13 +63,15 @@ export function calculateAPY(
   const lastSharePrice = fillNan(lastPoolState.sharePrice);
   const priceDynamics = lastSharePrice.div(firstSharePrice);
 
-  // To avoid division by zero in the case when both first and last pool state
-  // is the same (so priceDynamics is 1.0), APY recognized as 0%:
-  if (priceDynamics.eq(1)) {
-    return BigNumber(0)
-  } else {
-    return priceDynamics.pow(BigNumber(1).div(durationY)).minus(1)
-  }
+  // Avoiding division by zero:
+  const frequencyY = durationY.eq(0) ? BigNumber(0) : BigNumber(1).div(durationY);
+
+  // BigNumber does not support pow for non-integer values. As far as it is not
+  // critical to have high accuracy APY calculation, its replaced with Math.pow
+  const annualDynamics = new BigNumber(
+    Math.pow(priceDynamics.toNumber(), frequencyY.toNumber())
+  );
+  return annualDynamics.minus(1)
 }
 
 /* TODO:
