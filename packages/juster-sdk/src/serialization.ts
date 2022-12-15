@@ -8,7 +8,8 @@ import {
   ClaimType,
   ClaimsType,
   PoolType,
-  PoolStateType
+  PoolStateType,
+  PoolEventType
 } from '../src/types'
 import BigNumber from "bignumber.js";
 
@@ -20,6 +21,7 @@ import {
   pool_position,
   claim,
   pool,
+  pool_event,
 } from '@juster-finance/gql-client'
 
 
@@ -179,3 +181,25 @@ export function processOrDefault<RawT, ProcessedT>(
     return deserializeFn(someValue)
   }
 }
+
+export const deserializePoolEvents = (
+  rawEvents: Array<pool_event>
+): Array<PoolEventType> => {
+
+  const toBigNumberIfDefined = (rawNumber: BigNumber | undefined) => {
+    return (rawNumber !== undefined) && (rawNumber !== null)
+      ? new BigNumber(rawNumber)
+      : undefined
+  };
+
+  return rawEvents.map((rawEvent: pool_event): PoolEventType => {
+    return {
+      provided: toBigNumberIfDefined(rawEvent.provided),
+      result: toBigNumberIfDefined(rawEvent.result),
+      claimed: toBigNumberIfDefined(rawEvent.claimed),
+      eventId: rawEvent.eventId,
+      lineId: rawEvent.lineId,
+      poolId: rawEvent.poolId
+    }
+  });
+};
