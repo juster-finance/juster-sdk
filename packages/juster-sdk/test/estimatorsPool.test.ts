@@ -1,7 +1,8 @@
 import {
   calculateAPY,
   calculateDurationY,
-  calculateMean
+  calculateMean,
+  calculateVariation
 } from "../src/estimators/pool";
 import rawPoolStates from "./data/poolStates.json"
 import BigNumber from "bignumber.js";
@@ -81,5 +82,31 @@ describe("mean calculation", () => {
   test("should return the same value if there is only one number", () => {
     const numbers = [new BigNumber(420)];
     expect(calculateMean(numbers).toFixed()).toBe("420")
+  });
+})
+
+describe("variance calculation", () => {
+  test("should return correct variance for an array of numbers", () => {
+    const numbers = [
+      new BigNumber(10),
+      new BigNumber(20),
+      new BigNumber(30),
+      new BigNumber(40)
+    ];
+    expect(calculateVariation(numbers).toFixed()).toBe("125")
+  });
+
+  test("should return 0 if variation calculated for only one number", () => {
+    const numbers = [new BigNumber(420)];
+    expect(calculateVariation(numbers).toFixed()).toBe("0")
+  });
+
+  test("should return 0 for array where all instances is the same number", () => {
+    const numbers = [
+      new BigNumber(42),
+      new BigNumber(42),
+      new BigNumber(42)
+    ];
+    expect(calculateVariation(numbers).toFixed()).toBe("0")
   });
 })
