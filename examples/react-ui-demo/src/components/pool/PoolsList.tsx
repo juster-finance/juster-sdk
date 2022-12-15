@@ -1,11 +1,14 @@
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 
 import {
+  JusterPool,
   PoolType
 } from '@juster-finance/sdk';
 
+import { PoolInfoRow } from './PoolInfoRow';
+
 export type PoolsListProps = {
-  pools: Array<PoolType>
+  pools: Array<JusterPool>
 };
 
 export const PoolsList: FC<PoolsListProps> = (props) => {
@@ -14,7 +17,6 @@ export const PoolsList: FC<PoolsListProps> = (props) => {
   return (
     <div className="Grid">
       <h3>Pools:</h3>
-      {pools.length > 0 &&
         <table className="Table">
           <thead>
             <tr>
@@ -23,25 +25,17 @@ export const PoolsList: FC<PoolsListProps> = (props) => {
               <th>version</th>
               <th>lock period</th>
               <th>is deposit paused</th>
+              <th>APY</th>
             </tr>
           </thead>
           <tbody>
             {pools.map((pool, _index) => {
-                  return (
-                    <tr key={pool.address}>
-                      <td>{pool.address}</td>
-                      <td>{pool.name}</td>
-                      <td>{pool.version}</td>
-                      <td>{pool.entryLockPeriod}</td>
-                      <td>{pool.isDepositPaused ? "yes" : "no"}</td>
-                    </tr>
-                  )
+                  return <PoolInfoRow pool={pool} />
                 }
               )
             }
           </tbody>
         </table>
-      }
     </div>
   );
 };

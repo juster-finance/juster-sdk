@@ -18,25 +18,25 @@ import { PoolsList } from '../pool/PoolsList';
 
 export type PoolTabProps = {
   pkh: string | null,
-  justerPool: JusterPool,
   pendingEntries: PendingEntriesType,
   poolPosition: PoolPositionType | null,
   claims: ClaimsType,
   poolState: PoolStateType | null,
-  pools: Array<PoolType>
+  pools: Array<JusterPool>
 };
 
 export const PoolTab: FunctionComponent<PoolTabProps> = ({
   pkh,
-  justerPool,
+  pools,
   pendingEntries,
   poolPosition,
   claims,
   poolState,
-  pools
 }) => {
 
   const poolPositions: Array<PoolPositionType> = poolPosition == null ? [] : [poolPosition];
+  // TODO: implement ability to select pool
+  const justerPool = pools[0];
   return (
     <div>
       <PoolsList
