@@ -56,4 +56,13 @@ test("calculateAPY", async () => {
     daysIn2022
   );
   expect(apy.toFixed()).toBe("1");
+
+  /* Check that x1.41 price dynamics in half year is approx 100%: */
+  apy = calculateAPY(
+    poolStates.get("originatedState")!,
+    poolStates.get("stateAfterHalfYear")!,
+    daysIn2022
+  );
+  expect(apy.isGreaterThan(0.99)).toBe(true);
+  expect(apy.isLessThan(1.01)).toBe(true);
 });

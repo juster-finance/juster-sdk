@@ -24,6 +24,19 @@
     "sharePrice": 2,
     "action": "EVENT_CREATED",
     "opgHash": "op7kk4zjCyRx4yscoALNGT6cmLrQDFFsZ3QhQWauubxFKfGXE5i"
+  },
+  "stateAfterHalfYear": {
+    "timestamp": "2023-06-07T12:00:00.000Z",
+    "level": 2948818,
+    "counter": 100,
+    "totalLiquidity": 1410,
+    "totalShares": 1000,
+    "activeLiquidity": 1500,
+    "withdrawableLiquidity": 0,
+    "entryLiquidity": 0,
+    "sharePrice": 1.41,
+    "action": "EVENT_CREATED",
+    "opgHash": "op7kk4zjCyRx4yscoALNGT6cmLrQDFFsZ3QhQWauubxFKfGXE5i"
   }
 }
 
