@@ -95,5 +95,12 @@ export class JusterBaseInstrument {
       entrypoint,
       args).send({ amount, mutez });
   };
+
+  /**
+   * Returns contract address
+   */
+  getContractAddress(): string {
+    return this._contractAddress
+  }
 }
 
