@@ -118,3 +118,12 @@ export type SummaryPositionType = {
   unrealizedProfit: BigNumber,
   lockedInClaims: BigNumber
 }
+
+export type PoolEventType = {
+  provided?: BigNumber,
+  result?: BigNumber,
+  claimed?: BigNumber,
+  eventId?: number,
+  lineId?: string,
+  poolId?: string
+}

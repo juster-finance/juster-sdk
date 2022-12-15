@@ -2,7 +2,8 @@ import BigNumber from "bignumber.js";
 import {
   PoolStateType,
   PoolPositionType,
-  SummaryPositionType
+  SummaryPositionType,
+  PoolEventType
 } from '../types'
 
 
@@ -72,6 +73,29 @@ export function calculateAPY(
     Math.pow(priceDynamics.toNumber(), frequencyY.toNumber())
   );
   return annualDynamics.minus(1)
+}
+
+// TODO: move this to statistics.ts ?
+export function calculateMean(values: Array<BigNumber>): BigNumber {
+  const sum = values.reduce(
+    (acc, value) => acc.plus(value),
+    new BigNumber(0)
+  );
+  return sum.div(values.length)
+}
+
+export function calculateRiskIndex(events: Array<PoolEventType>): BigNumber {
+  const removeUndefined = (event: PoolEventType) => {
+    return (event.provided !== undefined) && (event.result !== undefined)
+  }
+
+  const calcReturnDynamics = (event: PoolEventType) => {
+    return event.provided!.div(event.result!)
+  }
+
+  const dynamics = events.filter(removeUndefined).map(calcReturnDynamics);
+  // return BigNumber.variance(dynamics)
+  return calculateMean(dynamics)
 }
 
 /* TODO:
