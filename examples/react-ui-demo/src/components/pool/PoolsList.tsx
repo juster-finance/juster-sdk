@@ -17,25 +17,26 @@ export const PoolsList: FC<PoolsListProps> = (props) => {
   return (
     <div className="Grid">
       <h3>Pools:</h3>
-        <table className="Table">
-          <thead>
-            <tr>
-              <th>address</th>
-              <th>name</th>
-              <th>version</th>
-              <th>lock period</th>
-              <th>is deposit paused</th>
-              <th>APY</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pools.map((pool, _index) => {
-                  return <PoolInfoRow pool={pool} />
-                }
-              )
-            }
-          </tbody>
-        </table>
+        { pools.length > 0 &&
+          <table className="Table">
+            <thead>
+              <tr>
+                <th>address (name)</th>
+                <th>version</th>
+                <th>lock period</th>
+                <th>is deposit paused</th>
+                <th>APY</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pools.map((pool, _index) => {
+                    return <PoolInfoRow pool={pool} />
+                  }
+                )
+              }
+            </tbody>
+          </table>
+        }
     </div>
   );
 };

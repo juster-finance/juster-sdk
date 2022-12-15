@@ -16,11 +16,14 @@ export const PoolInfoRow: FC<PoolInfoRowProps> = (props) => {
   const [poolInfo, setPoolInfo] = useState<PoolType | null>(null);
 
   useEffect(() => {
-    const fetchInfo = async () => {
+    const fetchInfoAndSubscribe = async () => {
       setPoolInfo(await pool.getInfo());
-      // TODO: subscribe to APY and update it
+      pool.subscribeToAPY(
+        (newAPY) => {setPoolAPY(newAPY)}
+      );
     }
-    fetchInfo();
+
+    fetchInfoAndSubscribe();
   }, []);
 
   if (poolInfo === null) {
@@ -33,12 +36,11 @@ export const PoolInfoRow: FC<PoolInfoRowProps> = (props) => {
 
   return (
     <tr key={pool.getContractAddress()}>
-      <td>{poolInfo.address}</td>
-      <td>{poolInfo.name}</td>
+      <td>{poolInfo.address}<br/>{poolInfo.name}</td>
       <td>{poolInfo.version}</td>
       <td>{poolInfo.entryLockPeriod}</td>
       <td>{poolInfo.isDepositPaused ? "yes" : "no"}</td>
-      <td>{poolAPY.toFixed()}</td>
+      <td>{poolAPY.times(100).toFixed(2)}%</td>
     </tr>
   );
 };
