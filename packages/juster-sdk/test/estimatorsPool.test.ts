@@ -1,6 +1,7 @@
 import {
   calculateAPY,
-  calculateDurationY
+  calculateDurationY,
+  calculateMean
 } from "../src/estimators/pool";
 import rawPoolStates from "./data/poolStates.json"
 import BigNumber from "bignumber.js";
@@ -66,3 +67,19 @@ test("calculateAPY", async () => {
   expect(apy.isGreaterThan(0.99)).toBe(true);
   expect(apy.isLessThan(1.01)).toBe(true);
 });
+
+describe("mean calculation", () => {
+  test("should return correct mean for an array of numbers", () => {
+    const numbers = [
+      new BigNumber(1),
+      new BigNumber(2),
+      new BigNumber(3)
+    ];
+    expect(calculateMean(numbers).toFixed()).toBe("2")
+  });
+
+  test("should return the same value if there is only one number", () => {
+    const numbers = [new BigNumber(420)];
+    expect(calculateMean(numbers).toFixed()).toBe("420")
+  });
+})
