@@ -84,6 +84,16 @@ export function calculateMean(values: Array<BigNumber>): BigNumber {
   return sum.div(values.length)
 }
 
+// TODO: move this to statistics.ts [2] ?
+export function calculateVariation(values: Array<BigNumber>): BigNumber {
+  const mean = calculateMean(values);
+  const squareDifferences = values.map((value) => {
+    const difference = value.minus(mean);
+    return difference.times(difference)
+  });
+  return calculateMean(squareDifferences)
+}
+
 export function calculateRiskIndex(events: Array<PoolEventType>): BigNumber {
   const removeUndefined = (event: PoolEventType) => {
     return (event.provided !== undefined) && (event.result !== undefined)
