@@ -138,6 +138,15 @@ export const deserializePoolState = (rawPoolState: pool_state): PoolStateType =>
   };
 };
 
+export const emptyPool: PoolType = {
+  address: 'not-a-pool',
+  isDepositPaused: false,
+  isDisbanded: false,
+  name: 'not-a-pool',
+  version: 'not-a-pool',
+  entryLockPeriod: 0
+};
+
 export const deserializePool = (rawPool: pool): PoolType => {
   return {
     address: rawPool.address,

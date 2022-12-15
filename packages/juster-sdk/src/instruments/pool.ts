@@ -38,13 +38,25 @@ import {
   deserializePool,
   processOrDefault,
   emptyPoolPosition,
-  emptyPoolState
+  emptyPoolState,
+  emptyPool
 } from '../serialization'
 
 import { JusterBaseInstrument } from './baseInstrument'
 
 import { requestSimilarPools } from '../tzkt'
 import { calculateAPY } from "../estimators/pool";
+
+
+const POOL_FIELDS = {
+  address: true,
+  entryLockPeriod: true,
+  isDepositPaused: true,
+  isDisbandAllow: true,
+  name: true,
+  version: true
+};
+
 
 export class JusterPool extends JusterBaseInstrument {
   protected _shareDecimals: BigNumber;
@@ -587,6 +599,40 @@ export class JusterPool extends JusterBaseInstrument {
     );
   };
 
+  /**
+   * Preparing QueryReqest for getting general pool info
+   *
+   * @returns QueryRequest with graphql request for event
+   */
+  _makeGetInfo(): QueryRequest {
+    return {
+      pool: [
+        {
+          where: {
+            address: {_eq: this._contractAddress}
+          }
+        },
+        POOL_FIELDS
+      ]
+    }
+  }
+
+  /**
+   * Performs request to graphql API for pool general info
+   *
+   * @returns promise with PoolPositionsType
+   */
+  getInfo(): Promise<PoolType> {
+    return this._genqlClient.query(
+      this._makeGetInfo()
+    ).then(result => processOrDefault(
+        result.pool[0] as pool,
+        emptyPool,
+        deserializePool
+      )
+    );
+  }
+
   async unsubscribeAll(): Promise<void> {
     this.unsubscribeFromPendingEntries();
     this.unsubscribeFromPoolPosition();
@@ -601,35 +647,28 @@ export class JusterPool extends JusterBaseInstrument {
 export const getAllPools = async (
   network: Network
 ): Promise<Array<PoolType>> => {
-    const {
-      graphqlUri,
-      tzktApiBaseUrl,
-      justerPoolReferenceAddress,
-      trustedOriginationSenders
-    } = config.networks[network];
+  const {
+    graphqlUri,
+    tzktApiBaseUrl,
+    justerPoolReferenceAddress,
+    trustedOriginationSenders
+  } = config.networks[network];
 
-    const client = createClient({ url: graphqlUri });
+  const client = createClient({ url: graphqlUri });
 
-    const similarPools = await requestSimilarPools(
-      tzktApiBaseUrl, justerPoolReferenceAddress);
-    const trustedPoolAddresses = similarPools.filter(poolData => {
-      return trustedOriginationSenders.includes(poolData.creator.address)
-    }).map(poolData => {return poolData.address});
+  const similarPools = await requestSimilarPools(
+    tzktApiBaseUrl, justerPoolReferenceAddress);
+  const trustedPoolAddresses = similarPools.filter(poolData => {
+    return trustedOriginationSenders.includes(poolData.creator.address)
+  }).map(poolData => {return poolData.address});
 
-    const checkIsTrusted = (pool: PoolType) => {
-      return trustedPoolAddresses.includes(pool.address)
-    };
+  const checkIsTrusted = (pool: PoolType) => {
+    return trustedPoolAddresses.includes(pool.address)
+  };
 
-    // TODO: consider adding filtering by balance?
-    const poolsPromise: Promise<Array<PoolType>> = client.query({
-      pool: {
-        address: true,
-        entryLockPeriod: true,
-        isDepositPaused: true,
-        isDisbandAllow: true,
-        name: true,
-        version: true
-      }
+  // TODO: consider adding filtering by balance?
+  const poolsPromise: Promise<Array<PoolType>> = client.query({
+      pool: POOL_FIELDS
     }).then(result => {
       return (result.pool as Array<pool>).map(deserializePool).filter(checkIsTrusted)
   });
