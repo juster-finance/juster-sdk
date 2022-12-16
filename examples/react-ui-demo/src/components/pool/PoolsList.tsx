@@ -26,6 +26,7 @@ export const PoolsList: FC<PoolsListProps> = (props) => {
                 <th>lock period</th>
                 <th>is deposit paused</th>
                 <th>APY</th>
+                <th>Risk Index</th>
               </tr>
             </thead>
             <tbody>
