@@ -13,7 +13,8 @@ import {
   claim,
   pool_state,
   pool,
-  order_by
+  order_by,
+  pool_event
 } from '@juster-finance/gql-client'
 
 import config from "../config.json"
@@ -39,13 +40,14 @@ import {
   processOrDefault,
   emptyPoolPosition,
   emptyPoolState,
-  emptyPool
+  emptyPool,
+  deserializePoolEvents
 } from '../serialization'
 
 import { JusterBaseInstrument } from './baseInstrument'
 
 import { requestSimilarPools } from '../tzkt'
-import { calculateAPY } from "../estimators/pool";
+import { calculateAPY, calculateRiskIndex } from "../estimators/pool";
 
 
 const POOL_FIELDS = {
@@ -67,6 +69,7 @@ export class JusterPool extends JusterBaseInstrument {
   public unsubscribeFromLastPoolState: () => void;
   public unsubscribeFromFirstPoolState: () => void;
   public unsubscribeFromAPY: () => void;
+  public unsubscribeFromRiskIndex: () => void;
 
   constructor(
     network: NetworkType,
@@ -95,6 +98,7 @@ export class JusterPool extends JusterBaseInstrument {
     this.unsubscribeFromLastPoolState = () => undefined;
     this.unsubscribeFromFirstPoolState = () => undefined;
     this.unsubscribeFromAPY = () => undefined;
+    this.unsubscribeFromRiskIndex = () => undefined;
 
     this._shareDecimals = new BigNumber(shareDecimals);
   };
@@ -571,7 +575,7 @@ export class JusterPool extends JusterBaseInstrument {
    * performs requests to graphql api to calculate pool APY
    *
    * @param dateFrom is minimal date from which APY is calculated
-   * @returns promise with poolstatetype
+   * @returns promise with BigNumber
    */
   async getAPY(
     dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
@@ -633,6 +637,46 @@ export class JusterPool extends JusterBaseInstrument {
     );
   }
 
+  /**
+   * Subscribes to pool Risk Index updates, calls updateCallback each time
+   *
+   * @param limit is maximal amount of events that used to calculate Risk Index
+   * @returns promise with BigNumber
+   */
+  async subscribeToRiskIndex(
+    updateCallback: (apy: BigNumber) => void,
+    limit: number = 100
+  ): Promise<void> {
+    this.unsubscribeFromRiskIndex();
+
+    const { unsubscribe } = this._genqlClient.subscription({
+      poolEvent: [
+        {
+          where: {
+            pool: {address: {_eq: this._contractAddress}},
+            result: {_is_null: false}
+          },
+          limit: limit
+        },
+        {
+          provided: true,
+          result: true
+        }
+      ]
+    }).subscribe({
+      next: (result) => updateCallback(
+        calculateRiskIndex(
+          deserializePoolEvents(
+            result.poolEvent as Array<pool_event>
+          )
+        )
+      ),
+      error: console.error,
+    });
+
+    this.unsubscribeFromRiskIndex = unsubscribe;
+  };
+
   async unsubscribeAll(): Promise<void> {
     this.unsubscribeFromPendingEntries();
     this.unsubscribeFromPoolPosition();
@@ -640,6 +684,7 @@ export class JusterPool extends JusterBaseInstrument {
     this.unsubscribeFromLastPoolState();
     this.unsubscribeFromFirstPoolState();
     this.unsubscribeFromAPY();
+    this.unsubscribeFromRiskIndex();
   }
 }
 
