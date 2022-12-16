@@ -12,16 +12,16 @@ export type PoolInfoRowProps = {
 
 export const PoolInfoRow: FC<PoolInfoRowProps> = (props) => {
   const { pool } = props;
-  const [poolAPY, setPoolAPY] = useState<BigNumber>(new BigNumber(0));
+  const [APY, setAPY] = useState<BigNumber>(new BigNumber(0));
   const [riskIndex, setRiskIndex] = useState<BigNumber>(new BigNumber(0));
-  const [poolInfo, setPoolInfo] = useState<PoolType | null>(null);
+  const [info, setInfo] = useState<PoolType | null>(null);
 
   useEffect(() => {
     const fetchInfoAndSubscribe = async () => {
-      setPoolInfo(await pool.getInfo());
+      setInfo(await pool.getInfo());
 
       pool.subscribeToAPY(
-        (newAPY) => {setPoolAPY(newAPY)}
+        (newAPY) => {setAPY(newAPY)}
       );
 
       pool.subscribeToRiskIndex(
@@ -32,7 +32,7 @@ export const PoolInfoRow: FC<PoolInfoRowProps> = (props) => {
     fetchInfoAndSubscribe();
   }, []);
 
-  if (poolInfo === null) {
+  if (info === null) {
     return (
       <tr key={pool.getContractAddress()}>
         <td>loading...</td>
@@ -42,11 +42,11 @@ export const PoolInfoRow: FC<PoolInfoRowProps> = (props) => {
 
   return (
     <tr key={pool.getContractAddress()}>
-      <td>{poolInfo.address}<br/>{poolInfo.name}</td>
-      <td>{poolInfo.version}</td>
-      <td>{poolInfo.entryLockPeriod}</td>
-      <td>{poolInfo.isDepositPaused ? "yes" : "no"}</td>
-      <td>{poolAPY.times(100).toFixed(2)}%</td>
+      <td>{info.address}<br/>{info.name}</td>
+      <td>{info.version}</td>
+      <td>{info.entryLockPeriod}</td>
+      <td>{info.isDepositPaused ? "yes" : "no"}</td>
+      <td>{APY.times(100).toFixed(2)}%</td>
       <td>{riskIndex.times(100).toFixed(2)}%</td>
     </tr>
   );
