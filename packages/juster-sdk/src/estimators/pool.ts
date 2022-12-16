@@ -94,6 +94,13 @@ export function calculateVariation(values: Array<BigNumber>): BigNumber {
   return calculateMean(squareDifferences)
 }
 
+/**
+ * Calculates Risk Index as variation coefficient (standard deviation to the mean
+ * value) of provided/result ratio for given events
+ *
+ * @param events is array of events that go to the Risk Index calculation
+ * @returns BigNumber
+ */
 export function calculateRiskIndex(events: Array<PoolEventType>): BigNumber {
   const removeUndefined = (event: PoolEventType) => {
     return (event.provided !== undefined) && (event.result !== undefined)
@@ -104,8 +111,9 @@ export function calculateRiskIndex(events: Array<PoolEventType>): BigNumber {
   }
 
   const dynamics = events.filter(removeUndefined).map(calcReturnDynamics);
-  // return BigNumber.variance(dynamics)
-  return calculateMean(dynamics)
+  const variation = calculateVariation(dynamics);
+  const mean = calculateMean(dynamics);
+  return variation.sqrt().div(mean)
 }
 
 /* TODO:
