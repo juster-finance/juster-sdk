@@ -14,6 +14,7 @@ export const PoolInfoRow: FC<PoolInfoRowProps> = (props) => {
   const { pool } = props;
   const [APY, setAPY] = useState<BigNumber>(new BigNumber(0));
   const [riskIndex, setRiskIndex] = useState<BigNumber>(new BigNumber(0));
+  const [utilization, setUtilization] = useState<BigNumber>(new BigNumber(0));
   const [info, setInfo] = useState<PoolType | null>(null);
 
   useEffect(() => {
@@ -27,6 +28,10 @@ export const PoolInfoRow: FC<PoolInfoRowProps> = (props) => {
       pool.subscribeToRiskIndex(
         (newRiskIndex) => {setRiskIndex(newRiskIndex)}
       );
+
+      pool.subscribeToUtilization(
+        (newUtilization) => {setUtilization(newUtilization)}
+      );
     }
 
     fetchInfoAndSubscribe();
@@ -34,20 +39,21 @@ export const PoolInfoRow: FC<PoolInfoRowProps> = (props) => {
 
   if (info === null) {
     return (
-      <tr key={pool.getContractAddress()}>
+      <tr>
         <td>loading...</td>
       </tr>
     )
   }
 
   return (
-    <tr key={pool.getContractAddress()}>
+    <tr>
       <td>{info.address}<br/>{info.name}</td>
       <td>{info.version}</td>
       <td>{info.entryLockPeriod}</td>
       <td>{info.isDepositPaused ? "yes" : "no"}</td>
       <td>{APY.times(100).toFixed(2)}%</td>
       <td>{riskIndex.times(100).toFixed(2)}%</td>
+      <td>{utilization.times(100).toFixed(2)}%</td>
     </tr>
   );
 };

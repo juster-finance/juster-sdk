@@ -27,11 +27,12 @@ export const PoolsList: FC<PoolsListProps> = (props) => {
                 <th>is deposit paused</th>
                 <th>APY</th>
                 <th>Risk Index</th>
+                <th>Utilization</th>
               </tr>
             </thead>
             <tbody>
               {pools.map((pool, _index) => {
-                    return <PoolInfoRow pool={pool} />
+                    return <PoolInfoRow pool={pool} key={pool.getContractAddress()}/>
                   }
                 )
               }
