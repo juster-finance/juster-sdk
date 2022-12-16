@@ -2,11 +2,12 @@ import {
   calculateAPY,
   calculateDurationY,
   calculateMean,
+  calculateRiskIndex,
   calculateVariation
 } from "../src/estimators/pool";
 import rawPoolStates from "./data/poolStates.json"
 import BigNumber from "bignumber.js";
-import { PoolStateType } from "../src/types";
+import { PoolEventType, PoolStateType } from "../src/types";
 import { deserializePoolState } from "../src/serialization";
 import { pool_state } from "@juster-finance/gql-client";
 
@@ -108,5 +109,33 @@ describe("variance calculation", () => {
       new BigNumber(42)
     ];
     expect(calculateVariation(numbers).toFixed()).toBe("0")
+  });
+})
+
+describe("risk index calculation", () => {
+  test("should return correct risk index for multiple events ~0.082", () => {
+    const events = [
+      {provided: BigNumber(100), result: BigNumber(100)} as PoolEventType,
+      {provided: BigNumber(100), result: BigNumber(110)} as PoolEventType,
+      {provided: BigNumber(100), result: BigNumber(90)} as PoolEventType,
+    ];
+    expect(calculateRiskIndex(events).isGreaterThan(0.08)).toBe(true)
+    expect(calculateRiskIndex(events).isLessThan(0.09)).toBe(true)
+  });
+
+  test("should return 0 if Risk Index calculated for only one event", () => {
+    const events = [
+      {provided: BigNumber(100), result: BigNumber(10)} as PoolEventType
+    ];
+    expect(calculateRiskIndex(events).toFixed()).toBe("0")
+  });
+
+  test("should be robust for unfinished events", () => {
+    const events = [
+      {provided: BigNumber(100), result: undefined} as PoolEventType,
+      {provided: BigNumber(100), result: BigNumber(110)} as PoolEventType,
+      {provided: BigNumber(100)} as PoolEventType,
+    ];
+    expect(calculateRiskIndex(events).toFixed()).toBe("0")
   });
 })
