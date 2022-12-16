@@ -30,7 +30,7 @@ const provider = new BeaconWallet({
   preferredNetwork: NetworkType["GHOSTNET"]
 });
 
-const network = "testnet";
+const network = "mainnet";
 const justerCore = JusterCore.create(tezos, provider, network);
 
 // NOTE: pool address hardcoded to allow default pool object creation (instead of making it null)
@@ -43,7 +43,7 @@ type Tabs = "pool" | "core";
 
 function App() {
   // TODO: this component state is getting very complex, probably there is a way
-  // to fix it:
+  // to fix it (looks like some of the states might be used inside components):
   const [tab, setTab] = useState<Tabs>("pool");
   const [eventId, setEventId] = useState<number>(10313);
   const [event, setEvent] = useState<EventType | null>(null);
