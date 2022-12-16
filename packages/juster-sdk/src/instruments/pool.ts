@@ -47,7 +47,7 @@ import {
 import { JusterBaseInstrument } from './baseInstrument'
 
 import { requestSimilarPools } from '../tzkt'
-import { calculateAPY, calculateRiskIndex } from "../estimators/pool";
+import { calculateAPY, calculateRiskIndex, calculateUtilization } from "../estimators/pool";
 
 
 const POOL_FIELDS = {
@@ -70,6 +70,7 @@ export class JusterPool extends JusterBaseInstrument {
   public unsubscribeFromFirstPoolState: () => void;
   public unsubscribeFromAPY: () => void;
   public unsubscribeFromRiskIndex: () => void;
+  public unsubscribeFromUtilization: () => void;
 
   constructor(
     network: NetworkType,
@@ -99,6 +100,7 @@ export class JusterPool extends JusterBaseInstrument {
     this.unsubscribeFromFirstPoolState = () => undefined;
     this.unsubscribeFromAPY = () => undefined;
     this.unsubscribeFromRiskIndex = () => undefined;
+    this.unsubscribeFromUtilization = () => undefined;
 
     this._shareDecimals = new BigNumber(shareDecimals);
   };
@@ -677,6 +679,48 @@ export class JusterPool extends JusterBaseInstrument {
     this.unsubscribeFromRiskIndex = unsubscribe;
   };
 
+  /**
+   * Subscribes to pool Utilization metric updates, calls updateCallback each time
+   *
+   * @param limit is maximal amount of events that used to calculate Utilization metric
+   * @returns promise with BigNumber
+   */
+  async subscribeToUtilization(
+    updateCallback: (apy: BigNumber) => void,
+    limit: number = 100
+  ): Promise<void> {
+    this.unsubscribeFromUtilization();
+
+    const { unsubscribe } = this._genqlClient.subscription({
+      poolEvent: [
+        {
+          where: {
+            pool: {address: {_eq: this._contractAddress}},
+            eventId: {_is_null: false}
+          },
+          limit: limit
+        },
+        {
+          event: {
+            totalLiquidityProvided: true,
+            totalBetsAmount: true
+          }
+        }
+      ]
+    }).subscribe({
+      next: (result) => updateCallback(
+        calculateUtilization(
+          deserializePoolEvents(
+            result.poolEvent as Array<pool_event>
+          )
+        )
+      ),
+      error: console.error,
+    });
+
+    this.unsubscribeFromUtilization = unsubscribe;
+  };
+
   async unsubscribeAll(): Promise<void> {
     this.unsubscribeFromPendingEntries();
     this.unsubscribeFromPoolPosition();
@@ -685,6 +729,7 @@ export class JusterPool extends JusterBaseInstrument {
     this.unsubscribeFromFirstPoolState();
     this.unsubscribeFromAPY();
     this.unsubscribeFromRiskIndex();
+    this.unsubscribeFromUtilization();
   }
 }
 
