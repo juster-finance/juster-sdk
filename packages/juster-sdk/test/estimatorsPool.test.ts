@@ -3,6 +3,7 @@ import {
   calculateDurationY,
   calculateMean,
   calculateRiskIndex,
+  calculateUtilization,
   calculateVariation
 } from "../src/estimators/pool";
 import rawPoolStates from "./data/poolStates.json"
@@ -137,5 +138,21 @@ describe("risk index calculation", () => {
       {provided: BigNumber(100)} as PoolEventType,
     ];
     expect(calculateRiskIndex(events).toFixed()).toBe("0")
+  });
+})
+
+describe("utilization calculation", () => {
+  test("should return correct mean utilization for two events", () => {
+    const events = [
+      {
+        totalLiquidityProvided: BigNumber(100),
+        totalBetsAmount: BigNumber(1)
+      } as PoolEventType,
+      {
+        totalLiquidityProvided: BigNumber(100),
+        totalBetsAmount: BigNumber(3)
+      } as PoolEventType,
+    ];
+    expect(calculateUtilization(events).toFixed()).toBe("0.02")
   });
 })
