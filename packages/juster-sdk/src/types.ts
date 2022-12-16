@@ -125,5 +125,7 @@ export type PoolEventType = {
   claimed?: BigNumber,
   eventId?: number,
   lineId?: string,
-  poolId?: string
+  poolId?: string,
+  totalLiquidityProvided?: BigNumber,
+  totalBetsAmount?: BigNumber
 }

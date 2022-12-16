@@ -116,6 +116,21 @@ export function calculateRiskIndex(events: Array<PoolEventType>): BigNumber {
   return variation.sqrt().div(mean)
 }
 
+export function calculateUtilization(events: Array<PoolEventType>): BigNumber {
+  const removeUndefined = (event: PoolEventType) => {
+    const isHaveBetsAmount = event.totalBetsAmount !== undefined;
+    const isHaveLiquidityAmount = event.totalLiquidityProvided !== undefined;
+    return isHaveBetsAmount && isHaveLiquidityAmount;
+  }
+
+  const calcEventUtilization = (event: PoolEventType) => {
+    return event.totalBetsAmount!.div(event.totalLiquidityProvided!)
+  }
+
+  const utilizations = events.filter(removeUndefined).map(calcEventUtilization);
+  return calculateMean(utilizations);
+}
+
 /* TODO:
 export function estimateFreeLiquidity(pool: PoolType): BigNumber {
   ?
