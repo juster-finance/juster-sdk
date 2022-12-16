@@ -200,8 +200,8 @@ export const deserializePoolEvents = (
       eventId: rawEvent.eventId,
       lineId: rawEvent.lineId,
       poolId: rawEvent.poolId,
-      totalLiquidityProvided: rawEvent.event?.totalLiquidityProvided,
-      totalBetsAmount: rawEvent.event?.totalBetsAmount
+      totalLiquidityProvided: toBigNumberIfDefined(rawEvent.event?.totalLiquidityProvided),
+      totalBetsAmount: toBigNumberIfDefined(rawEvent.event?.totalBetsAmount)
     }
   });
 };
