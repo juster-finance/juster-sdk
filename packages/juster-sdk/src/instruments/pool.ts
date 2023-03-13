@@ -658,6 +658,7 @@ export class JusterPool extends JusterBaseInstrument {
             pool: {address: {_eq: this._contractAddress}},
             result: {_is_null: false}
           },
+          order_by: [{id: "desc"}],
           limit: limit
         },
         {
@@ -698,6 +699,7 @@ export class JusterPool extends JusterBaseInstrument {
             pool: {address: {_eq: this._contractAddress}},
             eventId: {_is_null: false}
           },
+          order_by: [{id: "desc"}],
           limit: limit
         },
         {
