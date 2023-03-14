@@ -98,7 +98,12 @@ export type PoolStateType = {
 }
 
 export type PoolType = {
-  address: string
+  address: string,
+  isDepositPaused: boolean,
+  isDisbanded: boolean,
+  name: string,
+  version: string,
+  entryLockPeriod: number
 }
 
 export type SummaryPositionType = {
@@ -112,4 +117,15 @@ export type SummaryPositionType = {
   realizedProfit: BigNumber,
   unrealizedProfit: BigNumber,
   lockedInClaims: BigNumber
+}
+
+export type PoolEventType = {
+  provided?: BigNumber,
+  result?: BigNumber,
+  claimed?: BigNumber,
+  eventId?: number,
+  lineId?: string,
+  poolId?: string,
+  totalLiquidityProvided?: BigNumber,
+  totalBetsAmount?: BigNumber
 }

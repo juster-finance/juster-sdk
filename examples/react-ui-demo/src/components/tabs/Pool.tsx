@@ -4,7 +4,8 @@ import {
   PendingEntriesType,
   PoolPositionType,
   ClaimsType,
-  PoolStateType
+  PoolStateType,
+  PoolType
 } from '@juster-finance/sdk';
 
 import { DepositForm } from '../pool/DepositForm';
@@ -12,29 +13,37 @@ import { PendingEntriesBlock } from '../pool/PendingEntriesBlock';
 import { PoolPositions } from '../pool/PoolPositions';
 import { ClaimsBlock } from '../pool/ClaimsBlock';
 import { UserSummary } from '../pool/UserSummary';
+import { PoolsList } from '../pool/PoolsList';
 
 
 export type PoolTabProps = {
   pkh: string | null,
-  justerPool: JusterPool,
   pendingEntries: PendingEntriesType,
   poolPosition: PoolPositionType | null,
   claims: ClaimsType,
-  poolState: PoolStateType | null
+  poolState: PoolStateType | null,
+  pools: Array<JusterPool>
 };
 
 export const PoolTab: FunctionComponent<PoolTabProps> = ({
   pkh,
-  justerPool,
+  pools,
   pendingEntries,
   poolPosition,
   claims,
-  poolState
+  poolState,
 }) => {
 
   const poolPositions: Array<PoolPositionType> = poolPosition == null ? [] : [poolPosition];
+  // TODO: implement ability to select pool
+  const justerPool = pools[0];
   return (
     <div>
+      <PoolsList
+        pools={pools}
+      />
+
+      <hr/>
       <DepositForm
         pkh={pkh}
         justerPool={justerPool}

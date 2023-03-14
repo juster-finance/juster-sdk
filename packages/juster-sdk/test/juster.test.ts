@@ -1,4 +1,4 @@
-import { Juster } from "../src/juster";
+import { JusterCore } from "../src/instruments/core";
 
 test("test juster creation", async () => {
   /*

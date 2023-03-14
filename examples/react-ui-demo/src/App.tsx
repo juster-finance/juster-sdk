@@ -14,7 +14,8 @@ import {
   PoolPositionType,
   ClaimsType,
   PoolStateType,
-  getAllPools
+  getAllPools,
+  PoolType
 } from '@juster-finance/sdk';
 
 import { PoolTab } from './components/tabs/Pool';
@@ -42,7 +43,7 @@ type Tabs = "pool" | "core";
 
 function App() {
   // TODO: this component state is getting very complex, probably there is a way
-  // to fix it:
+  // to fix it (looks like some of the states might be used inside components):
   const [tab, setTab] = useState<Tabs>("pool");
   const [eventId, setEventId] = useState<number>(10313);
   const [event, setEvent] = useState<EventType | null>(null);
@@ -53,6 +54,7 @@ function App() {
   const [poolPosition, setPoolPosition] = useState<PoolPositionType | null>(null);
   const [claims, setClaims] = useState<ClaimsType>([]);
   const [poolState, setPoolState] = useState<PoolStateType | null>(null);
+  const [pools, setPools] = useState<Array<JusterPool>>([]);
 
   // TODO: don't like this hardcoded address again:
   const [poolAddress, setPoolAddress] = useState<string>("KT1JKiMQWE8hcSGq8j89mYDEY4DLpTE4vEaD");
@@ -77,10 +79,7 @@ function App() {
 
   const handleSync = async (e: FormEvent<HTMLButtonElement>) => {
     await justerCore.sync();
-    const pools = await getAllPools(network);
-    console.log("pools:", pools);
-    justerPool.unsubscribeAll();
-    justerPool = JusterPool.create(tezos, provider, network, pools[0].address);
+    const newPools = await getAllPools(network);
 
     justerCore.getPkh().then((pkh) => {
       console.log("newPkh: ", pkh);
@@ -97,23 +96,34 @@ function App() {
         (updPosition) => {setPosition(updPosition)}
       );
 
-      justerPool.subscribeToPendingEntries(
-        pkh,
-        (updPendingEntries) => {setPendingEntries(updPendingEntries)}
+      const newJusterPools = newPools.map(
+        (pool, _) => {
+          const newJusterPool = JusterPool.create(tezos, provider, network, pool.address)
+
+          // TODO: move subscription code to the separate components
+          // TODO: find a way to get pkh of user
+          newJusterPool.subscribeToPendingEntries(
+            pkh,
+            (updPendingEntries) => {setPendingEntries(updPendingEntries)}
+          );
+
+          newJusterPool.subscribeToPoolPositions(
+            pkh,
+            (updPoolPosition) => {setPoolPosition(updPoolPosition)}
+          );
+
+          newJusterPool.subscribeToWithdrawableClaims(
+            pkh,
+            (updClaims) => {setClaims(updClaims)}
+          );
+
+          newJusterPool.subscribeToLastPoolState((updPoolState) => {setPoolState(updPoolState)});
+          return newJusterPool
+        }
       );
 
-      justerPool.subscribeToPoolPositions(
-        pkh,
-        (updPoolPosition) => {setPoolPosition(updPoolPosition)}
-      );
-
-      justerPool.subscribeToWithdrawableClaims(
-        pkh,
-        (updClaims) => {setClaims(updClaims)}
-      );
-
-      justerPool.subscribeToLastPoolState((updPoolState) => {setPoolState(updPoolState)});
-      });
+      setPools(newJusterPools);
+    });
   };
 
   // TODO: move all this code to one component with juster core
@@ -125,7 +135,7 @@ function App() {
     pool: (
       <PoolTab
         pkh={pkh}
-        justerPool={justerPool}
+        pools={pools}
         pendingEntries={pendingEntries}
         poolPosition={poolPosition}
         claims={claims}

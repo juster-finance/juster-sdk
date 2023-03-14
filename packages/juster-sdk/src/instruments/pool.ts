@@ -11,7 +11,10 @@ import {
   entry_liquidity,
   pool_position,
   claim,
-  pool_state
+  pool_state,
+  pool,
+  order_by,
+  pool_event
 } from '@juster-finance/gql-client'
 
 import config from "../config.json"
@@ -32,12 +35,30 @@ import {
   deserializePendingEntries,
   deserializePoolPosition,
   deserializeClaims,
-  deserializePoolState
+  deserializePoolState,
+  deserializePool,
+  processOrDefault,
+  emptyPoolPosition,
+  emptyPoolState,
+  emptyPool,
+  deserializePoolEvents
 } from '../serialization'
 
 import { JusterBaseInstrument } from './baseInstrument'
 
 import { requestSimilarPools } from '../tzkt'
+import { calculateAPY, calculateRiskIndex, calculateUtilization } from "../estimators/pool";
+
+
+const POOL_FIELDS = {
+  address: true,
+  entryLockPeriod: true,
+  isDepositPaused: true,
+  isDisbandAllow: true,
+  name: true,
+  version: true
+};
+
 
 export class JusterPool extends JusterBaseInstrument {
   protected _shareDecimals: BigNumber;
@@ -46,6 +67,10 @@ export class JusterPool extends JusterBaseInstrument {
   public unsubscribeFromPoolPosition: () => void;
   public unsubscribeFromClaims: () => void;
   public unsubscribeFromLastPoolState: () => void;
+  public unsubscribeFromFirstPoolState: () => void;
+  public unsubscribeFromAPY: () => void;
+  public unsubscribeFromRiskIndex: () => void;
+  public unsubscribeFromUtilization: () => void;
 
   constructor(
     network: NetworkType,
@@ -72,6 +97,10 @@ export class JusterPool extends JusterBaseInstrument {
     this.unsubscribeFromPoolPosition = () => undefined;
     this.unsubscribeFromClaims = () => undefined;
     this.unsubscribeFromLastPoolState = () => undefined;
+    this.unsubscribeFromFirstPoolState = () => undefined;
+    this.unsubscribeFromAPY = () => undefined;
+    this.unsubscribeFromRiskIndex = () => undefined;
+    this.unsubscribeFromUtilization = () => undefined;
 
     this._shareDecimals = new BigNumber(shareDecimals);
   };
@@ -277,12 +306,14 @@ export class JusterPool extends JusterBaseInstrument {
   ): Promise<PoolPositionType> {
     const positionPromise: Promise<PoolPositionType> = this._genqlClient.query(
       this._makeGetPosition(userAddress)
-    ).then(result => {
-      // TODO: check if there are any errors while request?
-      return deserializePoolPosition(result.poolPosition[0] as pool_position)
-  });
+    ).then(result => processOrDefault(
+        result.poolPosition[0] as pool_position,
+        emptyPoolPosition,
+        deserializePoolPosition
+      )
+    );
 
-  return positionPromise
+    return positionPromise
   }
 
   /**
@@ -303,7 +334,12 @@ export class JusterPool extends JusterBaseInstrument {
       this._makeGetPosition(userAddress)
     ).subscribe({
       next: (result) => updateCallback(
-        deserializePoolPosition(result.poolPosition[0] as pool_position)),
+        processOrDefault(
+          result.poolPosition[0] as pool_position,
+          emptyPoolPosition,
+          deserializePoolPosition
+        )
+      ),
       error: console.error,
     });
 
@@ -386,21 +422,29 @@ export class JusterPool extends JusterBaseInstrument {
   }
 
   /**
-   * Preparing QueryReqest for getting Pool
+   * Preparing QueryReqest for getting pool state
    *
+   * @param orderBy is desc by default (to request last pool state)
+   * @param dateFrom is minimal date from which state is requested
    * @returns QueryRequest with graphql request for event
    */
-  _makeGetLastPoolState(): QueryRequest {
+  _makeGetPoolState(
+    orderBy: order_by = "desc",
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): QueryRequest {
     return {
       poolState: [
         {
           where: {
             pool: {
               address: {_eq: this._contractAddress}
+            },
+            timestamp: {
+              _gte: dateFrom
             }
           },
           limit: 1,
-          order_by: [{counter: "desc"}]
+          order_by: [{counter: orderBy}]
         },
         {
           totalLiquidity: true,
@@ -420,24 +464,69 @@ export class JusterPool extends JusterBaseInstrument {
   }
 
   /**
-   * Performs request to graphql API for pool data
+   * Performs request to graphql API for pool state
+   *
+   * @param orderBy is desc by default (to request last pool state)
+   * @param dateFrom is minimal date from which state is requested
+   * @returns promise with PoolStateType
+   */
+  getPoolState(
+    orderBy: order_by = "desc",
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): Promise<PoolStateType> {
+    const poolStatePromise: Promise<PoolStateType> = this._genqlClient.query(
+      this._makeGetPoolState(orderBy, dateFrom)
+    ).then(
+      result => processOrDefault(
+        result.poolState[0] as pool_state,
+        emptyPoolState,
+        deserializePoolState
+      )
+    );
+
+    return poolStatePromise
+  }
+
+  /**
+   * Subscribes to pool states, calls updateCallback each time when new update received
+   *
+   * @param updateCallback function with PoolPositionsType arg that called each
+   * time new update received
+   * @param orderBy is desc by default (to request last pool state)
+   * @param dateFrom is minimal date from which state is requested
+   * @returns unsubscribe function
+   */
+  _makePoolStateSubscription(
+    updateCallback: (positions: PoolStateType) => void,
+    orderBy: order_by = "desc",
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): () => void {
+    const { unsubscribe } = this._genqlClient.subscription(
+      this._makeGetPoolState(orderBy, dateFrom)
+    ).subscribe({
+      next: (result) => updateCallback(
+        processOrDefault(
+          result.poolState[0] as pool_state,
+          emptyPoolState,
+          deserializePoolState
+        )
+      ),
+      error: console.error,
+    });
+    return unsubscribe
+  }
+
+  /**
+   * Performs request to graphql API for last pool state
    *
    * @returns promise with PoolStateType
    */
   getLastPoolState(): Promise<PoolStateType> {
-    const poolStatePromise: Promise<PoolStateType> = this._genqlClient.query(
-      this._makeGetLastPoolState()
-    ).then(result => {
-      // TODO: check if there are any errors while request?
-      // TODO: handle error if there is no pools returned?
-      return deserializePoolState(result.poolState[0] as pool_state)
-  });
-
-  return poolStatePromise
+    return this.getPoolState()
   }
 
   /**
-   * Subscribes to pool stats, calls updateCallback each time when new update received
+   * Subscribes to last pool state, calls updateCallback each time when new update received
    *
    * @param updateCallback function with PoolPositionsType arg that called each
    * time new update received
@@ -447,56 +536,233 @@ export class JusterPool extends JusterBaseInstrument {
     updateCallback: (positions: PoolStateType) => void
   ): Promise<void> {
     this.unsubscribeFromLastPoolState();
-    const { unsubscribe } = this._genqlClient.subscription(
-      this._makeGetLastPoolState()
-    ).subscribe({
+    this.unsubscribeFromLastPoolState = this._makePoolStateSubscription(updateCallback);
+  }
+
+  /**
+   * performs request to graphql api for first pool state
+   *
+   * @param dateFrom used to filter pool states starting from a given date
+   * @returns promise with PoolStateType
+   */
+  getFirstPoolState(
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): Promise<PoolStateType> {
+    const orderBy: order_by = "asc";
+    return this.getPoolState(orderBy, dateFrom);
+  }
+
+  /**
+   * Subscribes to first pool state, calls updateCallback each time when new update received
+   *
+   * @param updateCallback function with PoolPositionsType arg that called each
+   * time new update received
+   * @param dateFrom is minimal date from which state is requested
+   * @returns unsubscribe function
+   */
+  async subscribeToFirstPoolState(
+    updateCallback: (positions: PoolStateType) => void,
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): Promise<void> {
+    this.unsubscribeFromFirstPoolState();
+    const orderBy: order_by = "asc";
+    this.unsubscribeFromFirstPoolState = this._makePoolStateSubscription(
+      updateCallback,
+      orderBy,
+      dateFrom
+    );
+  }
+
+  /**
+   * performs requests to graphql api to calculate pool APY
+   *
+   * @param dateFrom is minimal date from which APY is calculated
+   * @returns promise with BigNumber
+   */
+  async getAPY(
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): Promise<BigNumber> {
+    return calculateAPY(
+      await this.getFirstPoolState(dateFrom),
+      await this.getLastPoolState()
+    )
+  }
+
+  /**
+   * Subscribes to pool APY updates, calls updateCallback each time 
+   *
+   * @param dateFrom is minimal date from which APY is calculated
+   * @returns promise with PoolStateType
+   */
+  async subscribeToAPY(
+    updateCallback: (apy: BigNumber) => void,
+    dateFrom: Date = new Date("1984-01-01T12:00:00.000Z")
+  ): Promise<void> {
+    this.unsubscribeFromAPY();
+    const firstState = await this.getFirstPoolState(dateFrom);
+    this.unsubscribeFromAPY = this._makePoolStateSubscription(
+      (newState: PoolStateType) => updateCallback(calculateAPY(firstState, newState))
+    );
+  };
+
+  /**
+   * Preparing QueryReqest for getting general pool info
+   *
+   * @returns QueryRequest with graphql request for event
+   */
+  _makeGetInfo(): QueryRequest {
+    return {
+      pool: [
+        {
+          where: {
+            address: {_eq: this._contractAddress}
+          }
+        },
+        POOL_FIELDS
+      ]
+    }
+  }
+
+  /**
+   * Performs request to graphql API for pool general info
+   *
+   * @returns promise with PoolPositionsType
+   */
+  getInfo(): Promise<PoolType> {
+    return this._genqlClient.query(
+      this._makeGetInfo()
+    ).then(result => processOrDefault(
+        result.pool[0] as pool,
+        emptyPool,
+        deserializePool
+      )
+    );
+  }
+
+  /**
+   * Subscribes to pool Risk Index updates, calls updateCallback each time
+   *
+   * @param limit is maximal amount of events that used to calculate Risk Index
+   * @returns promise with BigNumber
+   */
+  async subscribeToRiskIndex(
+    updateCallback: (apy: BigNumber) => void,
+    limit: number = 100
+  ): Promise<void> {
+    this.unsubscribeFromRiskIndex();
+
+    const { unsubscribe } = this._genqlClient.subscription({
+      poolEvent: [
+        {
+          where: {
+            pool: {address: {_eq: this._contractAddress}},
+            result: {_is_null: false}
+          },
+          order_by: [{id: "desc"}],
+          limit: limit
+        },
+        {
+          provided: true,
+          result: true
+        }
+      ]
+    }).subscribe({
       next: (result) => updateCallback(
-        deserializePoolState(result.poolState[0] as pool_state)),
+        calculateRiskIndex(
+          deserializePoolEvents(
+            result.poolEvent as Array<pool_event>
+          )
+        )
+      ),
       error: console.error,
     });
 
-    this.unsubscribeFromLastPoolState = unsubscribe;
-  }
+    this.unsubscribeFromRiskIndex = unsubscribe;
+  };
+
+  /**
+   * Subscribes to pool Utilization metric updates, calls updateCallback each time
+   *
+   * @param limit is maximal amount of events that used to calculate Utilization metric
+   * @returns promise with BigNumber
+   */
+  async subscribeToUtilization(
+    updateCallback: (apy: BigNumber) => void,
+    limit: number = 100
+  ): Promise<void> {
+    this.unsubscribeFromUtilization();
+
+    const { unsubscribe } = this._genqlClient.subscription({
+      poolEvent: [
+        {
+          where: {
+            pool: {address: {_eq: this._contractAddress}},
+            eventId: {_is_null: false}
+          },
+          order_by: [{id: "desc"}],
+          limit: limit
+        },
+        {
+          event: {
+            totalLiquidityProvided: true,
+            totalBetsAmount: true
+          }
+        }
+      ]
+    }).subscribe({
+      next: (result) => updateCallback(
+        calculateUtilization(
+          deserializePoolEvents(
+            result.poolEvent as Array<pool_event>
+          )
+        )
+      ),
+      error: console.error,
+    });
+
+    this.unsubscribeFromUtilization = unsubscribe;
+  };
 
   async unsubscribeAll(): Promise<void> {
     this.unsubscribeFromPendingEntries();
     this.unsubscribeFromPoolPosition();
     this.unsubscribeFromClaims();
     this.unsubscribeFromLastPoolState();
+    this.unsubscribeFromFirstPoolState();
+    this.unsubscribeFromAPY();
+    this.unsubscribeFromRiskIndex();
+    this.unsubscribeFromUtilization();
   }
 }
 
+// TODO: consider returning JusterPool objects instead?
 export const getAllPools = async (
   network: Network
 ): Promise<Array<PoolType>> => {
-    const {
-      graphqlUri,
-      tzktApiBaseUrl,
-      justerPoolReferenceAddress,
-      trustedOriginationSenders
-    } = config.networks[network];
+  const {
+    graphqlUri,
+    tzktApiBaseUrl,
+    justerPoolReferenceAddress,
+    trustedOriginationSenders
+  } = config.networks[network];
 
-    const client = createClient({ url: graphqlUri });
+  const client = createClient({ url: graphqlUri });
 
-    const deserializePool = (pool: PoolType) => {
-      return {address: pool.address}
-    };
+  const similarPools = await requestSimilarPools(
+    tzktApiBaseUrl, justerPoolReferenceAddress);
+  const trustedPoolAddresses = similarPools.filter(poolData => {
+    return trustedOriginationSenders.includes(poolData.creator.address)
+  }).map(poolData => {return poolData.address});
 
-    const similarPools = await requestSimilarPools(
-      tzktApiBaseUrl, justerPoolReferenceAddress);
-    const trustedPoolAddresses = similarPools.filter(poolData => {
-      return trustedOriginationSenders.includes(poolData.creator.address)
-    }).map(poolData => {return poolData.address});
+  const checkIsTrusted = (pool: PoolType) => {
+    return trustedPoolAddresses.includes(pool.address)
+  };
 
-    const checkIsTrusted = (pool: PoolType) => {
-      return trustedPoolAddresses.includes(pool.address)
-    };
-
-    // TODO: consider adding filtering by balance?
-    const poolsPromise: Promise<Array<PoolType>> = client.query({
-      pool: {address: true}
+  // TODO: consider adding filtering by balance?
+  const poolsPromise: Promise<Array<PoolType>> = client.query({
+      pool: POOL_FIELDS
     }).then(result => {
-      return result.pool.map(deserializePool).filter(checkIsTrusted)
+      return (result.pool as Array<pool>).map(deserializePool).filter(checkIsTrusted)
   });
 
   return poolsPromise
