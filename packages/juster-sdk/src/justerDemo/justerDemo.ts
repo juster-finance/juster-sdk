@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { textUtils } from '../utils/index.js';
 import type { BetSide } from '../models.js';
-import type { BetParamsDto, BetResultDto } from './dtos.js';
+import type { BetParamsDto, BetResultDto, ProvideLiquidityParams, ProvideLiquidityResult } from './dtos.js';
 import type { AccessTokenFactory } from './accessTokenFactory.js';
 import { JusterDemoResponseError } from './justerDemoResponseError.js';
 
@@ -21,6 +21,38 @@ export class JusterDemo {
   protected getUrl(uri: string) {
     return new URL(this.baseUrl + '/' + textUtils.trimSlashes(uri));
   }
+
+  /**
+   * Calling provideLiquidity action
+   *
+   * @param {number} eventId number of event
+   * @param {BigNumber} expectedRatioAboveEq expected pool ratio numerator
+   * @param {BigNumber} expectedRatioBellow expected pool ratio denomimator
+   * @param {BigNumber} maxSlippage maximal difference between expected ratio and actual ratio (nat number measured in ratioPrecision)
+   * @param {BigNumber} amount added liquidity amount
+   * @returns promise with ProvideLiquidityResult
+   */
+  async provideLiquidity(
+    eventId: number,
+    expectedRatioAboveEq: BigNumber,
+    expectedRatioBellow: BigNumber,
+    maxSlippage: BigNumber,
+    amount: BigNumber
+  ): Promise<ProvideLiquidityResult> {
+    const provideLiquidityParams: ProvideLiquidityParams = {
+      amount: amount.toNumber(),
+      eventId,
+      expectedRatioAboveEq: expectedRatioAboveEq.toNumber(),
+      expectedRatioBelow: expectedRatioBellow.toNumber(),
+      maxSlippage: maxSlippage.toNumber(),
+    };
+    const provideLiquidityResult = await this.fetch<ProvideLiquidityResult>('/contract/add-liquidity', true, {
+      method: 'POST',
+      body: JSON.stringify(provideLiquidityParams),
+    });
+
+    return provideLiquidityResult;
+  };
 
   /**
    * Calling bet action
@@ -50,6 +82,22 @@ export class JusterDemo {
 
     return betResult;
   }
+
+  /**
+   * Calling withdraw action
+   *
+   * @param {number} eventId number of event
+   * @param {address} participantAddress address of the participant used to calculate and pay rewards
+   * @returns promise with TransactionWalletOperation
+   */
+  withdraw(
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    eventId: number,
+    participantAddress: string
+    /* eslint-enable @typescript-eslint/no-unused-vars */
+  ): Promise<void> {
+    return Promise.resolve();
+  };
 
   protected async getRequestInit(isPrivate: boolean, requestInit: RequestInit = {}) {
     const headers = new Headers(requestInit.headers);

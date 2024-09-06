@@ -50,9 +50,20 @@ export interface PositionDto {
   value: number;
 }
 
+export interface DepositDto {
+  id: number;
+  createdTime: number;
+  opgHash: string;
+  eventId: number;
+  userId: string;
+  amountAboveEq: number;
+  amountBelow: number;
+  shares: number;
+}
+
 export interface BetDto {
   id: number;
-  createdTime: Date;
+  createdTime: number;
   opgHash: string;
   side: BetSide;
   amount: number;
@@ -63,6 +74,20 @@ export interface BetDto {
 
 export interface BaseParamsDto {
   amount: number;
+}
+
+export interface ProvideLiquidityParams extends BaseParamsDto {
+  eventId: number;
+  expectedRatioAboveEq: number;
+  expectedRatioBelow: number;
+  maxSlippage: number;
+}
+
+export interface ProvideLiquidityResult extends BaseParamsDto {
+  user: UserDto;
+  event: JusterEventDto;
+  position: PositionDto;
+  deposit: DepositDto;
 }
 
 export interface BetParamsDto extends BaseParamsDto {
