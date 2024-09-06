@@ -1,6 +1,6 @@
 {
   "name": "@juster-finance/gql-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Justed GraphQL client",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,7 +13,7 @@
   "bugs": {
     "url": "https://github.com/juster-finance/juster-sdk/issues"
   },
-  "homepage": "https://juster.fi",
+  "homepage": "",
   "devDependencies": {
     "@genql/cli": "^2.10.0"
   },

@@ -1,0 +1,7157 @@
+schema {
+  query: query_root
+  subscription: subscription_root
+}
+
+"""whether this query should be cached (Hasura Cloud only)"""
+directive @cached(
+  """measured in seconds"""
+  ttl: Int! = 60
+
+  """refresh the cache entry"""
+  refresh: Boolean! = false
+) on QUERY
+
+"""
+Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'.
+"""
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+
+  """does the column match the given case-insensitive pattern"""
+  _ilike: String
+  _in: [String!]
+
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _is_null: Boolean
+
+  """does the column match the given pattern"""
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+
+  """does the column NOT match the given case-insensitive pattern"""
+  _nilike: String
+  _nin: [String!]
+
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+
+  """does the column NOT match the given pattern"""
+  _nlike: String
+
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+
+  """does the column NOT match the given SQL regular expression"""
+  _nsimilar: String
+
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+
+  """does the column match the given SQL regular expression"""
+  _similar: String
+}
+
+"""
+columns and relationships of "bet"
+"""
+type bet {
+  amount: numeric!
+  createdTime: timestamptz!
+
+  """An object relationship"""
+  event: event!
+  eventId: bigint!
+  id: bigint!
+  opgHash: String!
+  reward: numeric!
+
+  """ABOVE_EQ: ABOVE_EQ\nBELOW: BELOW"""
+  side: String!
+
+  """An object relationship"""
+  user: user!
+  userId: String!
+}
+
+"""
+order by aggregate values of table "bet"
+"""
+input bet_aggregate_order_by {
+  avg: bet_avg_order_by
+  count: order_by
+  max: bet_max_order_by
+  min: bet_min_order_by
+  stddev: bet_stddev_order_by
+  stddev_pop: bet_stddev_pop_order_by
+  stddev_samp: bet_stddev_samp_order_by
+  sum: bet_sum_order_by
+  var_pop: bet_var_pop_order_by
+  var_samp: bet_var_samp_order_by
+  variance: bet_variance_order_by
+}
+
+"""
+order by avg() on columns of table "bet"
+"""
+input bet_avg_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  reward: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "bet". All fields are combined with a logical 'AND'.
+"""
+input bet_bool_exp {
+  _and: [bet_bool_exp!]
+  _not: bet_bool_exp
+  _or: [bet_bool_exp!]
+  amount: numeric_comparison_exp
+  createdTime: timestamptz_comparison_exp
+  event: event_bool_exp
+  eventId: bigint_comparison_exp
+  id: bigint_comparison_exp
+  opgHash: String_comparison_exp
+  reward: numeric_comparison_exp
+  side: String_comparison_exp
+  user: user_bool_exp
+  userId: String_comparison_exp
+}
+
+"""
+order by max() on columns of table "bet"
+"""
+input bet_max_order_by {
+  amount: order_by
+  createdTime: order_by
+  eventId: order_by
+  id: order_by
+  opgHash: order_by
+  reward: order_by
+
+  """ABOVE_EQ: ABOVE_EQ\nBELOW: BELOW"""
+  side: order_by
+  userId: order_by
+}
+
+"""
+order by min() on columns of table "bet"
+"""
+input bet_min_order_by {
+  amount: order_by
+  createdTime: order_by
+  eventId: order_by
+  id: order_by
+  opgHash: order_by
+  reward: order_by
+
+  """ABOVE_EQ: ABOVE_EQ\nBELOW: BELOW"""
+  side: order_by
+  userId: order_by
+}
+
+"""Ordering options when selecting data from "bet"."""
+input bet_order_by {
+  amount: order_by
+  createdTime: order_by
+  event: event_order_by
+  eventId: order_by
+  id: order_by
+  opgHash: order_by
+  reward: order_by
+  side: order_by
+  user: user_order_by
+  userId: order_by
+}
+
+"""
+select columns of table "bet"
+"""
+enum bet_select_column {
+  """column name"""
+  amount
+
+  """column name"""
+  createdTime
+
+  """column name"""
+  eventId
+
+  """column name"""
+  id
+
+  """column name"""
+  opgHash
+
+  """column name"""
+  reward
+
+  """column name"""
+  side
+
+  """column name"""
+  userId
+}
+
+"""
+order by stddev() on columns of table "bet"
+"""
+input bet_stddev_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  reward: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "bet"
+"""
+input bet_stddev_pop_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  reward: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "bet"
+"""
+input bet_stddev_samp_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  reward: order_by
+}
+
+"""
+Streaming cursor of the table "bet"
+"""
+input bet_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: bet_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input bet_stream_cursor_value_input {
+  amount: numeric
+  createdTime: timestamptz
+  eventId: bigint
+  id: bigint
+  opgHash: String
+  reward: numeric
+
+  """ABOVE_EQ: ABOVE_EQ\nBELOW: BELOW"""
+  side: String
+  userId: String
+}
+
+"""
+order by sum() on columns of table "bet"
+"""
+input bet_sum_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  reward: order_by
+}
+
+"""
+order by var_pop() on columns of table "bet"
+"""
+input bet_var_pop_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  reward: order_by
+}
+
+"""
+order by var_samp() on columns of table "bet"
+"""
+input bet_var_samp_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  reward: order_by
+}
+
+"""
+order by variance() on columns of table "bet"
+"""
+input bet_variance_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  reward: order_by
+}
+
+scalar bigint
+
+"""
+Boolean expression to compare columns of type "bigint". All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+  _gt: bigint
+  _gte: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+  _lt: bigint
+  _lte: bigint
+  _neq: bigint
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "candle"
+"""
+type candle {
+  close: numeric!
+
+  """An object relationship"""
+  currencyPair: currency_pair!
+  currencyPairId: Int!
+  high: numeric!
+  id: bigint!
+
+  """
+  ONE_MINUTE: ONE_MINUTE\nFIVE_MINUTES: FIVE_MINUTES\nFIFTEEN_MINUTES: FIFTEEN_MINUTES\nONE_HOUR: ONE_HOUR\nSIX_HOURS: SIX_HOURS\nONE_DAY: ONE_DAY
+  """
+  interval: String!
+  low: numeric!
+  open: numeric!
+  since: timestamptz!
+
+  """HARBINGER: HARBINGER\nCOINBASE: COINBASE\nMERGED: MERGED"""
+  source: String!
+  until: timestamptz!
+  volume: numeric!
+}
+
+"""
+order by aggregate values of table "candle"
+"""
+input candle_aggregate_order_by {
+  avg: candle_avg_order_by
+  count: order_by
+  max: candle_max_order_by
+  min: candle_min_order_by
+  stddev: candle_stddev_order_by
+  stddev_pop: candle_stddev_pop_order_by
+  stddev_samp: candle_stddev_samp_order_by
+  sum: candle_sum_order_by
+  var_pop: candle_var_pop_order_by
+  var_samp: candle_var_samp_order_by
+  variance: candle_variance_order_by
+}
+
+"""
+order by avg() on columns of table "candle"
+"""
+input candle_avg_order_by {
+  close: order_by
+  currencyPairId: order_by
+  high: order_by
+  id: order_by
+  low: order_by
+  open: order_by
+  volume: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "candle". All fields are combined with a logical 'AND'.
+"""
+input candle_bool_exp {
+  _and: [candle_bool_exp!]
+  _not: candle_bool_exp
+  _or: [candle_bool_exp!]
+  close: numeric_comparison_exp
+  currencyPair: currency_pair_bool_exp
+  currencyPairId: Int_comparison_exp
+  high: numeric_comparison_exp
+  id: bigint_comparison_exp
+  interval: String_comparison_exp
+  low: numeric_comparison_exp
+  open: numeric_comparison_exp
+  since: timestamptz_comparison_exp
+  source: String_comparison_exp
+  until: timestamptz_comparison_exp
+  volume: numeric_comparison_exp
+}
+
+"""
+order by max() on columns of table "candle"
+"""
+input candle_max_order_by {
+  close: order_by
+  currencyPairId: order_by
+  high: order_by
+  id: order_by
+
+  """
+  ONE_MINUTE: ONE_MINUTE\nFIVE_MINUTES: FIVE_MINUTES\nFIFTEEN_MINUTES: FIFTEEN_MINUTES\nONE_HOUR: ONE_HOUR\nSIX_HOURS: SIX_HOURS\nONE_DAY: ONE_DAY
+  """
+  interval: order_by
+  low: order_by
+  open: order_by
+  since: order_by
+
+  """HARBINGER: HARBINGER\nCOINBASE: COINBASE\nMERGED: MERGED"""
+  source: order_by
+  until: order_by
+  volume: order_by
+}
+
+"""
+order by min() on columns of table "candle"
+"""
+input candle_min_order_by {
+  close: order_by
+  currencyPairId: order_by
+  high: order_by
+  id: order_by
+
+  """
+  ONE_MINUTE: ONE_MINUTE\nFIVE_MINUTES: FIVE_MINUTES\nFIFTEEN_MINUTES: FIFTEEN_MINUTES\nONE_HOUR: ONE_HOUR\nSIX_HOURS: SIX_HOURS\nONE_DAY: ONE_DAY
+  """
+  interval: order_by
+  low: order_by
+  open: order_by
+  since: order_by
+
+  """HARBINGER: HARBINGER\nCOINBASE: COINBASE\nMERGED: MERGED"""
+  source: order_by
+  until: order_by
+  volume: order_by
+}
+
+"""Ordering options when selecting data from "candle"."""
+input candle_order_by {
+  close: order_by
+  currencyPair: currency_pair_order_by
+  currencyPairId: order_by
+  high: order_by
+  id: order_by
+  interval: order_by
+  low: order_by
+  open: order_by
+  since: order_by
+  source: order_by
+  until: order_by
+  volume: order_by
+}
+
+"""
+select columns of table "candle"
+"""
+enum candle_select_column {
+  """column name"""
+  close
+
+  """column name"""
+  currencyPairId
+
+  """column name"""
+  high
+
+  """column name"""
+  id
+
+  """column name"""
+  interval
+
+  """column name"""
+  low
+
+  """column name"""
+  open
+
+  """column name"""
+  since
+
+  """column name"""
+  source
+
+  """column name"""
+  until
+
+  """column name"""
+  volume
+}
+
+"""
+order by stddev() on columns of table "candle"
+"""
+input candle_stddev_order_by {
+  close: order_by
+  currencyPairId: order_by
+  high: order_by
+  id: order_by
+  low: order_by
+  open: order_by
+  volume: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "candle"
+"""
+input candle_stddev_pop_order_by {
+  close: order_by
+  currencyPairId: order_by
+  high: order_by
+  id: order_by
+  low: order_by
+  open: order_by
+  volume: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "candle"
+"""
+input candle_stddev_samp_order_by {
+  close: order_by
+  currencyPairId: order_by
+  high: order_by
+  id: order_by
+  low: order_by
+  open: order_by
+  volume: order_by
+}
+
+"""
+Streaming cursor of the table "candle"
+"""
+input candle_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: candle_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input candle_stream_cursor_value_input {
+  close: numeric
+  currencyPairId: Int
+  high: numeric
+  id: bigint
+
+  """
+  ONE_MINUTE: ONE_MINUTE\nFIVE_MINUTES: FIVE_MINUTES\nFIFTEEN_MINUTES: FIFTEEN_MINUTES\nONE_HOUR: ONE_HOUR\nSIX_HOURS: SIX_HOURS\nONE_DAY: ONE_DAY
+  """
+  interval: String
+  low: numeric
+  open: numeric
+  since: timestamptz
+
+  """HARBINGER: HARBINGER\nCOINBASE: COINBASE\nMERGED: MERGED"""
+  source: String
+  until: timestamptz
+  volume: numeric
+}
+
+"""
+order by sum() on columns of table "candle"
+"""
+input candle_sum_order_by {
+  close: order_by
+  currencyPairId: order_by
+  high: order_by
+  id: order_by
+  low: order_by
+  open: order_by
+  volume: order_by
+}
+
+"""
+order by var_pop() on columns of table "candle"
+"""
+input candle_var_pop_order_by {
+  close: order_by
+  currencyPairId: order_by
+  high: order_by
+  id: order_by
+  low: order_by
+  open: order_by
+  volume: order_by
+}
+
+"""
+order by var_samp() on columns of table "candle"
+"""
+input candle_var_samp_order_by {
+  close: order_by
+  currencyPairId: order_by
+  high: order_by
+  id: order_by
+  low: order_by
+  open: order_by
+  volume: order_by
+}
+
+"""
+order by variance() on columns of table "candle"
+"""
+input candle_variance_order_by {
+  close: order_by
+  currencyPairId: order_by
+  high: order_by
+  id: order_by
+  low: order_by
+  open: order_by
+  volume: order_by
+}
+
+"""
+columns and relationships of "claim"
+"""
+type claim {
+  amount: numeric!
+
+  """An object relationship"""
+  event: pool_event!
+  eventId: bigint!
+  id: Int!
+
+  """An object relationship"""
+  pool: pool!
+  poolId: String!
+
+  """An object relationship"""
+  position: pool_position!
+  positionId: bigint!
+
+  """An array relationship"""
+  states(
+    """distinct select on columns"""
+    distinct_on: [pool_state_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_state_order_by!]
+
+    """filter the rows returned"""
+    where: pool_state_bool_exp
+  ): [pool_state!]!
+
+  """An object relationship"""
+  user: user!
+  userId: String!
+  withdrawn: Boolean!
+}
+
+"""
+order by aggregate values of table "claim"
+"""
+input claim_aggregate_order_by {
+  avg: claim_avg_order_by
+  count: order_by
+  max: claim_max_order_by
+  min: claim_min_order_by
+  stddev: claim_stddev_order_by
+  stddev_pop: claim_stddev_pop_order_by
+  stddev_samp: claim_stddev_samp_order_by
+  sum: claim_sum_order_by
+  var_pop: claim_var_pop_order_by
+  var_samp: claim_var_samp_order_by
+  variance: claim_variance_order_by
+}
+
+"""
+order by avg() on columns of table "claim"
+"""
+input claim_avg_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  positionId: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "claim". All fields are combined with a logical 'AND'.
+"""
+input claim_bool_exp {
+  _and: [claim_bool_exp!]
+  _not: claim_bool_exp
+  _or: [claim_bool_exp!]
+  amount: numeric_comparison_exp
+  event: pool_event_bool_exp
+  eventId: bigint_comparison_exp
+  id: Int_comparison_exp
+  pool: pool_bool_exp
+  poolId: String_comparison_exp
+  position: pool_position_bool_exp
+  positionId: bigint_comparison_exp
+  states: pool_state_bool_exp
+  user: user_bool_exp
+  userId: String_comparison_exp
+  withdrawn: Boolean_comparison_exp
+}
+
+"""
+order by max() on columns of table "claim"
+"""
+input claim_max_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  poolId: order_by
+  positionId: order_by
+  userId: order_by
+}
+
+"""
+order by min() on columns of table "claim"
+"""
+input claim_min_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  poolId: order_by
+  positionId: order_by
+  userId: order_by
+}
+
+"""Ordering options when selecting data from "claim"."""
+input claim_order_by {
+  amount: order_by
+  event: pool_event_order_by
+  eventId: order_by
+  id: order_by
+  pool: pool_order_by
+  poolId: order_by
+  position: pool_position_order_by
+  positionId: order_by
+  states_aggregate: pool_state_aggregate_order_by
+  user: user_order_by
+  userId: order_by
+  withdrawn: order_by
+}
+
+"""
+select columns of table "claim"
+"""
+enum claim_select_column {
+  """column name"""
+  amount
+
+  """column name"""
+  eventId
+
+  """column name"""
+  id
+
+  """column name"""
+  poolId
+
+  """column name"""
+  positionId
+
+  """column name"""
+  userId
+
+  """column name"""
+  withdrawn
+}
+
+"""
+order by stddev() on columns of table "claim"
+"""
+input claim_stddev_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  positionId: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "claim"
+"""
+input claim_stddev_pop_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  positionId: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "claim"
+"""
+input claim_stddev_samp_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  positionId: order_by
+}
+
+"""
+Streaming cursor of the table "claim"
+"""
+input claim_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: claim_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input claim_stream_cursor_value_input {
+  amount: numeric
+  eventId: bigint
+  id: Int
+  poolId: String
+  positionId: bigint
+  userId: String
+  withdrawn: Boolean
+}
+
+"""
+order by sum() on columns of table "claim"
+"""
+input claim_sum_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  positionId: order_by
+}
+
+"""
+order by var_pop() on columns of table "claim"
+"""
+input claim_var_pop_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  positionId: order_by
+}
+
+"""
+order by var_samp() on columns of table "claim"
+"""
+input claim_var_samp_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  positionId: order_by
+}
+
+"""
+order by variance() on columns of table "claim"
+"""
+input claim_variance_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+  positionId: order_by
+}
+
+"""
+columns and relationships of "currency_pair"
+"""
+type currency_pair {
+  """An array relationship"""
+  candles(
+    """distinct select on columns"""
+    distinct_on: [candle_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candle_order_by!]
+
+    """filter the rows returned"""
+    where: candle_bool_exp
+  ): [candle!]!
+
+  """An array relationship"""
+  events(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+  id: Int!
+
+  """An array relationship"""
+  poolLines(
+    """distinct select on columns"""
+    distinct_on: [pool_line_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_line_order_by!]
+
+    """filter the rows returned"""
+    where: pool_line_bool_exp
+  ): [pool_line!]!
+  symbol: String!
+  totalEvents: Int!
+  totalValueLocked: numeric!
+  totalVolume: numeric!
+}
+
+"""
+Boolean expression to filter rows from the table "currency_pair". All fields are combined with a logical 'AND'.
+"""
+input currency_pair_bool_exp {
+  _and: [currency_pair_bool_exp!]
+  _not: currency_pair_bool_exp
+  _or: [currency_pair_bool_exp!]
+  candles: candle_bool_exp
+  events: event_bool_exp
+  id: Int_comparison_exp
+  poolLines: pool_line_bool_exp
+  symbol: String_comparison_exp
+  totalEvents: Int_comparison_exp
+  totalValueLocked: numeric_comparison_exp
+  totalVolume: numeric_comparison_exp
+}
+
+"""Ordering options when selecting data from "currency_pair"."""
+input currency_pair_order_by {
+  candles_aggregate: candle_aggregate_order_by
+  events_aggregate: event_aggregate_order_by
+  id: order_by
+  poolLines_aggregate: pool_line_aggregate_order_by
+  symbol: order_by
+  totalEvents: order_by
+  totalValueLocked: order_by
+  totalVolume: order_by
+}
+
+"""
+select columns of table "currency_pair"
+"""
+enum currency_pair_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  symbol
+
+  """column name"""
+  totalEvents
+
+  """column name"""
+  totalValueLocked
+
+  """column name"""
+  totalVolume
+}
+
+"""
+Streaming cursor of the table "currency_pair"
+"""
+input currency_pair_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: currency_pair_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input currency_pair_stream_cursor_value_input {
+  id: Int
+  symbol: String
+  totalEvents: Int
+  totalValueLocked: numeric
+  totalVolume: numeric
+}
+
+"""ordering argument of a cursor"""
+enum cursor_ordering {
+  """ascending ordering of the cursor"""
+  ASC
+
+  """descending ordering of the cursor"""
+  DESC
+}
+
+"""
+columns and relationships of "deposit"
+"""
+type deposit {
+  amountAboveEq: numeric!
+  amountBelow: numeric!
+  createdTime: timestamptz!
+
+  """An object relationship"""
+  event: event!
+  eventId: bigint!
+  id: bigint!
+  opgHash: String!
+  shares: numeric!
+
+  """An object relationship"""
+  user: user!
+  userId: String!
+}
+
+"""
+order by aggregate values of table "deposit"
+"""
+input deposit_aggregate_order_by {
+  avg: deposit_avg_order_by
+  count: order_by
+  max: deposit_max_order_by
+  min: deposit_min_order_by
+  stddev: deposit_stddev_order_by
+  stddev_pop: deposit_stddev_pop_order_by
+  stddev_samp: deposit_stddev_samp_order_by
+  sum: deposit_sum_order_by
+  var_pop: deposit_var_pop_order_by
+  var_samp: deposit_var_samp_order_by
+  variance: deposit_variance_order_by
+}
+
+"""
+order by avg() on columns of table "deposit"
+"""
+input deposit_avg_order_by {
+  amountAboveEq: order_by
+  amountBelow: order_by
+  eventId: order_by
+  id: order_by
+  shares: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "deposit". All fields are combined with a logical 'AND'.
+"""
+input deposit_bool_exp {
+  _and: [deposit_bool_exp!]
+  _not: deposit_bool_exp
+  _or: [deposit_bool_exp!]
+  amountAboveEq: numeric_comparison_exp
+  amountBelow: numeric_comparison_exp
+  createdTime: timestamptz_comparison_exp
+  event: event_bool_exp
+  eventId: bigint_comparison_exp
+  id: bigint_comparison_exp
+  opgHash: String_comparison_exp
+  shares: numeric_comparison_exp
+  user: user_bool_exp
+  userId: String_comparison_exp
+}
+
+"""
+order by max() on columns of table "deposit"
+"""
+input deposit_max_order_by {
+  amountAboveEq: order_by
+  amountBelow: order_by
+  createdTime: order_by
+  eventId: order_by
+  id: order_by
+  opgHash: order_by
+  shares: order_by
+  userId: order_by
+}
+
+"""
+order by min() on columns of table "deposit"
+"""
+input deposit_min_order_by {
+  amountAboveEq: order_by
+  amountBelow: order_by
+  createdTime: order_by
+  eventId: order_by
+  id: order_by
+  opgHash: order_by
+  shares: order_by
+  userId: order_by
+}
+
+"""Ordering options when selecting data from "deposit"."""
+input deposit_order_by {
+  amountAboveEq: order_by
+  amountBelow: order_by
+  createdTime: order_by
+  event: event_order_by
+  eventId: order_by
+  id: order_by
+  opgHash: order_by
+  shares: order_by
+  user: user_order_by
+  userId: order_by
+}
+
+"""
+select columns of table "deposit"
+"""
+enum deposit_select_column {
+  """column name"""
+  amountAboveEq
+
+  """column name"""
+  amountBelow
+
+  """column name"""
+  createdTime
+
+  """column name"""
+  eventId
+
+  """column name"""
+  id
+
+  """column name"""
+  opgHash
+
+  """column name"""
+  shares
+
+  """column name"""
+  userId
+}
+
+"""
+order by stddev() on columns of table "deposit"
+"""
+input deposit_stddev_order_by {
+  amountAboveEq: order_by
+  amountBelow: order_by
+  eventId: order_by
+  id: order_by
+  shares: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "deposit"
+"""
+input deposit_stddev_pop_order_by {
+  amountAboveEq: order_by
+  amountBelow: order_by
+  eventId: order_by
+  id: order_by
+  shares: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "deposit"
+"""
+input deposit_stddev_samp_order_by {
+  amountAboveEq: order_by
+  amountBelow: order_by
+  eventId: order_by
+  id: order_by
+  shares: order_by
+}
+
+"""
+Streaming cursor of the table "deposit"
+"""
+input deposit_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: deposit_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input deposit_stream_cursor_value_input {
+  amountAboveEq: numeric
+  amountBelow: numeric
+  createdTime: timestamptz
+  eventId: bigint
+  id: bigint
+  opgHash: String
+  shares: numeric
+  userId: String
+}
+
+"""
+order by sum() on columns of table "deposit"
+"""
+input deposit_sum_order_by {
+  amountAboveEq: order_by
+  amountBelow: order_by
+  eventId: order_by
+  id: order_by
+  shares: order_by
+}
+
+"""
+order by var_pop() on columns of table "deposit"
+"""
+input deposit_var_pop_order_by {
+  amountAboveEq: order_by
+  amountBelow: order_by
+  eventId: order_by
+  id: order_by
+  shares: order_by
+}
+
+"""
+order by var_samp() on columns of table "deposit"
+"""
+input deposit_var_samp_order_by {
+  amountAboveEq: order_by
+  amountBelow: order_by
+  eventId: order_by
+  id: order_by
+  shares: order_by
+}
+
+"""
+order by variance() on columns of table "deposit"
+"""
+input deposit_variance_order_by {
+  amountAboveEq: order_by
+  amountBelow: order_by
+  eventId: order_by
+  id: order_by
+  shares: order_by
+}
+
+"""
+columns and relationships of "dipdup_contract"
+"""
+type dipdup_contract {
+  address: String!
+  createdAt: timestamptz!
+  name: String!
+  typename: String
+  updatedAt: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_contract". All fields are combined with a logical 'AND'.
+"""
+input dipdup_contract_bool_exp {
+  _and: [dipdup_contract_bool_exp!]
+  _not: dipdup_contract_bool_exp
+  _or: [dipdup_contract_bool_exp!]
+  address: String_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  name: String_comparison_exp
+  typename: String_comparison_exp
+  updatedAt: timestamptz_comparison_exp
+}
+
+"""
+columns and relationships of "dipdup_contract_metadata"
+"""
+type dipdup_contract_metadata {
+  contract: String!
+  createdAt: timestamptz!
+  id: Int!
+  metadata(
+    """JSON select path"""
+    path: String
+  ): jsonb!
+  network: String!
+  updateId: Int!
+  updatedAt: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_contract_metadata". All fields are combined with a logical 'AND'.
+"""
+input dipdup_contract_metadata_bool_exp {
+  _and: [dipdup_contract_metadata_bool_exp!]
+  _not: dipdup_contract_metadata_bool_exp
+  _or: [dipdup_contract_metadata_bool_exp!]
+  contract: String_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  id: Int_comparison_exp
+  metadata: jsonb_comparison_exp
+  network: String_comparison_exp
+  updateId: Int_comparison_exp
+  updatedAt: timestamptz_comparison_exp
+}
+
+"""Ordering options when selecting data from "dipdup_contract_metadata"."""
+input dipdup_contract_metadata_order_by {
+  contract: order_by
+  createdAt: order_by
+  id: order_by
+  metadata: order_by
+  network: order_by
+  updateId: order_by
+  updatedAt: order_by
+}
+
+"""
+select columns of table "dipdup_contract_metadata"
+"""
+enum dipdup_contract_metadata_select_column {
+  """column name"""
+  contract
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  metadata
+
+  """column name"""
+  network
+
+  """column name"""
+  updateId
+
+  """column name"""
+  updatedAt
+}
+
+"""
+Streaming cursor of the table "dipdup_contract_metadata"
+"""
+input dipdup_contract_metadata_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_contract_metadata_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_contract_metadata_stream_cursor_value_input {
+  contract: String
+  createdAt: timestamptz
+  id: Int
+  metadata: jsonb
+  network: String
+  updateId: Int
+  updatedAt: timestamptz
+}
+
+"""Ordering options when selecting data from "dipdup_contract"."""
+input dipdup_contract_order_by {
+  address: order_by
+  createdAt: order_by
+  name: order_by
+  typename: order_by
+  updatedAt: order_by
+}
+
+"""
+select columns of table "dipdup_contract"
+"""
+enum dipdup_contract_select_column {
+  """column name"""
+  address
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  name
+
+  """column name"""
+  typename
+
+  """column name"""
+  updatedAt
+}
+
+"""
+Streaming cursor of the table "dipdup_contract"
+"""
+input dipdup_contract_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_contract_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_contract_stream_cursor_value_input {
+  address: String
+  createdAt: timestamptz
+  name: String
+  typename: String
+  updatedAt: timestamptz
+}
+
+"""
+columns and relationships of "dipdup_head"
+"""
+type dipdup_head {
+  createdAt: timestamptz!
+  hash: String!
+  level: Int!
+  name: String!
+  timestamp: timestamptz!
+  updatedAt: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_head". All fields are combined with a logical 'AND'.
+"""
+input dipdup_head_bool_exp {
+  _and: [dipdup_head_bool_exp!]
+  _not: dipdup_head_bool_exp
+  _or: [dipdup_head_bool_exp!]
+  createdAt: timestamptz_comparison_exp
+  hash: String_comparison_exp
+  level: Int_comparison_exp
+  name: String_comparison_exp
+  timestamp: timestamptz_comparison_exp
+  updatedAt: timestamptz_comparison_exp
+}
+
+"""Ordering options when selecting data from "dipdup_head"."""
+input dipdup_head_order_by {
+  createdAt: order_by
+  hash: order_by
+  level: order_by
+  name: order_by
+  timestamp: order_by
+  updatedAt: order_by
+}
+
+"""
+select columns of table "dipdup_head"
+"""
+enum dipdup_head_select_column {
+  """column name"""
+  createdAt
+
+  """column name"""
+  hash
+
+  """column name"""
+  level
+
+  """column name"""
+  name
+
+  """column name"""
+  timestamp
+
+  """column name"""
+  updatedAt
+}
+
+"""
+columns and relationships of "dipdup_head_status"
+"""
+type dipdup_head_status {
+  name: String
+  status: String
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_head_status". All fields are combined with a logical 'AND'.
+"""
+input dipdup_head_status_bool_exp {
+  _and: [dipdup_head_status_bool_exp!]
+  _not: dipdup_head_status_bool_exp
+  _or: [dipdup_head_status_bool_exp!]
+  name: String_comparison_exp
+  status: String_comparison_exp
+}
+
+"""Ordering options when selecting data from "dipdup_head_status"."""
+input dipdup_head_status_order_by {
+  name: order_by
+  status: order_by
+}
+
+"""
+select columns of table "dipdup_head_status"
+"""
+enum dipdup_head_status_select_column {
+  """column name"""
+  name
+
+  """column name"""
+  status
+}
+
+"""
+Streaming cursor of the table "dipdup_head_status"
+"""
+input dipdup_head_status_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_head_status_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_head_status_stream_cursor_value_input {
+  name: String
+  status: String
+}
+
+"""
+Streaming cursor of the table "dipdup_head"
+"""
+input dipdup_head_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_head_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_head_stream_cursor_value_input {
+  createdAt: timestamptz
+  hash: String
+  level: Int
+  name: String
+  timestamp: timestamptz
+  updatedAt: timestamptz
+}
+
+"""
+columns and relationships of "dipdup_index"
+"""
+type dipdup_index {
+  configHash: String!
+  createdAt: timestamptz!
+  level: Int!
+  name: String!
+
+  """
+  NEW: NEW\nSYNCING: SYNCING\nREALTIME: REALTIME\nROLLBACK: ROLLBACK\nONESHOT: ONESHOT
+  """
+  status: String!
+  template: String
+  templateValues(
+    """JSON select path"""
+    path: String
+  ): jsonb
+
+  """
+  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer\nevent: event
+  """
+  type: String!
+  updatedAt: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_index". All fields are combined with a logical 'AND'.
+"""
+input dipdup_index_bool_exp {
+  _and: [dipdup_index_bool_exp!]
+  _not: dipdup_index_bool_exp
+  _or: [dipdup_index_bool_exp!]
+  configHash: String_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  level: Int_comparison_exp
+  name: String_comparison_exp
+  status: String_comparison_exp
+  template: String_comparison_exp
+  templateValues: jsonb_comparison_exp
+  type: String_comparison_exp
+  updatedAt: timestamptz_comparison_exp
+}
+
+"""Ordering options when selecting data from "dipdup_index"."""
+input dipdup_index_order_by {
+  configHash: order_by
+  createdAt: order_by
+  level: order_by
+  name: order_by
+  status: order_by
+  template: order_by
+  templateValues: order_by
+  type: order_by
+  updatedAt: order_by
+}
+
+"""
+select columns of table "dipdup_index"
+"""
+enum dipdup_index_select_column {
+  """column name"""
+  configHash
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  level
+
+  """column name"""
+  name
+
+  """column name"""
+  status
+
+  """column name"""
+  template
+
+  """column name"""
+  templateValues
+
+  """column name"""
+  type
+
+  """column name"""
+  updatedAt
+}
+
+"""
+Streaming cursor of the table "dipdup_index"
+"""
+input dipdup_index_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_index_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_index_stream_cursor_value_input {
+  configHash: String
+  createdAt: timestamptz
+  level: Int
+  name: String
+
+  """
+  NEW: NEW\nSYNCING: SYNCING\nREALTIME: REALTIME\nROLLBACK: ROLLBACK\nONESHOT: ONESHOT
+  """
+  status: String
+  template: String
+  templateValues: jsonb
+
+  """
+  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer\nevent: event
+  """
+  type: String
+  updatedAt: timestamptz
+}
+
+"""Model update created within versioned transactions"""
+type dipdup_model_update {
+  """INSERT: INSERT\nUPDATE: UPDATE\nDELETE: DELETE"""
+  action: String!
+  createdAt: timestamptz!
+  data(
+    """JSON select path"""
+    path: String
+  ): jsonb
+  id: Int!
+  index: String!
+  level: Int!
+  modelName: String!
+  modelPk: String!
+  updatedAt: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_model_update". All fields are combined with a logical 'AND'.
+"""
+input dipdup_model_update_bool_exp {
+  _and: [dipdup_model_update_bool_exp!]
+  _not: dipdup_model_update_bool_exp
+  _or: [dipdup_model_update_bool_exp!]
+  action: String_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  data: jsonb_comparison_exp
+  id: Int_comparison_exp
+  index: String_comparison_exp
+  level: Int_comparison_exp
+  modelName: String_comparison_exp
+  modelPk: String_comparison_exp
+  updatedAt: timestamptz_comparison_exp
+}
+
+"""Ordering options when selecting data from "dipdup_model_update"."""
+input dipdup_model_update_order_by {
+  action: order_by
+  createdAt: order_by
+  data: order_by
+  id: order_by
+  index: order_by
+  level: order_by
+  modelName: order_by
+  modelPk: order_by
+  updatedAt: order_by
+}
+
+"""
+select columns of table "dipdup_model_update"
+"""
+enum dipdup_model_update_select_column {
+  """column name"""
+  action
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  data
+
+  """column name"""
+  id
+
+  """column name"""
+  index
+
+  """column name"""
+  level
+
+  """column name"""
+  modelName
+
+  """column name"""
+  modelPk
+
+  """column name"""
+  updatedAt
+}
+
+"""
+Streaming cursor of the table "dipdup_model_update"
+"""
+input dipdup_model_update_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_model_update_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_model_update_stream_cursor_value_input {
+  """INSERT: INSERT\nUPDATE: UPDATE\nDELETE: DELETE"""
+  action: String
+  createdAt: timestamptz
+  data: jsonb
+  id: Int
+  index: String
+  level: Int
+  modelName: String
+  modelPk: String
+  updatedAt: timestamptz
+}
+
+"""
+columns and relationships of "dipdup_schema"
+"""
+type dipdup_schema {
+  createdAt: timestamptz!
+  hash: String!
+  name: String!
+
+  """
+  manual: manual\nmigration: migration\nrollback: rollback\nconfig_modified: config_modified\nschema_modified: schema_modified
+  """
+  reindex: String
+  updatedAt: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_schema". All fields are combined with a logical 'AND'.
+"""
+input dipdup_schema_bool_exp {
+  _and: [dipdup_schema_bool_exp!]
+  _not: dipdup_schema_bool_exp
+  _or: [dipdup_schema_bool_exp!]
+  createdAt: timestamptz_comparison_exp
+  hash: String_comparison_exp
+  name: String_comparison_exp
+  reindex: String_comparison_exp
+  updatedAt: timestamptz_comparison_exp
+}
+
+"""Ordering options when selecting data from "dipdup_schema"."""
+input dipdup_schema_order_by {
+  createdAt: order_by
+  hash: order_by
+  name: order_by
+  reindex: order_by
+  updatedAt: order_by
+}
+
+"""
+select columns of table "dipdup_schema"
+"""
+enum dipdup_schema_select_column {
+  """column name"""
+  createdAt
+
+  """column name"""
+  hash
+
+  """column name"""
+  name
+
+  """column name"""
+  reindex
+
+  """column name"""
+  updatedAt
+}
+
+"""
+Streaming cursor of the table "dipdup_schema"
+"""
+input dipdup_schema_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_schema_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_schema_stream_cursor_value_input {
+  createdAt: timestamptz
+  hash: String
+  name: String
+
+  """
+  manual: manual\nmigration: migration\nrollback: rollback\nconfig_modified: config_modified\nschema_modified: schema_modified
+  """
+  reindex: String
+  updatedAt: timestamptz
+}
+
+"""
+columns and relationships of "dipdup_token_metadata"
+"""
+type dipdup_token_metadata {
+  contract: String!
+  createdAt: timestamptz!
+  id: Int!
+  metadata(
+    """JSON select path"""
+    path: String
+  ): jsonb!
+  network: String!
+  tokenId: String!
+  updateId: Int!
+  updatedAt: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_token_metadata". All fields are combined with a logical 'AND'.
+"""
+input dipdup_token_metadata_bool_exp {
+  _and: [dipdup_token_metadata_bool_exp!]
+  _not: dipdup_token_metadata_bool_exp
+  _or: [dipdup_token_metadata_bool_exp!]
+  contract: String_comparison_exp
+  createdAt: timestamptz_comparison_exp
+  id: Int_comparison_exp
+  metadata: jsonb_comparison_exp
+  network: String_comparison_exp
+  tokenId: String_comparison_exp
+  updateId: Int_comparison_exp
+  updatedAt: timestamptz_comparison_exp
+}
+
+"""Ordering options when selecting data from "dipdup_token_metadata"."""
+input dipdup_token_metadata_order_by {
+  contract: order_by
+  createdAt: order_by
+  id: order_by
+  metadata: order_by
+  network: order_by
+  tokenId: order_by
+  updateId: order_by
+  updatedAt: order_by
+}
+
+"""
+select columns of table "dipdup_token_metadata"
+"""
+enum dipdup_token_metadata_select_column {
+  """column name"""
+  contract
+
+  """column name"""
+  createdAt
+
+  """column name"""
+  id
+
+  """column name"""
+  metadata
+
+  """column name"""
+  network
+
+  """column name"""
+  tokenId
+
+  """column name"""
+  updateId
+
+  """column name"""
+  updatedAt
+}
+
+"""
+Streaming cursor of the table "dipdup_token_metadata"
+"""
+input dipdup_token_metadata_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_token_metadata_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_token_metadata_stream_cursor_value_input {
+  contract: String
+  createdAt: timestamptz
+  id: Int
+  metadata: jsonb
+  network: String
+  tokenId: String
+  updateId: Int
+  updatedAt: timestamptz
+}
+
+"""
+columns and relationships of "entry_liquidity"
+"""
+type entry_liquidity {
+  acceptTime: timestamptz!
+  amount: numeric!
+  entryId: Int!
+
+  """An object relationship"""
+  pool: pool!
+  poolEntryId: String!
+  poolId: String!
+
+  """An object relationship"""
+  position: pool_position
+  positionId: bigint
+
+  """An array relationship"""
+  states(
+    """distinct select on columns"""
+    distinct_on: [pool_state_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_state_order_by!]
+
+    """filter the rows returned"""
+    where: pool_state_bool_exp
+  ): [pool_state!]!
+
+  """PENDING: PENDING\nAPPROVED: APPROVED\nCANCELED: CANCELED"""
+  status: String!
+
+  """An object relationship"""
+  user: user!
+  userId: String!
+}
+
+"""
+order by aggregate values of table "entry_liquidity"
+"""
+input entry_liquidity_aggregate_order_by {
+  avg: entry_liquidity_avg_order_by
+  count: order_by
+  max: entry_liquidity_max_order_by
+  min: entry_liquidity_min_order_by
+  stddev: entry_liquidity_stddev_order_by
+  stddev_pop: entry_liquidity_stddev_pop_order_by
+  stddev_samp: entry_liquidity_stddev_samp_order_by
+  sum: entry_liquidity_sum_order_by
+  var_pop: entry_liquidity_var_pop_order_by
+  var_samp: entry_liquidity_var_samp_order_by
+  variance: entry_liquidity_variance_order_by
+}
+
+"""
+order by avg() on columns of table "entry_liquidity"
+"""
+input entry_liquidity_avg_order_by {
+  amount: order_by
+  entryId: order_by
+  positionId: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "entry_liquidity". All fields are combined with a logical 'AND'.
+"""
+input entry_liquidity_bool_exp {
+  _and: [entry_liquidity_bool_exp!]
+  _not: entry_liquidity_bool_exp
+  _or: [entry_liquidity_bool_exp!]
+  acceptTime: timestamptz_comparison_exp
+  amount: numeric_comparison_exp
+  entryId: Int_comparison_exp
+  pool: pool_bool_exp
+  poolEntryId: String_comparison_exp
+  poolId: String_comparison_exp
+  position: pool_position_bool_exp
+  positionId: bigint_comparison_exp
+  states: pool_state_bool_exp
+  status: String_comparison_exp
+  user: user_bool_exp
+  userId: String_comparison_exp
+}
+
+"""
+order by max() on columns of table "entry_liquidity"
+"""
+input entry_liquidity_max_order_by {
+  acceptTime: order_by
+  amount: order_by
+  entryId: order_by
+  poolEntryId: order_by
+  poolId: order_by
+  positionId: order_by
+
+  """PENDING: PENDING\nAPPROVED: APPROVED\nCANCELED: CANCELED"""
+  status: order_by
+  userId: order_by
+}
+
+"""
+order by min() on columns of table "entry_liquidity"
+"""
+input entry_liquidity_min_order_by {
+  acceptTime: order_by
+  amount: order_by
+  entryId: order_by
+  poolEntryId: order_by
+  poolId: order_by
+  positionId: order_by
+
+  """PENDING: PENDING\nAPPROVED: APPROVED\nCANCELED: CANCELED"""
+  status: order_by
+  userId: order_by
+}
+
+"""Ordering options when selecting data from "entry_liquidity"."""
+input entry_liquidity_order_by {
+  acceptTime: order_by
+  amount: order_by
+  entryId: order_by
+  pool: pool_order_by
+  poolEntryId: order_by
+  poolId: order_by
+  position: pool_position_order_by
+  positionId: order_by
+  states_aggregate: pool_state_aggregate_order_by
+  status: order_by
+  user: user_order_by
+  userId: order_by
+}
+
+"""
+select columns of table "entry_liquidity"
+"""
+enum entry_liquidity_select_column {
+  """column name"""
+  acceptTime
+
+  """column name"""
+  amount
+
+  """column name"""
+  entryId
+
+  """column name"""
+  poolEntryId
+
+  """column name"""
+  poolId
+
+  """column name"""
+  positionId
+
+  """column name"""
+  status
+
+  """column name"""
+  userId
+}
+
+"""
+order by stddev() on columns of table "entry_liquidity"
+"""
+input entry_liquidity_stddev_order_by {
+  amount: order_by
+  entryId: order_by
+  positionId: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "entry_liquidity"
+"""
+input entry_liquidity_stddev_pop_order_by {
+  amount: order_by
+  entryId: order_by
+  positionId: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "entry_liquidity"
+"""
+input entry_liquidity_stddev_samp_order_by {
+  amount: order_by
+  entryId: order_by
+  positionId: order_by
+}
+
+"""
+Streaming cursor of the table "entry_liquidity"
+"""
+input entry_liquidity_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: entry_liquidity_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input entry_liquidity_stream_cursor_value_input {
+  acceptTime: timestamptz
+  amount: numeric
+  entryId: Int
+  poolEntryId: String
+  poolId: String
+  positionId: bigint
+
+  """PENDING: PENDING\nAPPROVED: APPROVED\nCANCELED: CANCELED"""
+  status: String
+  userId: String
+}
+
+"""
+order by sum() on columns of table "entry_liquidity"
+"""
+input entry_liquidity_sum_order_by {
+  amount: order_by
+  entryId: order_by
+  positionId: order_by
+}
+
+"""
+order by var_pop() on columns of table "entry_liquidity"
+"""
+input entry_liquidity_var_pop_order_by {
+  amount: order_by
+  entryId: order_by
+  positionId: order_by
+}
+
+"""
+order by var_samp() on columns of table "entry_liquidity"
+"""
+input entry_liquidity_var_samp_order_by {
+  amount: order_by
+  entryId: order_by
+  positionId: order_by
+}
+
+"""
+order by variance() on columns of table "entry_liquidity"
+"""
+input entry_liquidity_variance_order_by {
+  amount: order_by
+  entryId: order_by
+  positionId: order_by
+}
+
+"""
+columns and relationships of "event"
+"""
+type event {
+  """An array relationship"""
+  bets(
+    """distinct select on columns"""
+    distinct_on: [bet_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bet_order_by!]
+
+    """filter the rows returned"""
+    where: bet_bool_exp
+  ): [bet!]!
+  betsCloseTime: timestamptz!
+  closedDynamics: numeric
+  closedOracleTime: timestamptz
+  closedRate: numeric
+  createdTime: timestamptz!
+
+  """An object relationship"""
+  creator: user!
+  creatorId: String!
+
+  """An object relationship"""
+  currencyPair: currency_pair!
+  currencyPairId: Int!
+
+  """An array relationship"""
+  deposits(
+    """distinct select on columns"""
+    distinct_on: [deposit_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [deposit_order_by!]
+
+    """filter the rows returned"""
+    where: deposit_bool_exp
+  ): [deposit!]!
+  id: bigint!
+  liquidityPercent: numeric!
+  measureOracleStartTime: timestamptz
+  measurePeriod: bigint!
+  poolAboveEq: numeric!
+  poolBelow: numeric!
+
+  """An array relationship"""
+  poolEventData(
+    """distinct select on columns"""
+    distinct_on: [pool_event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_event_order_by!]
+
+    """filter the rows returned"""
+    where: pool_event_bool_exp
+  ): [pool_event!]!
+
+  """An array relationship"""
+  positions(
+    """distinct select on columns"""
+    distinct_on: [position_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [position_order_by!]
+
+    """filter the rows returned"""
+    where: position_bool_exp
+  ): [position!]!
+  startRate: numeric
+
+  """NEW: NEW\nSTARTED: STARTED\nFINISHED: FINISHED\nCANCELED: CANCELED"""
+  status: String!
+  targetDynamics: numeric!
+  totalBetsAmount: numeric!
+  totalLiquidityProvided: numeric!
+  totalLiquidityShares: numeric!
+  totalValueLocked: numeric!
+
+  """ABOVE_EQ: ABOVE_EQ\nBELOW: BELOW"""
+  winnerBets: String
+
+  """An array relationship"""
+  withdrawals(
+    """distinct select on columns"""
+    distinct_on: [withdrawal_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [withdrawal_order_by!]
+
+    """filter the rows returned"""
+    where: withdrawal_bool_exp
+  ): [withdrawal!]!
+}
+
+"""
+order by aggregate values of table "event"
+"""
+input event_aggregate_order_by {
+  avg: event_avg_order_by
+  count: order_by
+  max: event_max_order_by
+  min: event_min_order_by
+  stddev: event_stddev_order_by
+  stddev_pop: event_stddev_pop_order_by
+  stddev_samp: event_stddev_samp_order_by
+  sum: event_sum_order_by
+  var_pop: event_var_pop_order_by
+  var_samp: event_var_samp_order_by
+  variance: event_variance_order_by
+}
+
+"""
+order by avg() on columns of table "event"
+"""
+input event_avg_order_by {
+  closedDynamics: order_by
+  closedRate: order_by
+  currencyPairId: order_by
+  id: order_by
+  liquidityPercent: order_by
+  measurePeriod: order_by
+  poolAboveEq: order_by
+  poolBelow: order_by
+  startRate: order_by
+  targetDynamics: order_by
+  totalBetsAmount: order_by
+  totalLiquidityProvided: order_by
+  totalLiquidityShares: order_by
+  totalValueLocked: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "event". All fields are combined with a logical 'AND'.
+"""
+input event_bool_exp {
+  _and: [event_bool_exp!]
+  _not: event_bool_exp
+  _or: [event_bool_exp!]
+  bets: bet_bool_exp
+  betsCloseTime: timestamptz_comparison_exp
+  closedDynamics: numeric_comparison_exp
+  closedOracleTime: timestamptz_comparison_exp
+  closedRate: numeric_comparison_exp
+  createdTime: timestamptz_comparison_exp
+  creator: user_bool_exp
+  creatorId: String_comparison_exp
+  currencyPair: currency_pair_bool_exp
+  currencyPairId: Int_comparison_exp
+  deposits: deposit_bool_exp
+  id: bigint_comparison_exp
+  liquidityPercent: numeric_comparison_exp
+  measureOracleStartTime: timestamptz_comparison_exp
+  measurePeriod: bigint_comparison_exp
+  poolAboveEq: numeric_comparison_exp
+  poolBelow: numeric_comparison_exp
+  poolEventData: pool_event_bool_exp
+  positions: position_bool_exp
+  startRate: numeric_comparison_exp
+  status: String_comparison_exp
+  targetDynamics: numeric_comparison_exp
+  totalBetsAmount: numeric_comparison_exp
+  totalLiquidityProvided: numeric_comparison_exp
+  totalLiquidityShares: numeric_comparison_exp
+  totalValueLocked: numeric_comparison_exp
+  winnerBets: String_comparison_exp
+  withdrawals: withdrawal_bool_exp
+}
+
+"""
+order by max() on columns of table "event"
+"""
+input event_max_order_by {
+  betsCloseTime: order_by
+  closedDynamics: order_by
+  closedOracleTime: order_by
+  closedRate: order_by
+  createdTime: order_by
+  creatorId: order_by
+  currencyPairId: order_by
+  id: order_by
+  liquidityPercent: order_by
+  measureOracleStartTime: order_by
+  measurePeriod: order_by
+  poolAboveEq: order_by
+  poolBelow: order_by
+  startRate: order_by
+
+  """NEW: NEW\nSTARTED: STARTED\nFINISHED: FINISHED\nCANCELED: CANCELED"""
+  status: order_by
+  targetDynamics: order_by
+  totalBetsAmount: order_by
+  totalLiquidityProvided: order_by
+  totalLiquidityShares: order_by
+  totalValueLocked: order_by
+
+  """ABOVE_EQ: ABOVE_EQ\nBELOW: BELOW"""
+  winnerBets: order_by
+}
+
+"""
+order by min() on columns of table "event"
+"""
+input event_min_order_by {
+  betsCloseTime: order_by
+  closedDynamics: order_by
+  closedOracleTime: order_by
+  closedRate: order_by
+  createdTime: order_by
+  creatorId: order_by
+  currencyPairId: order_by
+  id: order_by
+  liquidityPercent: order_by
+  measureOracleStartTime: order_by
+  measurePeriod: order_by
+  poolAboveEq: order_by
+  poolBelow: order_by
+  startRate: order_by
+
+  """NEW: NEW\nSTARTED: STARTED\nFINISHED: FINISHED\nCANCELED: CANCELED"""
+  status: order_by
+  targetDynamics: order_by
+  totalBetsAmount: order_by
+  totalLiquidityProvided: order_by
+  totalLiquidityShares: order_by
+  totalValueLocked: order_by
+
+  """ABOVE_EQ: ABOVE_EQ\nBELOW: BELOW"""
+  winnerBets: order_by
+}
+
+"""Ordering options when selecting data from "event"."""
+input event_order_by {
+  betsCloseTime: order_by
+  bets_aggregate: bet_aggregate_order_by
+  closedDynamics: order_by
+  closedOracleTime: order_by
+  closedRate: order_by
+  createdTime: order_by
+  creator: user_order_by
+  creatorId: order_by
+  currencyPair: currency_pair_order_by
+  currencyPairId: order_by
+  deposits_aggregate: deposit_aggregate_order_by
+  id: order_by
+  liquidityPercent: order_by
+  measureOracleStartTime: order_by
+  measurePeriod: order_by
+  poolAboveEq: order_by
+  poolBelow: order_by
+  poolEventData_aggregate: pool_event_aggregate_order_by
+  positions_aggregate: position_aggregate_order_by
+  startRate: order_by
+  status: order_by
+  targetDynamics: order_by
+  totalBetsAmount: order_by
+  totalLiquidityProvided: order_by
+  totalLiquidityShares: order_by
+  totalValueLocked: order_by
+  winnerBets: order_by
+  withdrawals_aggregate: withdrawal_aggregate_order_by
+}
+
+"""
+select columns of table "event"
+"""
+enum event_select_column {
+  """column name"""
+  betsCloseTime
+
+  """column name"""
+  closedDynamics
+
+  """column name"""
+  closedOracleTime
+
+  """column name"""
+  closedRate
+
+  """column name"""
+  createdTime
+
+  """column name"""
+  creatorId
+
+  """column name"""
+  currencyPairId
+
+  """column name"""
+  id
+
+  """column name"""
+  liquidityPercent
+
+  """column name"""
+  measureOracleStartTime
+
+  """column name"""
+  measurePeriod
+
+  """column name"""
+  poolAboveEq
+
+  """column name"""
+  poolBelow
+
+  """column name"""
+  startRate
+
+  """column name"""
+  status
+
+  """column name"""
+  targetDynamics
+
+  """column name"""
+  totalBetsAmount
+
+  """column name"""
+  totalLiquidityProvided
+
+  """column name"""
+  totalLiquidityShares
+
+  """column name"""
+  totalValueLocked
+
+  """column name"""
+  winnerBets
+}
+
+"""
+order by stddev() on columns of table "event"
+"""
+input event_stddev_order_by {
+  closedDynamics: order_by
+  closedRate: order_by
+  currencyPairId: order_by
+  id: order_by
+  liquidityPercent: order_by
+  measurePeriod: order_by
+  poolAboveEq: order_by
+  poolBelow: order_by
+  startRate: order_by
+  targetDynamics: order_by
+  totalBetsAmount: order_by
+  totalLiquidityProvided: order_by
+  totalLiquidityShares: order_by
+  totalValueLocked: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "event"
+"""
+input event_stddev_pop_order_by {
+  closedDynamics: order_by
+  closedRate: order_by
+  currencyPairId: order_by
+  id: order_by
+  liquidityPercent: order_by
+  measurePeriod: order_by
+  poolAboveEq: order_by
+  poolBelow: order_by
+  startRate: order_by
+  targetDynamics: order_by
+  totalBetsAmount: order_by
+  totalLiquidityProvided: order_by
+  totalLiquidityShares: order_by
+  totalValueLocked: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "event"
+"""
+input event_stddev_samp_order_by {
+  closedDynamics: order_by
+  closedRate: order_by
+  currencyPairId: order_by
+  id: order_by
+  liquidityPercent: order_by
+  measurePeriod: order_by
+  poolAboveEq: order_by
+  poolBelow: order_by
+  startRate: order_by
+  targetDynamics: order_by
+  totalBetsAmount: order_by
+  totalLiquidityProvided: order_by
+  totalLiquidityShares: order_by
+  totalValueLocked: order_by
+}
+
+"""
+Streaming cursor of the table "event"
+"""
+input event_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: event_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input event_stream_cursor_value_input {
+  betsCloseTime: timestamptz
+  closedDynamics: numeric
+  closedOracleTime: timestamptz
+  closedRate: numeric
+  createdTime: timestamptz
+  creatorId: String
+  currencyPairId: Int
+  id: bigint
+  liquidityPercent: numeric
+  measureOracleStartTime: timestamptz
+  measurePeriod: bigint
+  poolAboveEq: numeric
+  poolBelow: numeric
+  startRate: numeric
+
+  """NEW: NEW\nSTARTED: STARTED\nFINISHED: FINISHED\nCANCELED: CANCELED"""
+  status: String
+  targetDynamics: numeric
+  totalBetsAmount: numeric
+  totalLiquidityProvided: numeric
+  totalLiquidityShares: numeric
+  totalValueLocked: numeric
+
+  """ABOVE_EQ: ABOVE_EQ\nBELOW: BELOW"""
+  winnerBets: String
+}
+
+"""
+order by sum() on columns of table "event"
+"""
+input event_sum_order_by {
+  closedDynamics: order_by
+  closedRate: order_by
+  currencyPairId: order_by
+  id: order_by
+  liquidityPercent: order_by
+  measurePeriod: order_by
+  poolAboveEq: order_by
+  poolBelow: order_by
+  startRate: order_by
+  targetDynamics: order_by
+  totalBetsAmount: order_by
+  totalLiquidityProvided: order_by
+  totalLiquidityShares: order_by
+  totalValueLocked: order_by
+}
+
+"""
+order by var_pop() on columns of table "event"
+"""
+input event_var_pop_order_by {
+  closedDynamics: order_by
+  closedRate: order_by
+  currencyPairId: order_by
+  id: order_by
+  liquidityPercent: order_by
+  measurePeriod: order_by
+  poolAboveEq: order_by
+  poolBelow: order_by
+  startRate: order_by
+  targetDynamics: order_by
+  totalBetsAmount: order_by
+  totalLiquidityProvided: order_by
+  totalLiquidityShares: order_by
+  totalValueLocked: order_by
+}
+
+"""
+order by var_samp() on columns of table "event"
+"""
+input event_var_samp_order_by {
+  closedDynamics: order_by
+  closedRate: order_by
+  currencyPairId: order_by
+  id: order_by
+  liquidityPercent: order_by
+  measurePeriod: order_by
+  poolAboveEq: order_by
+  poolBelow: order_by
+  startRate: order_by
+  targetDynamics: order_by
+  totalBetsAmount: order_by
+  totalLiquidityProvided: order_by
+  totalLiquidityShares: order_by
+  totalValueLocked: order_by
+}
+
+"""
+order by variance() on columns of table "event"
+"""
+input event_variance_order_by {
+  closedDynamics: order_by
+  closedRate: order_by
+  currencyPairId: order_by
+  id: order_by
+  liquidityPercent: order_by
+  measurePeriod: order_by
+  poolAboveEq: order_by
+  poolBelow: order_by
+  startRate: order_by
+  targetDynamics: order_by
+  totalBetsAmount: order_by
+  totalLiquidityProvided: order_by
+  totalLiquidityShares: order_by
+  totalValueLocked: order_by
+}
+
+scalar jsonb
+
+input jsonb_cast_exp {
+  String: String_comparison_exp
+}
+
+"""
+Boolean expression to compare columns of type "jsonb". All fields are combined with logical 'AND'.
+"""
+input jsonb_comparison_exp {
+  _cast: jsonb_cast_exp
+
+  """is the column contained in the given json value"""
+  _contained_in: jsonb
+
+  """does the column contain the given json value at the top level"""
+  _contains: jsonb
+  _eq: jsonb
+  _gt: jsonb
+  _gte: jsonb
+
+  """does the string exist as a top-level key in the column"""
+  _has_key: String
+
+  """do all of these strings exist as top-level keys in the column"""
+  _has_keys_all: [String!]
+
+  """do any of these strings exist as top-level keys in the column"""
+  _has_keys_any: [String!]
+  _in: [jsonb!]
+  _is_null: Boolean
+  _lt: jsonb
+  _lte: jsonb
+  _neq: jsonb
+  _nin: [jsonb!]
+}
+
+"""
+columns and relationships of "merged_candles"
+"""
+type merged_candles {
+  close: numeric
+  currencyPairId: Int
+  high: numeric
+  low: numeric
+  open: numeric
+  source: String
+  until: timestamptz
+  volume: numeric
+}
+
+"""
+Boolean expression to filter rows from the table "merged_candles". All fields are combined with a logical 'AND'.
+"""
+input merged_candles_bool_exp {
+  _and: [merged_candles_bool_exp!]
+  _not: merged_candles_bool_exp
+  _or: [merged_candles_bool_exp!]
+  close: numeric_comparison_exp
+  currencyPairId: Int_comparison_exp
+  high: numeric_comparison_exp
+  low: numeric_comparison_exp
+  open: numeric_comparison_exp
+  source: String_comparison_exp
+  until: timestamptz_comparison_exp
+  volume: numeric_comparison_exp
+}
+
+"""Ordering options when selecting data from "merged_candles"."""
+input merged_candles_order_by {
+  close: order_by
+  currencyPairId: order_by
+  high: order_by
+  low: order_by
+  open: order_by
+  source: order_by
+  until: order_by
+  volume: order_by
+}
+
+"""
+select columns of table "merged_candles"
+"""
+enum merged_candles_select_column {
+  """column name"""
+  close
+
+  """column name"""
+  currencyPairId
+
+  """column name"""
+  high
+
+  """column name"""
+  low
+
+  """column name"""
+  open
+
+  """column name"""
+  source
+
+  """column name"""
+  until
+
+  """column name"""
+  volume
+}
+
+"""
+Streaming cursor of the table "merged_candles"
+"""
+input merged_candles_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: merged_candles_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input merged_candles_stream_cursor_value_input {
+  close: numeric
+  currencyPairId: Int
+  high: numeric
+  low: numeric
+  open: numeric
+  source: String
+  until: timestamptz
+  volume: numeric
+}
+
+scalar numeric
+
+"""
+Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+  _gt: numeric
+  _gte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+  _lt: numeric
+  _lte: numeric
+  _neq: numeric
+  _nin: [numeric!]
+}
+
+"""column ordering options"""
+enum order_by {
+  """in ascending order, nulls last"""
+  asc
+
+  """in ascending order, nulls first"""
+  asc_nulls_first
+
+  """in ascending order, nulls last"""
+  asc_nulls_last
+
+  """in descending order, nulls first"""
+  desc
+
+  """in descending order, nulls first"""
+  desc_nulls_first
+
+  """in descending order, nulls last"""
+  desc_nulls_last
+}
+
+"""
+columns and relationships of "pool"
+"""
+type pool {
+  address: String!
+
+  """An array relationship"""
+  claims(
+    """distinct select on columns"""
+    distinct_on: [claim_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claim_order_by!]
+
+    """filter the rows returned"""
+    where: claim_bool_exp
+  ): [claim!]!
+
+  """An array relationship"""
+  entries(
+    """distinct select on columns"""
+    distinct_on: [entry_liquidity_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [entry_liquidity_order_by!]
+
+    """filter the rows returned"""
+    where: entry_liquidity_bool_exp
+  ): [entry_liquidity!]!
+  entryLockPeriod: bigint!
+
+  """An array relationship"""
+  events(
+    """distinct select on columns"""
+    distinct_on: [pool_event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_event_order_by!]
+
+    """filter the rows returned"""
+    where: pool_event_bool_exp
+  ): [pool_event!]!
+  isDepositPaused: Boolean!
+  isDisbandAllow: Boolean!
+  name: String
+
+  """An array relationship"""
+  poolLines(
+    """distinct select on columns"""
+    distinct_on: [pool_line_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_line_order_by!]
+
+    """filter the rows returned"""
+    where: pool_line_bool_exp
+  ): [pool_line!]!
+
+  """An array relationship"""
+  poolPositions(
+    """distinct select on columns"""
+    distinct_on: [pool_position_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_position_order_by!]
+
+    """filter the rows returned"""
+    where: pool_position_bool_exp
+  ): [pool_position!]!
+
+  """An array relationship"""
+  states(
+    """distinct select on columns"""
+    distinct_on: [pool_state_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_state_order_by!]
+
+    """filter the rows returned"""
+    where: pool_state_bool_exp
+  ): [pool_state!]!
+  version: String
+}
+
+"""
+Boolean expression to filter rows from the table "pool". All fields are combined with a logical 'AND'.
+"""
+input pool_bool_exp {
+  _and: [pool_bool_exp!]
+  _not: pool_bool_exp
+  _or: [pool_bool_exp!]
+  address: String_comparison_exp
+  claims: claim_bool_exp
+  entries: entry_liquidity_bool_exp
+  entryLockPeriod: bigint_comparison_exp
+  events: pool_event_bool_exp
+  isDepositPaused: Boolean_comparison_exp
+  isDisbandAllow: Boolean_comparison_exp
+  name: String_comparison_exp
+  poolLines: pool_line_bool_exp
+  poolPositions: pool_position_bool_exp
+  states: pool_state_bool_exp
+  version: String_comparison_exp
+}
+
+"""
+columns and relationships of "pool_event"
+"""
+type pool_event {
+  claimed: numeric!
+
+  """An array relationship"""
+  claims(
+    """distinct select on columns"""
+    distinct_on: [claim_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claim_order_by!]
+
+    """filter the rows returned"""
+    where: claim_bool_exp
+  ): [claim!]!
+
+  """An object relationship"""
+  event: event
+  eventId: bigint
+  id: bigint!
+
+  """An object relationship"""
+  line: pool_line!
+  lineId: String!
+
+  """An object relationship"""
+  pool: pool!
+  poolId: String!
+  provided: numeric!
+  result: numeric
+
+  """An array relationship"""
+  states(
+    """distinct select on columns"""
+    distinct_on: [pool_state_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_state_order_by!]
+
+    """filter the rows returned"""
+    where: pool_state_bool_exp
+  ): [pool_state!]!
+}
+
+"""
+order by aggregate values of table "pool_event"
+"""
+input pool_event_aggregate_order_by {
+  avg: pool_event_avg_order_by
+  count: order_by
+  max: pool_event_max_order_by
+  min: pool_event_min_order_by
+  stddev: pool_event_stddev_order_by
+  stddev_pop: pool_event_stddev_pop_order_by
+  stddev_samp: pool_event_stddev_samp_order_by
+  sum: pool_event_sum_order_by
+  var_pop: pool_event_var_pop_order_by
+  var_samp: pool_event_var_samp_order_by
+  variance: pool_event_variance_order_by
+}
+
+"""
+order by avg() on columns of table "pool_event"
+"""
+input pool_event_avg_order_by {
+  claimed: order_by
+  eventId: order_by
+  id: order_by
+  provided: order_by
+  result: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "pool_event". All fields are combined with a logical 'AND'.
+"""
+input pool_event_bool_exp {
+  _and: [pool_event_bool_exp!]
+  _not: pool_event_bool_exp
+  _or: [pool_event_bool_exp!]
+  claimed: numeric_comparison_exp
+  claims: claim_bool_exp
+  event: event_bool_exp
+  eventId: bigint_comparison_exp
+  id: bigint_comparison_exp
+  line: pool_line_bool_exp
+  lineId: String_comparison_exp
+  pool: pool_bool_exp
+  poolId: String_comparison_exp
+  provided: numeric_comparison_exp
+  result: numeric_comparison_exp
+  states: pool_state_bool_exp
+}
+
+"""
+order by max() on columns of table "pool_event"
+"""
+input pool_event_max_order_by {
+  claimed: order_by
+  eventId: order_by
+  id: order_by
+  lineId: order_by
+  poolId: order_by
+  provided: order_by
+  result: order_by
+}
+
+"""
+order by min() on columns of table "pool_event"
+"""
+input pool_event_min_order_by {
+  claimed: order_by
+  eventId: order_by
+  id: order_by
+  lineId: order_by
+  poolId: order_by
+  provided: order_by
+  result: order_by
+}
+
+"""Ordering options when selecting data from "pool_event"."""
+input pool_event_order_by {
+  claimed: order_by
+  claims_aggregate: claim_aggregate_order_by
+  event: event_order_by
+  eventId: order_by
+  id: order_by
+  line: pool_line_order_by
+  lineId: order_by
+  pool: pool_order_by
+  poolId: order_by
+  provided: order_by
+  result: order_by
+  states_aggregate: pool_state_aggregate_order_by
+}
+
+"""
+select columns of table "pool_event"
+"""
+enum pool_event_select_column {
+  """column name"""
+  claimed
+
+  """column name"""
+  eventId
+
+  """column name"""
+  id
+
+  """column name"""
+  lineId
+
+  """column name"""
+  poolId
+
+  """column name"""
+  provided
+
+  """column name"""
+  result
+}
+
+"""
+order by stddev() on columns of table "pool_event"
+"""
+input pool_event_stddev_order_by {
+  claimed: order_by
+  eventId: order_by
+  id: order_by
+  provided: order_by
+  result: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "pool_event"
+"""
+input pool_event_stddev_pop_order_by {
+  claimed: order_by
+  eventId: order_by
+  id: order_by
+  provided: order_by
+  result: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "pool_event"
+"""
+input pool_event_stddev_samp_order_by {
+  claimed: order_by
+  eventId: order_by
+  id: order_by
+  provided: order_by
+  result: order_by
+}
+
+"""
+Streaming cursor of the table "pool_event"
+"""
+input pool_event_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: pool_event_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input pool_event_stream_cursor_value_input {
+  claimed: numeric
+  eventId: bigint
+  id: bigint
+  lineId: String
+  poolId: String
+  provided: numeric
+  result: numeric
+}
+
+"""
+order by sum() on columns of table "pool_event"
+"""
+input pool_event_sum_order_by {
+  claimed: order_by
+  eventId: order_by
+  id: order_by
+  provided: order_by
+  result: order_by
+}
+
+"""
+order by var_pop() on columns of table "pool_event"
+"""
+input pool_event_var_pop_order_by {
+  claimed: order_by
+  eventId: order_by
+  id: order_by
+  provided: order_by
+  result: order_by
+}
+
+"""
+order by var_samp() on columns of table "pool_event"
+"""
+input pool_event_var_samp_order_by {
+  claimed: order_by
+  eventId: order_by
+  id: order_by
+  provided: order_by
+  result: order_by
+}
+
+"""
+order by variance() on columns of table "pool_event"
+"""
+input pool_event_variance_order_by {
+  claimed: order_by
+  eventId: order_by
+  id: order_by
+  provided: order_by
+  result: order_by
+}
+
+"""
+columns and relationships of "pool_line"
+"""
+type pool_line {
+  """An object relationship"""
+  currencyPair: currency_pair!
+  currencyPairId: Int!
+
+  """An array relationship"""
+  events(
+    """distinct select on columns"""
+    distinct_on: [pool_event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_event_order_by!]
+
+    """filter the rows returned"""
+    where: pool_event_bool_exp
+  ): [pool_event!]!
+  isPaused: Boolean!
+  lastBetsCloseTime: timestamptz!
+  lineId: Int!
+  liquidityPercent: numeric!
+  maxEvents: Int!
+  measurePeriod: bigint!
+
+  """An object relationship"""
+  pool: pool!
+  poolId: String!
+  poolLineId: String!
+  rateAboveEq: numeric!
+  rateBelow: numeric!
+  targetDynamics: numeric!
+}
+
+"""
+order by aggregate values of table "pool_line"
+"""
+input pool_line_aggregate_order_by {
+  avg: pool_line_avg_order_by
+  count: order_by
+  max: pool_line_max_order_by
+  min: pool_line_min_order_by
+  stddev: pool_line_stddev_order_by
+  stddev_pop: pool_line_stddev_pop_order_by
+  stddev_samp: pool_line_stddev_samp_order_by
+  sum: pool_line_sum_order_by
+  var_pop: pool_line_var_pop_order_by
+  var_samp: pool_line_var_samp_order_by
+  variance: pool_line_variance_order_by
+}
+
+"""
+order by avg() on columns of table "pool_line"
+"""
+input pool_line_avg_order_by {
+  currencyPairId: order_by
+  lineId: order_by
+  liquidityPercent: order_by
+  maxEvents: order_by
+  measurePeriod: order_by
+  rateAboveEq: order_by
+  rateBelow: order_by
+  targetDynamics: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "pool_line". All fields are combined with a logical 'AND'.
+"""
+input pool_line_bool_exp {
+  _and: [pool_line_bool_exp!]
+  _not: pool_line_bool_exp
+  _or: [pool_line_bool_exp!]
+  currencyPair: currency_pair_bool_exp
+  currencyPairId: Int_comparison_exp
+  events: pool_event_bool_exp
+  isPaused: Boolean_comparison_exp
+  lastBetsCloseTime: timestamptz_comparison_exp
+  lineId: Int_comparison_exp
+  liquidityPercent: numeric_comparison_exp
+  maxEvents: Int_comparison_exp
+  measurePeriod: bigint_comparison_exp
+  pool: pool_bool_exp
+  poolId: String_comparison_exp
+  poolLineId: String_comparison_exp
+  rateAboveEq: numeric_comparison_exp
+  rateBelow: numeric_comparison_exp
+  targetDynamics: numeric_comparison_exp
+}
+
+"""
+order by max() on columns of table "pool_line"
+"""
+input pool_line_max_order_by {
+  currencyPairId: order_by
+  lastBetsCloseTime: order_by
+  lineId: order_by
+  liquidityPercent: order_by
+  maxEvents: order_by
+  measurePeriod: order_by
+  poolId: order_by
+  poolLineId: order_by
+  rateAboveEq: order_by
+  rateBelow: order_by
+  targetDynamics: order_by
+}
+
+"""
+order by min() on columns of table "pool_line"
+"""
+input pool_line_min_order_by {
+  currencyPairId: order_by
+  lastBetsCloseTime: order_by
+  lineId: order_by
+  liquidityPercent: order_by
+  maxEvents: order_by
+  measurePeriod: order_by
+  poolId: order_by
+  poolLineId: order_by
+  rateAboveEq: order_by
+  rateBelow: order_by
+  targetDynamics: order_by
+}
+
+"""Ordering options when selecting data from "pool_line"."""
+input pool_line_order_by {
+  currencyPair: currency_pair_order_by
+  currencyPairId: order_by
+  events_aggregate: pool_event_aggregate_order_by
+  isPaused: order_by
+  lastBetsCloseTime: order_by
+  lineId: order_by
+  liquidityPercent: order_by
+  maxEvents: order_by
+  measurePeriod: order_by
+  pool: pool_order_by
+  poolId: order_by
+  poolLineId: order_by
+  rateAboveEq: order_by
+  rateBelow: order_by
+  targetDynamics: order_by
+}
+
+"""
+select columns of table "pool_line"
+"""
+enum pool_line_select_column {
+  """column name"""
+  currencyPairId
+
+  """column name"""
+  isPaused
+
+  """column name"""
+  lastBetsCloseTime
+
+  """column name"""
+  lineId
+
+  """column name"""
+  liquidityPercent
+
+  """column name"""
+  maxEvents
+
+  """column name"""
+  measurePeriod
+
+  """column name"""
+  poolId
+
+  """column name"""
+  poolLineId
+
+  """column name"""
+  rateAboveEq
+
+  """column name"""
+  rateBelow
+
+  """column name"""
+  targetDynamics
+}
+
+"""
+order by stddev() on columns of table "pool_line"
+"""
+input pool_line_stddev_order_by {
+  currencyPairId: order_by
+  lineId: order_by
+  liquidityPercent: order_by
+  maxEvents: order_by
+  measurePeriod: order_by
+  rateAboveEq: order_by
+  rateBelow: order_by
+  targetDynamics: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "pool_line"
+"""
+input pool_line_stddev_pop_order_by {
+  currencyPairId: order_by
+  lineId: order_by
+  liquidityPercent: order_by
+  maxEvents: order_by
+  measurePeriod: order_by
+  rateAboveEq: order_by
+  rateBelow: order_by
+  targetDynamics: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "pool_line"
+"""
+input pool_line_stddev_samp_order_by {
+  currencyPairId: order_by
+  lineId: order_by
+  liquidityPercent: order_by
+  maxEvents: order_by
+  measurePeriod: order_by
+  rateAboveEq: order_by
+  rateBelow: order_by
+  targetDynamics: order_by
+}
+
+"""
+Streaming cursor of the table "pool_line"
+"""
+input pool_line_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: pool_line_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input pool_line_stream_cursor_value_input {
+  currencyPairId: Int
+  isPaused: Boolean
+  lastBetsCloseTime: timestamptz
+  lineId: Int
+  liquidityPercent: numeric
+  maxEvents: Int
+  measurePeriod: bigint
+  poolId: String
+  poolLineId: String
+  rateAboveEq: numeric
+  rateBelow: numeric
+  targetDynamics: numeric
+}
+
+"""
+order by sum() on columns of table "pool_line"
+"""
+input pool_line_sum_order_by {
+  currencyPairId: order_by
+  lineId: order_by
+  liquidityPercent: order_by
+  maxEvents: order_by
+  measurePeriod: order_by
+  rateAboveEq: order_by
+  rateBelow: order_by
+  targetDynamics: order_by
+}
+
+"""
+order by var_pop() on columns of table "pool_line"
+"""
+input pool_line_var_pop_order_by {
+  currencyPairId: order_by
+  lineId: order_by
+  liquidityPercent: order_by
+  maxEvents: order_by
+  measurePeriod: order_by
+  rateAboveEq: order_by
+  rateBelow: order_by
+  targetDynamics: order_by
+}
+
+"""
+order by var_samp() on columns of table "pool_line"
+"""
+input pool_line_var_samp_order_by {
+  currencyPairId: order_by
+  lineId: order_by
+  liquidityPercent: order_by
+  maxEvents: order_by
+  measurePeriod: order_by
+  rateAboveEq: order_by
+  rateBelow: order_by
+  targetDynamics: order_by
+}
+
+"""
+order by variance() on columns of table "pool_line"
+"""
+input pool_line_variance_order_by {
+  currencyPairId: order_by
+  lineId: order_by
+  liquidityPercent: order_by
+  maxEvents: order_by
+  measurePeriod: order_by
+  rateAboveEq: order_by
+  rateBelow: order_by
+  targetDynamics: order_by
+}
+
+"""Ordering options when selecting data from "pool"."""
+input pool_order_by {
+  address: order_by
+  claims_aggregate: claim_aggregate_order_by
+  entries_aggregate: entry_liquidity_aggregate_order_by
+  entryLockPeriod: order_by
+  events_aggregate: pool_event_aggregate_order_by
+  isDepositPaused: order_by
+  isDisbandAllow: order_by
+  name: order_by
+  poolLines_aggregate: pool_line_aggregate_order_by
+  poolPositions_aggregate: pool_position_aggregate_order_by
+  states_aggregate: pool_state_aggregate_order_by
+  version: order_by
+}
+
+"""
+columns and relationships of "pool_position"
+"""
+type pool_position {
+  """An array relationship"""
+  claims(
+    """distinct select on columns"""
+    distinct_on: [claim_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claim_order_by!]
+
+    """filter the rows returned"""
+    where: claim_bool_exp
+  ): [claim!]!
+  depositedAmount: numeric!
+
+  """An array relationship"""
+  entries(
+    """distinct select on columns"""
+    distinct_on: [entry_liquidity_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [entry_liquidity_order_by!]
+
+    """filter the rows returned"""
+    where: entry_liquidity_bool_exp
+  ): [entry_liquidity!]!
+  entrySharePrice: numeric!
+  id: bigint!
+  lockedEstimateAmount: numeric!
+
+  """An object relationship"""
+  pool: pool!
+  poolId: String!
+  realizedProfit: numeric!
+  shares: numeric!
+
+  """An object relationship"""
+  user: user!
+  userId: String!
+  withdrawnAmount: numeric!
+  withdrawnShares: numeric!
+}
+
+"""
+order by aggregate values of table "pool_position"
+"""
+input pool_position_aggregate_order_by {
+  avg: pool_position_avg_order_by
+  count: order_by
+  max: pool_position_max_order_by
+  min: pool_position_min_order_by
+  stddev: pool_position_stddev_order_by
+  stddev_pop: pool_position_stddev_pop_order_by
+  stddev_samp: pool_position_stddev_samp_order_by
+  sum: pool_position_sum_order_by
+  var_pop: pool_position_var_pop_order_by
+  var_samp: pool_position_var_samp_order_by
+  variance: pool_position_variance_order_by
+}
+
+"""
+order by avg() on columns of table "pool_position"
+"""
+input pool_position_avg_order_by {
+  depositedAmount: order_by
+  entrySharePrice: order_by
+  id: order_by
+  lockedEstimateAmount: order_by
+  realizedProfit: order_by
+  shares: order_by
+  withdrawnAmount: order_by
+  withdrawnShares: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "pool_position". All fields are combined with a logical 'AND'.
+"""
+input pool_position_bool_exp {
+  _and: [pool_position_bool_exp!]
+  _not: pool_position_bool_exp
+  _or: [pool_position_bool_exp!]
+  claims: claim_bool_exp
+  depositedAmount: numeric_comparison_exp
+  entries: entry_liquidity_bool_exp
+  entrySharePrice: numeric_comparison_exp
+  id: bigint_comparison_exp
+  lockedEstimateAmount: numeric_comparison_exp
+  pool: pool_bool_exp
+  poolId: String_comparison_exp
+  realizedProfit: numeric_comparison_exp
+  shares: numeric_comparison_exp
+  user: user_bool_exp
+  userId: String_comparison_exp
+  withdrawnAmount: numeric_comparison_exp
+  withdrawnShares: numeric_comparison_exp
+}
+
+"""
+order by max() on columns of table "pool_position"
+"""
+input pool_position_max_order_by {
+  depositedAmount: order_by
+  entrySharePrice: order_by
+  id: order_by
+  lockedEstimateAmount: order_by
+  poolId: order_by
+  realizedProfit: order_by
+  shares: order_by
+  userId: order_by
+  withdrawnAmount: order_by
+  withdrawnShares: order_by
+}
+
+"""
+order by min() on columns of table "pool_position"
+"""
+input pool_position_min_order_by {
+  depositedAmount: order_by
+  entrySharePrice: order_by
+  id: order_by
+  lockedEstimateAmount: order_by
+  poolId: order_by
+  realizedProfit: order_by
+  shares: order_by
+  userId: order_by
+  withdrawnAmount: order_by
+  withdrawnShares: order_by
+}
+
+"""Ordering options when selecting data from "pool_position"."""
+input pool_position_order_by {
+  claims_aggregate: claim_aggregate_order_by
+  depositedAmount: order_by
+  entries_aggregate: entry_liquidity_aggregate_order_by
+  entrySharePrice: order_by
+  id: order_by
+  lockedEstimateAmount: order_by
+  pool: pool_order_by
+  poolId: order_by
+  realizedProfit: order_by
+  shares: order_by
+  user: user_order_by
+  userId: order_by
+  withdrawnAmount: order_by
+  withdrawnShares: order_by
+}
+
+"""
+select columns of table "pool_position"
+"""
+enum pool_position_select_column {
+  """column name"""
+  depositedAmount
+
+  """column name"""
+  entrySharePrice
+
+  """column name"""
+  id
+
+  """column name"""
+  lockedEstimateAmount
+
+  """column name"""
+  poolId
+
+  """column name"""
+  realizedProfit
+
+  """column name"""
+  shares
+
+  """column name"""
+  userId
+
+  """column name"""
+  withdrawnAmount
+
+  """column name"""
+  withdrawnShares
+}
+
+"""
+order by stddev() on columns of table "pool_position"
+"""
+input pool_position_stddev_order_by {
+  depositedAmount: order_by
+  entrySharePrice: order_by
+  id: order_by
+  lockedEstimateAmount: order_by
+  realizedProfit: order_by
+  shares: order_by
+  withdrawnAmount: order_by
+  withdrawnShares: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "pool_position"
+"""
+input pool_position_stddev_pop_order_by {
+  depositedAmount: order_by
+  entrySharePrice: order_by
+  id: order_by
+  lockedEstimateAmount: order_by
+  realizedProfit: order_by
+  shares: order_by
+  withdrawnAmount: order_by
+  withdrawnShares: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "pool_position"
+"""
+input pool_position_stddev_samp_order_by {
+  depositedAmount: order_by
+  entrySharePrice: order_by
+  id: order_by
+  lockedEstimateAmount: order_by
+  realizedProfit: order_by
+  shares: order_by
+  withdrawnAmount: order_by
+  withdrawnShares: order_by
+}
+
+"""
+Streaming cursor of the table "pool_position"
+"""
+input pool_position_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: pool_position_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input pool_position_stream_cursor_value_input {
+  depositedAmount: numeric
+  entrySharePrice: numeric
+  id: bigint
+  lockedEstimateAmount: numeric
+  poolId: String
+  realizedProfit: numeric
+  shares: numeric
+  userId: String
+  withdrawnAmount: numeric
+  withdrawnShares: numeric
+}
+
+"""
+order by sum() on columns of table "pool_position"
+"""
+input pool_position_sum_order_by {
+  depositedAmount: order_by
+  entrySharePrice: order_by
+  id: order_by
+  lockedEstimateAmount: order_by
+  realizedProfit: order_by
+  shares: order_by
+  withdrawnAmount: order_by
+  withdrawnShares: order_by
+}
+
+"""
+order by var_pop() on columns of table "pool_position"
+"""
+input pool_position_var_pop_order_by {
+  depositedAmount: order_by
+  entrySharePrice: order_by
+  id: order_by
+  lockedEstimateAmount: order_by
+  realizedProfit: order_by
+  shares: order_by
+  withdrawnAmount: order_by
+  withdrawnShares: order_by
+}
+
+"""
+order by var_samp() on columns of table "pool_position"
+"""
+input pool_position_var_samp_order_by {
+  depositedAmount: order_by
+  entrySharePrice: order_by
+  id: order_by
+  lockedEstimateAmount: order_by
+  realizedProfit: order_by
+  shares: order_by
+  withdrawnAmount: order_by
+  withdrawnShares: order_by
+}
+
+"""
+order by variance() on columns of table "pool_position"
+"""
+input pool_position_variance_order_by {
+  depositedAmount: order_by
+  entrySharePrice: order_by
+  id: order_by
+  lockedEstimateAmount: order_by
+  realizedProfit: order_by
+  shares: order_by
+  withdrawnAmount: order_by
+  withdrawnShares: order_by
+}
+
+"""
+select columns of table "pool"
+"""
+enum pool_select_column {
+  """column name"""
+  address
+
+  """column name"""
+  entryLockPeriod
+
+  """column name"""
+  isDepositPaused
+
+  """column name"""
+  isDisbandAllow
+
+  """column name"""
+  name
+
+  """column name"""
+  version
+}
+
+"""
+columns and relationships of "pool_state"
+"""
+type pool_state {
+  """
+  EVENT_CREATED: EVENT_CREATED\nEVENT_FINISHED: EVENT_FINISHED\nUSER_DEPOSITED: USER_DEPOSITED\nLIQUIDITY_APPROVED: LIQUIDITY_APPROVED\nLIQUIDITY_CANCELED: LIQUIDITY_CANCELED\nUSER_CLAIMED: USER_CLAIMED\nUSER_WITHDRAWN: USER_WITHDRAWN\nRECEIVED_XTZ: RECEIVED_XTZ\nPOOL_ORIGINATED: POOL_ORIGINATED\nACCUMULATED_DUST: ACCUMULATED_DUST\nPOOL_DISBANDED: POOL_DISBANDED\nDEPOSITS_PAUSED: DEPOSITS_PAUSED\nDEPOSITS_UNPAUSED: DEPOSITS_UNPAUSED
+  """
+  action: String!
+  activeLiquidity: numeric!
+  activeLiquidityDiff: numeric!
+
+  """An object relationship"""
+  affectedClaim: claim
+  affectedClaimId: Int
+
+  """An object relationship"""
+  affectedEntry: entry_liquidity
+  affectedEntryId: String
+
+  """An object relationship"""
+  affectedEvent: pool_event
+  affectedEventId: bigint
+
+  """An object relationship"""
+  affectedUser: user
+  affectedUserId: String
+  counter: Int!
+  entryLiquidity: numeric!
+  entryLiquidityDiff: numeric!
+  id: bigint!
+  level: Int!
+  opgHash: String!
+
+  """An object relationship"""
+  pool: pool!
+  poolId: String!
+  sharePrice: numeric
+  timestamp: timestamptz!
+  totalLiquidity: numeric!
+  totalLiquidityDiff: numeric!
+  totalShares: numeric!
+  totalSharesDiff: numeric!
+  withdrawableLiquidity: numeric!
+  withdrawableLiquidityDiff: numeric!
+}
+
+"""
+order by aggregate values of table "pool_state"
+"""
+input pool_state_aggregate_order_by {
+  avg: pool_state_avg_order_by
+  count: order_by
+  max: pool_state_max_order_by
+  min: pool_state_min_order_by
+  stddev: pool_state_stddev_order_by
+  stddev_pop: pool_state_stddev_pop_order_by
+  stddev_samp: pool_state_stddev_samp_order_by
+  sum: pool_state_sum_order_by
+  var_pop: pool_state_var_pop_order_by
+  var_samp: pool_state_var_samp_order_by
+  variance: pool_state_variance_order_by
+}
+
+"""
+order by avg() on columns of table "pool_state"
+"""
+input pool_state_avg_order_by {
+  activeLiquidity: order_by
+  activeLiquidityDiff: order_by
+  affectedClaimId: order_by
+  affectedEventId: order_by
+  counter: order_by
+  entryLiquidity: order_by
+  entryLiquidityDiff: order_by
+  id: order_by
+  level: order_by
+  sharePrice: order_by
+  totalLiquidity: order_by
+  totalLiquidityDiff: order_by
+  totalShares: order_by
+  totalSharesDiff: order_by
+  withdrawableLiquidity: order_by
+  withdrawableLiquidityDiff: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "pool_state". All fields are combined with a logical 'AND'.
+"""
+input pool_state_bool_exp {
+  _and: [pool_state_bool_exp!]
+  _not: pool_state_bool_exp
+  _or: [pool_state_bool_exp!]
+  action: String_comparison_exp
+  activeLiquidity: numeric_comparison_exp
+  activeLiquidityDiff: numeric_comparison_exp
+  affectedClaim: claim_bool_exp
+  affectedClaimId: Int_comparison_exp
+  affectedEntry: entry_liquidity_bool_exp
+  affectedEntryId: String_comparison_exp
+  affectedEvent: pool_event_bool_exp
+  affectedEventId: bigint_comparison_exp
+  affectedUser: user_bool_exp
+  affectedUserId: String_comparison_exp
+  counter: Int_comparison_exp
+  entryLiquidity: numeric_comparison_exp
+  entryLiquidityDiff: numeric_comparison_exp
+  id: bigint_comparison_exp
+  level: Int_comparison_exp
+  opgHash: String_comparison_exp
+  pool: pool_bool_exp
+  poolId: String_comparison_exp
+  sharePrice: numeric_comparison_exp
+  timestamp: timestamptz_comparison_exp
+  totalLiquidity: numeric_comparison_exp
+  totalLiquidityDiff: numeric_comparison_exp
+  totalShares: numeric_comparison_exp
+  totalSharesDiff: numeric_comparison_exp
+  withdrawableLiquidity: numeric_comparison_exp
+  withdrawableLiquidityDiff: numeric_comparison_exp
+}
+
+"""
+order by max() on columns of table "pool_state"
+"""
+input pool_state_max_order_by {
+  """
+  EVENT_CREATED: EVENT_CREATED\nEVENT_FINISHED: EVENT_FINISHED\nUSER_DEPOSITED: USER_DEPOSITED\nLIQUIDITY_APPROVED: LIQUIDITY_APPROVED\nLIQUIDITY_CANCELED: LIQUIDITY_CANCELED\nUSER_CLAIMED: USER_CLAIMED\nUSER_WITHDRAWN: USER_WITHDRAWN\nRECEIVED_XTZ: RECEIVED_XTZ\nPOOL_ORIGINATED: POOL_ORIGINATED\nACCUMULATED_DUST: ACCUMULATED_DUST\nPOOL_DISBANDED: POOL_DISBANDED\nDEPOSITS_PAUSED: DEPOSITS_PAUSED\nDEPOSITS_UNPAUSED: DEPOSITS_UNPAUSED
+  """
+  action: order_by
+  activeLiquidity: order_by
+  activeLiquidityDiff: order_by
+  affectedClaimId: order_by
+  affectedEntryId: order_by
+  affectedEventId: order_by
+  affectedUserId: order_by
+  counter: order_by
+  entryLiquidity: order_by
+  entryLiquidityDiff: order_by
+  id: order_by
+  level: order_by
+  opgHash: order_by
+  poolId: order_by
+  sharePrice: order_by
+  timestamp: order_by
+  totalLiquidity: order_by
+  totalLiquidityDiff: order_by
+  totalShares: order_by
+  totalSharesDiff: order_by
+  withdrawableLiquidity: order_by
+  withdrawableLiquidityDiff: order_by
+}
+
+"""
+order by min() on columns of table "pool_state"
+"""
+input pool_state_min_order_by {
+  """
+  EVENT_CREATED: EVENT_CREATED\nEVENT_FINISHED: EVENT_FINISHED\nUSER_DEPOSITED: USER_DEPOSITED\nLIQUIDITY_APPROVED: LIQUIDITY_APPROVED\nLIQUIDITY_CANCELED: LIQUIDITY_CANCELED\nUSER_CLAIMED: USER_CLAIMED\nUSER_WITHDRAWN: USER_WITHDRAWN\nRECEIVED_XTZ: RECEIVED_XTZ\nPOOL_ORIGINATED: POOL_ORIGINATED\nACCUMULATED_DUST: ACCUMULATED_DUST\nPOOL_DISBANDED: POOL_DISBANDED\nDEPOSITS_PAUSED: DEPOSITS_PAUSED\nDEPOSITS_UNPAUSED: DEPOSITS_UNPAUSED
+  """
+  action: order_by
+  activeLiquidity: order_by
+  activeLiquidityDiff: order_by
+  affectedClaimId: order_by
+  affectedEntryId: order_by
+  affectedEventId: order_by
+  affectedUserId: order_by
+  counter: order_by
+  entryLiquidity: order_by
+  entryLiquidityDiff: order_by
+  id: order_by
+  level: order_by
+  opgHash: order_by
+  poolId: order_by
+  sharePrice: order_by
+  timestamp: order_by
+  totalLiquidity: order_by
+  totalLiquidityDiff: order_by
+  totalShares: order_by
+  totalSharesDiff: order_by
+  withdrawableLiquidity: order_by
+  withdrawableLiquidityDiff: order_by
+}
+
+"""Ordering options when selecting data from "pool_state"."""
+input pool_state_order_by {
+  action: order_by
+  activeLiquidity: order_by
+  activeLiquidityDiff: order_by
+  affectedClaim: claim_order_by
+  affectedClaimId: order_by
+  affectedEntry: entry_liquidity_order_by
+  affectedEntryId: order_by
+  affectedEvent: pool_event_order_by
+  affectedEventId: order_by
+  affectedUser: user_order_by
+  affectedUserId: order_by
+  counter: order_by
+  entryLiquidity: order_by
+  entryLiquidityDiff: order_by
+  id: order_by
+  level: order_by
+  opgHash: order_by
+  pool: pool_order_by
+  poolId: order_by
+  sharePrice: order_by
+  timestamp: order_by
+  totalLiquidity: order_by
+  totalLiquidityDiff: order_by
+  totalShares: order_by
+  totalSharesDiff: order_by
+  withdrawableLiquidity: order_by
+  withdrawableLiquidityDiff: order_by
+}
+
+"""
+select columns of table "pool_state"
+"""
+enum pool_state_select_column {
+  """column name"""
+  action
+
+  """column name"""
+  activeLiquidity
+
+  """column name"""
+  activeLiquidityDiff
+
+  """column name"""
+  affectedClaimId
+
+  """column name"""
+  affectedEntryId
+
+  """column name"""
+  affectedEventId
+
+  """column name"""
+  affectedUserId
+
+  """column name"""
+  counter
+
+  """column name"""
+  entryLiquidity
+
+  """column name"""
+  entryLiquidityDiff
+
+  """column name"""
+  id
+
+  """column name"""
+  level
+
+  """column name"""
+  opgHash
+
+  """column name"""
+  poolId
+
+  """column name"""
+  sharePrice
+
+  """column name"""
+  timestamp
+
+  """column name"""
+  totalLiquidity
+
+  """column name"""
+  totalLiquidityDiff
+
+  """column name"""
+  totalShares
+
+  """column name"""
+  totalSharesDiff
+
+  """column name"""
+  withdrawableLiquidity
+
+  """column name"""
+  withdrawableLiquidityDiff
+}
+
+"""
+order by stddev() on columns of table "pool_state"
+"""
+input pool_state_stddev_order_by {
+  activeLiquidity: order_by
+  activeLiquidityDiff: order_by
+  affectedClaimId: order_by
+  affectedEventId: order_by
+  counter: order_by
+  entryLiquidity: order_by
+  entryLiquidityDiff: order_by
+  id: order_by
+  level: order_by
+  sharePrice: order_by
+  totalLiquidity: order_by
+  totalLiquidityDiff: order_by
+  totalShares: order_by
+  totalSharesDiff: order_by
+  withdrawableLiquidity: order_by
+  withdrawableLiquidityDiff: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "pool_state"
+"""
+input pool_state_stddev_pop_order_by {
+  activeLiquidity: order_by
+  activeLiquidityDiff: order_by
+  affectedClaimId: order_by
+  affectedEventId: order_by
+  counter: order_by
+  entryLiquidity: order_by
+  entryLiquidityDiff: order_by
+  id: order_by
+  level: order_by
+  sharePrice: order_by
+  totalLiquidity: order_by
+  totalLiquidityDiff: order_by
+  totalShares: order_by
+  totalSharesDiff: order_by
+  withdrawableLiquidity: order_by
+  withdrawableLiquidityDiff: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "pool_state"
+"""
+input pool_state_stddev_samp_order_by {
+  activeLiquidity: order_by
+  activeLiquidityDiff: order_by
+  affectedClaimId: order_by
+  affectedEventId: order_by
+  counter: order_by
+  entryLiquidity: order_by
+  entryLiquidityDiff: order_by
+  id: order_by
+  level: order_by
+  sharePrice: order_by
+  totalLiquidity: order_by
+  totalLiquidityDiff: order_by
+  totalShares: order_by
+  totalSharesDiff: order_by
+  withdrawableLiquidity: order_by
+  withdrawableLiquidityDiff: order_by
+}
+
+"""
+Streaming cursor of the table "pool_state"
+"""
+input pool_state_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: pool_state_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input pool_state_stream_cursor_value_input {
+  """
+  EVENT_CREATED: EVENT_CREATED\nEVENT_FINISHED: EVENT_FINISHED\nUSER_DEPOSITED: USER_DEPOSITED\nLIQUIDITY_APPROVED: LIQUIDITY_APPROVED\nLIQUIDITY_CANCELED: LIQUIDITY_CANCELED\nUSER_CLAIMED: USER_CLAIMED\nUSER_WITHDRAWN: USER_WITHDRAWN\nRECEIVED_XTZ: RECEIVED_XTZ\nPOOL_ORIGINATED: POOL_ORIGINATED\nACCUMULATED_DUST: ACCUMULATED_DUST\nPOOL_DISBANDED: POOL_DISBANDED\nDEPOSITS_PAUSED: DEPOSITS_PAUSED\nDEPOSITS_UNPAUSED: DEPOSITS_UNPAUSED
+  """
+  action: String
+  activeLiquidity: numeric
+  activeLiquidityDiff: numeric
+  affectedClaimId: Int
+  affectedEntryId: String
+  affectedEventId: bigint
+  affectedUserId: String
+  counter: Int
+  entryLiquidity: numeric
+  entryLiquidityDiff: numeric
+  id: bigint
+  level: Int
+  opgHash: String
+  poolId: String
+  sharePrice: numeric
+  timestamp: timestamptz
+  totalLiquidity: numeric
+  totalLiquidityDiff: numeric
+  totalShares: numeric
+  totalSharesDiff: numeric
+  withdrawableLiquidity: numeric
+  withdrawableLiquidityDiff: numeric
+}
+
+"""
+order by sum() on columns of table "pool_state"
+"""
+input pool_state_sum_order_by {
+  activeLiquidity: order_by
+  activeLiquidityDiff: order_by
+  affectedClaimId: order_by
+  affectedEventId: order_by
+  counter: order_by
+  entryLiquidity: order_by
+  entryLiquidityDiff: order_by
+  id: order_by
+  level: order_by
+  sharePrice: order_by
+  totalLiquidity: order_by
+  totalLiquidityDiff: order_by
+  totalShares: order_by
+  totalSharesDiff: order_by
+  withdrawableLiquidity: order_by
+  withdrawableLiquidityDiff: order_by
+}
+
+"""
+order by var_pop() on columns of table "pool_state"
+"""
+input pool_state_var_pop_order_by {
+  activeLiquidity: order_by
+  activeLiquidityDiff: order_by
+  affectedClaimId: order_by
+  affectedEventId: order_by
+  counter: order_by
+  entryLiquidity: order_by
+  entryLiquidityDiff: order_by
+  id: order_by
+  level: order_by
+  sharePrice: order_by
+  totalLiquidity: order_by
+  totalLiquidityDiff: order_by
+  totalShares: order_by
+  totalSharesDiff: order_by
+  withdrawableLiquidity: order_by
+  withdrawableLiquidityDiff: order_by
+}
+
+"""
+order by var_samp() on columns of table "pool_state"
+"""
+input pool_state_var_samp_order_by {
+  activeLiquidity: order_by
+  activeLiquidityDiff: order_by
+  affectedClaimId: order_by
+  affectedEventId: order_by
+  counter: order_by
+  entryLiquidity: order_by
+  entryLiquidityDiff: order_by
+  id: order_by
+  level: order_by
+  sharePrice: order_by
+  totalLiquidity: order_by
+  totalLiquidityDiff: order_by
+  totalShares: order_by
+  totalSharesDiff: order_by
+  withdrawableLiquidity: order_by
+  withdrawableLiquidityDiff: order_by
+}
+
+"""
+order by variance() on columns of table "pool_state"
+"""
+input pool_state_variance_order_by {
+  activeLiquidity: order_by
+  activeLiquidityDiff: order_by
+  affectedClaimId: order_by
+  affectedEventId: order_by
+  counter: order_by
+  entryLiquidity: order_by
+  entryLiquidityDiff: order_by
+  id: order_by
+  level: order_by
+  sharePrice: order_by
+  totalLiquidity: order_by
+  totalLiquidityDiff: order_by
+  totalShares: order_by
+  totalSharesDiff: order_by
+  withdrawableLiquidity: order_by
+  withdrawableLiquidityDiff: order_by
+}
+
+"""
+Streaming cursor of the table "pool"
+"""
+input pool_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: pool_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input pool_stream_cursor_value_input {
+  address: String
+  entryLockPeriod: bigint
+  isDepositPaused: Boolean
+  isDisbandAllow: Boolean
+  name: String
+  version: String
+}
+
+"""
+columns and relationships of "position"
+"""
+type position {
+  """An object relationship"""
+  event: event!
+  eventId: bigint!
+  id: bigint!
+  liquidityProvidedAboveEq: numeric!
+  liquidityProvidedBelow: numeric!
+  rewardAboveEq: numeric!
+  rewardBelow: numeric!
+  shares: numeric!
+
+  """An object relationship"""
+  user: user!
+  userId: String!
+  value: numeric!
+  withdrawn: Boolean!
+}
+
+"""
+order by aggregate values of table "position"
+"""
+input position_aggregate_order_by {
+  avg: position_avg_order_by
+  count: order_by
+  max: position_max_order_by
+  min: position_min_order_by
+  stddev: position_stddev_order_by
+  stddev_pop: position_stddev_pop_order_by
+  stddev_samp: position_stddev_samp_order_by
+  sum: position_sum_order_by
+  var_pop: position_var_pop_order_by
+  var_samp: position_var_samp_order_by
+  variance: position_variance_order_by
+}
+
+"""
+order by avg() on columns of table "position"
+"""
+input position_avg_order_by {
+  eventId: order_by
+  id: order_by
+  liquidityProvidedAboveEq: order_by
+  liquidityProvidedBelow: order_by
+  rewardAboveEq: order_by
+  rewardBelow: order_by
+  shares: order_by
+  value: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "position". All fields are combined with a logical 'AND'.
+"""
+input position_bool_exp {
+  _and: [position_bool_exp!]
+  _not: position_bool_exp
+  _or: [position_bool_exp!]
+  event: event_bool_exp
+  eventId: bigint_comparison_exp
+  id: bigint_comparison_exp
+  liquidityProvidedAboveEq: numeric_comparison_exp
+  liquidityProvidedBelow: numeric_comparison_exp
+  rewardAboveEq: numeric_comparison_exp
+  rewardBelow: numeric_comparison_exp
+  shares: numeric_comparison_exp
+  user: user_bool_exp
+  userId: String_comparison_exp
+  value: numeric_comparison_exp
+  withdrawn: Boolean_comparison_exp
+}
+
+"""
+order by max() on columns of table "position"
+"""
+input position_max_order_by {
+  eventId: order_by
+  id: order_by
+  liquidityProvidedAboveEq: order_by
+  liquidityProvidedBelow: order_by
+  rewardAboveEq: order_by
+  rewardBelow: order_by
+  shares: order_by
+  userId: order_by
+  value: order_by
+}
+
+"""
+order by min() on columns of table "position"
+"""
+input position_min_order_by {
+  eventId: order_by
+  id: order_by
+  liquidityProvidedAboveEq: order_by
+  liquidityProvidedBelow: order_by
+  rewardAboveEq: order_by
+  rewardBelow: order_by
+  shares: order_by
+  userId: order_by
+  value: order_by
+}
+
+"""Ordering options when selecting data from "position"."""
+input position_order_by {
+  event: event_order_by
+  eventId: order_by
+  id: order_by
+  liquidityProvidedAboveEq: order_by
+  liquidityProvidedBelow: order_by
+  rewardAboveEq: order_by
+  rewardBelow: order_by
+  shares: order_by
+  user: user_order_by
+  userId: order_by
+  value: order_by
+  withdrawn: order_by
+}
+
+"""
+select columns of table "position"
+"""
+enum position_select_column {
+  """column name"""
+  eventId
+
+  """column name"""
+  id
+
+  """column name"""
+  liquidityProvidedAboveEq
+
+  """column name"""
+  liquidityProvidedBelow
+
+  """column name"""
+  rewardAboveEq
+
+  """column name"""
+  rewardBelow
+
+  """column name"""
+  shares
+
+  """column name"""
+  userId
+
+  """column name"""
+  value
+
+  """column name"""
+  withdrawn
+}
+
+"""
+order by stddev() on columns of table "position"
+"""
+input position_stddev_order_by {
+  eventId: order_by
+  id: order_by
+  liquidityProvidedAboveEq: order_by
+  liquidityProvidedBelow: order_by
+  rewardAboveEq: order_by
+  rewardBelow: order_by
+  shares: order_by
+  value: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "position"
+"""
+input position_stddev_pop_order_by {
+  eventId: order_by
+  id: order_by
+  liquidityProvidedAboveEq: order_by
+  liquidityProvidedBelow: order_by
+  rewardAboveEq: order_by
+  rewardBelow: order_by
+  shares: order_by
+  value: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "position"
+"""
+input position_stddev_samp_order_by {
+  eventId: order_by
+  id: order_by
+  liquidityProvidedAboveEq: order_by
+  liquidityProvidedBelow: order_by
+  rewardAboveEq: order_by
+  rewardBelow: order_by
+  shares: order_by
+  value: order_by
+}
+
+"""
+Streaming cursor of the table "position"
+"""
+input position_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: position_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input position_stream_cursor_value_input {
+  eventId: bigint
+  id: bigint
+  liquidityProvidedAboveEq: numeric
+  liquidityProvidedBelow: numeric
+  rewardAboveEq: numeric
+  rewardBelow: numeric
+  shares: numeric
+  userId: String
+  value: numeric
+  withdrawn: Boolean
+}
+
+"""
+order by sum() on columns of table "position"
+"""
+input position_sum_order_by {
+  eventId: order_by
+  id: order_by
+  liquidityProvidedAboveEq: order_by
+  liquidityProvidedBelow: order_by
+  rewardAboveEq: order_by
+  rewardBelow: order_by
+  shares: order_by
+  value: order_by
+}
+
+"""
+order by var_pop() on columns of table "position"
+"""
+input position_var_pop_order_by {
+  eventId: order_by
+  id: order_by
+  liquidityProvidedAboveEq: order_by
+  liquidityProvidedBelow: order_by
+  rewardAboveEq: order_by
+  rewardBelow: order_by
+  shares: order_by
+  value: order_by
+}
+
+"""
+order by var_samp() on columns of table "position"
+"""
+input position_var_samp_order_by {
+  eventId: order_by
+  id: order_by
+  liquidityProvidedAboveEq: order_by
+  liquidityProvidedBelow: order_by
+  rewardAboveEq: order_by
+  rewardBelow: order_by
+  shares: order_by
+  value: order_by
+}
+
+"""
+order by variance() on columns of table "position"
+"""
+input position_variance_order_by {
+  eventId: order_by
+  id: order_by
+  liquidityProvidedAboveEq: order_by
+  liquidityProvidedBelow: order_by
+  rewardAboveEq: order_by
+  rewardBelow: order_by
+  shares: order_by
+  value: order_by
+}
+
+type query_root {
+  """
+  fetch data from the table: "bet"
+  """
+  bet(
+    """distinct select on columns"""
+    distinct_on: [bet_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bet_order_by!]
+
+    """filter the rows returned"""
+    where: bet_bool_exp
+  ): [bet!]!
+
+  """fetch data from the table: "bet" using primary key columns"""
+  betByPk(id: bigint!): bet
+
+  """
+  fetch data from the table: "candle"
+  """
+  candle(
+    """distinct select on columns"""
+    distinct_on: [candle_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candle_order_by!]
+
+    """filter the rows returned"""
+    where: candle_bool_exp
+  ): [candle!]!
+
+  """fetch data from the table: "candle" using primary key columns"""
+  candleByPk(id: bigint!): candle
+
+  """
+  fetch data from the table: "claim"
+  """
+  claim(
+    """distinct select on columns"""
+    distinct_on: [claim_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claim_order_by!]
+
+    """filter the rows returned"""
+    where: claim_bool_exp
+  ): [claim!]!
+
+  """fetch data from the table: "claim" using primary key columns"""
+  claimByPk(id: Int!): claim
+
+  """
+  fetch data from the table: "currency_pair"
+  """
+  currencyPair(
+    """distinct select on columns"""
+    distinct_on: [currency_pair_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [currency_pair_order_by!]
+
+    """filter the rows returned"""
+    where: currency_pair_bool_exp
+  ): [currency_pair!]!
+
+  """fetch data from the table: "currency_pair" using primary key columns"""
+  currencyPairByPk(id: Int!): currency_pair
+
+  """
+  fetch data from the table: "deposit"
+  """
+  deposit(
+    """distinct select on columns"""
+    distinct_on: [deposit_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [deposit_order_by!]
+
+    """filter the rows returned"""
+    where: deposit_bool_exp
+  ): [deposit!]!
+
+  """fetch data from the table: "deposit" using primary key columns"""
+  depositByPk(id: bigint!): deposit
+
+  """
+  fetch data from the table: "dipdup_contract"
+  """
+  dipdupContract(
+    """distinct select on columns"""
+    distinct_on: [dipdup_contract_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_contract_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_contract_bool_exp
+  ): [dipdup_contract!]!
+
+  """fetch data from the table: "dipdup_contract" using primary key columns"""
+  dipdupContractByPk(name: String!): dipdup_contract
+
+  """
+  fetch data from the table: "dipdup_contract_metadata"
+  """
+  dipdupContractMetadata(
+    """distinct select on columns"""
+    distinct_on: [dipdup_contract_metadata_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_contract_metadata_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_contract_metadata_bool_exp
+  ): [dipdup_contract_metadata!]!
+
+  """
+  fetch data from the table: "dipdup_contract_metadata" using primary key columns
+  """
+  dipdupContractMetadataByPk(id: Int!): dipdup_contract_metadata
+
+  """
+  fetch data from the table: "dipdup_head"
+  """
+  dipdupHead(
+    """distinct select on columns"""
+    distinct_on: [dipdup_head_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_head_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_head_bool_exp
+  ): [dipdup_head!]!
+
+  """fetch data from the table: "dipdup_head" using primary key columns"""
+  dipdupHeadByPk(name: String!): dipdup_head
+
+  """
+  fetch data from the table: "dipdup_head_status"
+  """
+  dipdupHeadStatus(
+    """distinct select on columns"""
+    distinct_on: [dipdup_head_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_head_status_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_head_status_bool_exp
+  ): [dipdup_head_status!]!
+
+  """
+  fetch data from the table: "dipdup_index"
+  """
+  dipdupIndex(
+    """distinct select on columns"""
+    distinct_on: [dipdup_index_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_index_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_index_bool_exp
+  ): [dipdup_index!]!
+
+  """fetch data from the table: "dipdup_index" using primary key columns"""
+  dipdupIndexByPk(name: String!): dipdup_index
+
+  """
+  fetch data from the table: "dipdup_model_update"
+  """
+  dipdupModelUpdate(
+    """distinct select on columns"""
+    distinct_on: [dipdup_model_update_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_model_update_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_model_update_bool_exp
+  ): [dipdup_model_update!]!
+
+  """
+  fetch data from the table: "dipdup_model_update" using primary key columns
+  """
+  dipdupModelUpdateByPk(id: Int!): dipdup_model_update
+
+  """
+  fetch data from the table: "dipdup_schema"
+  """
+  dipdupSchema(
+    """distinct select on columns"""
+    distinct_on: [dipdup_schema_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_schema_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_schema_bool_exp
+  ): [dipdup_schema!]!
+
+  """fetch data from the table: "dipdup_schema" using primary key columns"""
+  dipdupSchemaByPk(name: String!): dipdup_schema
+
+  """
+  fetch data from the table: "dipdup_token_metadata"
+  """
+  dipdupTokenMetadata(
+    """distinct select on columns"""
+    distinct_on: [dipdup_token_metadata_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_token_metadata_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_token_metadata_bool_exp
+  ): [dipdup_token_metadata!]!
+
+  """
+  fetch data from the table: "dipdup_token_metadata" using primary key columns
+  """
+  dipdupTokenMetadataByPk(id: Int!): dipdup_token_metadata
+
+  """
+  fetch data from the table: "entry_liquidity"
+  """
+  entryLiquidity(
+    """distinct select on columns"""
+    distinct_on: [entry_liquidity_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [entry_liquidity_order_by!]
+
+    """filter the rows returned"""
+    where: entry_liquidity_bool_exp
+  ): [entry_liquidity!]!
+
+  """fetch data from the table: "entry_liquidity" using primary key columns"""
+  entryLiquidityByPk(poolEntryId: String!): entry_liquidity
+
+  """
+  fetch data from the table: "event"
+  """
+  event(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+
+  """fetch data from the table: "event" using primary key columns"""
+  eventByPk(id: bigint!): event
+
+  """
+  fetch data from the table: "merged_candles"
+  """
+  mergedCandles(
+    """distinct select on columns"""
+    distinct_on: [merged_candles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [merged_candles_order_by!]
+
+    """filter the rows returned"""
+    where: merged_candles_bool_exp
+  ): [merged_candles!]!
+
+  """
+  fetch data from the table: "pool"
+  """
+  pool(
+    """distinct select on columns"""
+    distinct_on: [pool_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_order_by!]
+
+    """filter the rows returned"""
+    where: pool_bool_exp
+  ): [pool!]!
+
+  """fetch data from the table: "pool" using primary key columns"""
+  poolByPk(address: String!): pool
+
+  """
+  fetch data from the table: "pool_event"
+  """
+  poolEvent(
+    """distinct select on columns"""
+    distinct_on: [pool_event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_event_order_by!]
+
+    """filter the rows returned"""
+    where: pool_event_bool_exp
+  ): [pool_event!]!
+
+  """fetch data from the table: "pool_event" using primary key columns"""
+  poolEventByPk(id: bigint!): pool_event
+
+  """
+  fetch data from the table: "pool_line"
+  """
+  poolLine(
+    """distinct select on columns"""
+    distinct_on: [pool_line_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_line_order_by!]
+
+    """filter the rows returned"""
+    where: pool_line_bool_exp
+  ): [pool_line!]!
+
+  """fetch data from the table: "pool_line" using primary key columns"""
+  poolLineByPk(poolLineId: String!): pool_line
+
+  """
+  fetch data from the table: "pool_position"
+  """
+  poolPosition(
+    """distinct select on columns"""
+    distinct_on: [pool_position_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_position_order_by!]
+
+    """filter the rows returned"""
+    where: pool_position_bool_exp
+  ): [pool_position!]!
+
+  """fetch data from the table: "pool_position" using primary key columns"""
+  poolPositionByPk(id: bigint!): pool_position
+
+  """
+  fetch data from the table: "pool_state"
+  """
+  poolState(
+    """distinct select on columns"""
+    distinct_on: [pool_state_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_state_order_by!]
+
+    """filter the rows returned"""
+    where: pool_state_bool_exp
+  ): [pool_state!]!
+
+  """fetch data from the table: "pool_state" using primary key columns"""
+  poolStateByPk(id: bigint!): pool_state
+
+  """
+  fetch data from the table: "position"
+  """
+  position(
+    """distinct select on columns"""
+    distinct_on: [position_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [position_order_by!]
+
+    """filter the rows returned"""
+    where: position_bool_exp
+  ): [position!]!
+
+  """fetch data from the table: "position" using primary key columns"""
+  positionByPk(id: bigint!): position
+
+  """
+  fetch data from the table: "quotes_wma"
+  """
+  quotesWma(
+    """distinct select on columns"""
+    distinct_on: [quotes_wma_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [quotes_wma_order_by!]
+
+    """filter the rows returned"""
+    where: quotes_wma_bool_exp
+  ): [quotes_wma!]!
+
+  """
+  fetch data from the table: "quotes_wma_15m"
+  """
+  quotesWma15m(
+    """distinct select on columns"""
+    distinct_on: [quotes_wma_15m_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [quotes_wma_15m_order_by!]
+
+    """filter the rows returned"""
+    where: quotes_wma_15m_bool_exp
+  ): [quotes_wma_15m!]!
+
+  """
+  fetch data from the table: "total_value_locked"
+  """
+  totalValueLocked(
+    """distinct select on columns"""
+    distinct_on: [total_value_locked_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [total_value_locked_order_by!]
+
+    """filter the rows returned"""
+    where: total_value_locked_bool_exp
+  ): [total_value_locked!]!
+
+  """
+  fetch data from the table: "user"
+  """
+  user(
+    """distinct select on columns"""
+    distinct_on: [user_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_order_by!]
+
+    """filter the rows returned"""
+    where: user_bool_exp
+  ): [user!]!
+
+  """fetch data from the table: "user" using primary key columns"""
+  userByPk(address: String!): user
+
+  """
+  fetch data from the table: "withdrawal"
+  """
+  withdrawal(
+    """distinct select on columns"""
+    distinct_on: [withdrawal_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [withdrawal_order_by!]
+
+    """filter the rows returned"""
+    where: withdrawal_bool_exp
+  ): [withdrawal!]!
+
+  """fetch data from the table: "withdrawal" using primary key columns"""
+  withdrawalByPk(id: bigint!): withdrawal
+}
+
+"""
+columns and relationships of "quotes_wma"
+"""
+type quotes_wma {
+  currencyPairId: Int
+  price: numeric
+  timestamp: timestamptz
+}
+
+"""
+columns and relationships of "quotes_wma_15m"
+"""
+type quotes_wma_15m {
+  currencyPairId: Int
+  price: numeric
+  timestamp: timestamptz
+}
+
+"""
+Boolean expression to filter rows from the table "quotes_wma_15m". All fields are combined with a logical 'AND'.
+"""
+input quotes_wma_15m_bool_exp {
+  _and: [quotes_wma_15m_bool_exp!]
+  _not: quotes_wma_15m_bool_exp
+  _or: [quotes_wma_15m_bool_exp!]
+  currencyPairId: Int_comparison_exp
+  price: numeric_comparison_exp
+  timestamp: timestamptz_comparison_exp
+}
+
+"""Ordering options when selecting data from "quotes_wma_15m"."""
+input quotes_wma_15m_order_by {
+  currencyPairId: order_by
+  price: order_by
+  timestamp: order_by
+}
+
+"""
+select columns of table "quotes_wma_15m"
+"""
+enum quotes_wma_15m_select_column {
+  """column name"""
+  currencyPairId
+
+  """column name"""
+  price
+
+  """column name"""
+  timestamp
+}
+
+"""
+Streaming cursor of the table "quotes_wma_15m"
+"""
+input quotes_wma_15m_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: quotes_wma_15m_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input quotes_wma_15m_stream_cursor_value_input {
+  currencyPairId: Int
+  price: numeric
+  timestamp: timestamptz
+}
+
+"""
+Boolean expression to filter rows from the table "quotes_wma". All fields are combined with a logical 'AND'.
+"""
+input quotes_wma_bool_exp {
+  _and: [quotes_wma_bool_exp!]
+  _not: quotes_wma_bool_exp
+  _or: [quotes_wma_bool_exp!]
+  currencyPairId: Int_comparison_exp
+  price: numeric_comparison_exp
+  timestamp: timestamptz_comparison_exp
+}
+
+"""Ordering options when selecting data from "quotes_wma"."""
+input quotes_wma_order_by {
+  currencyPairId: order_by
+  price: order_by
+  timestamp: order_by
+}
+
+"""
+select columns of table "quotes_wma"
+"""
+enum quotes_wma_select_column {
+  """column name"""
+  currencyPairId
+
+  """column name"""
+  price
+
+  """column name"""
+  timestamp
+}
+
+"""
+Streaming cursor of the table "quotes_wma"
+"""
+input quotes_wma_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: quotes_wma_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input quotes_wma_stream_cursor_value_input {
+  currencyPairId: Int
+  price: numeric
+  timestamp: timestamptz
+}
+
+type subscription_root {
+  """
+  fetch data from the table: "bet"
+  """
+  bet(
+    """distinct select on columns"""
+    distinct_on: [bet_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bet_order_by!]
+
+    """filter the rows returned"""
+    where: bet_bool_exp
+  ): [bet!]!
+
+  """fetch data from the table: "bet" using primary key columns"""
+  betByPk(id: bigint!): bet
+
+  """
+  fetch data from the table in a streaming manner: "bet"
+  """
+  bet_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [bet_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: bet_bool_exp
+  ): [bet!]!
+
+  """
+  fetch data from the table: "candle"
+  """
+  candle(
+    """distinct select on columns"""
+    distinct_on: [candle_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [candle_order_by!]
+
+    """filter the rows returned"""
+    where: candle_bool_exp
+  ): [candle!]!
+
+  """fetch data from the table: "candle" using primary key columns"""
+  candleByPk(id: bigint!): candle
+
+  """
+  fetch data from the table in a streaming manner: "candle"
+  """
+  candle_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [candle_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: candle_bool_exp
+  ): [candle!]!
+
+  """
+  fetch data from the table: "claim"
+  """
+  claim(
+    """distinct select on columns"""
+    distinct_on: [claim_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claim_order_by!]
+
+    """filter the rows returned"""
+    where: claim_bool_exp
+  ): [claim!]!
+
+  """fetch data from the table: "claim" using primary key columns"""
+  claimByPk(id: Int!): claim
+
+  """
+  fetch data from the table in a streaming manner: "claim"
+  """
+  claim_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [claim_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: claim_bool_exp
+  ): [claim!]!
+
+  """
+  fetch data from the table: "currency_pair"
+  """
+  currencyPair(
+    """distinct select on columns"""
+    distinct_on: [currency_pair_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [currency_pair_order_by!]
+
+    """filter the rows returned"""
+    where: currency_pair_bool_exp
+  ): [currency_pair!]!
+
+  """fetch data from the table: "currency_pair" using primary key columns"""
+  currencyPairByPk(id: Int!): currency_pair
+
+  """
+  fetch data from the table in a streaming manner: "currency_pair"
+  """
+  currency_pair_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [currency_pair_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: currency_pair_bool_exp
+  ): [currency_pair!]!
+
+  """
+  fetch data from the table: "deposit"
+  """
+  deposit(
+    """distinct select on columns"""
+    distinct_on: [deposit_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [deposit_order_by!]
+
+    """filter the rows returned"""
+    where: deposit_bool_exp
+  ): [deposit!]!
+
+  """fetch data from the table: "deposit" using primary key columns"""
+  depositByPk(id: bigint!): deposit
+
+  """
+  fetch data from the table in a streaming manner: "deposit"
+  """
+  deposit_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [deposit_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: deposit_bool_exp
+  ): [deposit!]!
+
+  """
+  fetch data from the table: "dipdup_contract"
+  """
+  dipdupContract(
+    """distinct select on columns"""
+    distinct_on: [dipdup_contract_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_contract_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_contract_bool_exp
+  ): [dipdup_contract!]!
+
+  """fetch data from the table: "dipdup_contract" using primary key columns"""
+  dipdupContractByPk(name: String!): dipdup_contract
+
+  """
+  fetch data from the table: "dipdup_contract_metadata"
+  """
+  dipdupContractMetadata(
+    """distinct select on columns"""
+    distinct_on: [dipdup_contract_metadata_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_contract_metadata_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_contract_metadata_bool_exp
+  ): [dipdup_contract_metadata!]!
+
+  """
+  fetch data from the table: "dipdup_contract_metadata" using primary key columns
+  """
+  dipdupContractMetadataByPk(id: Int!): dipdup_contract_metadata
+
+  """
+  fetch data from the table: "dipdup_head"
+  """
+  dipdupHead(
+    """distinct select on columns"""
+    distinct_on: [dipdup_head_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_head_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_head_bool_exp
+  ): [dipdup_head!]!
+
+  """fetch data from the table: "dipdup_head" using primary key columns"""
+  dipdupHeadByPk(name: String!): dipdup_head
+
+  """
+  fetch data from the table: "dipdup_head_status"
+  """
+  dipdupHeadStatus(
+    """distinct select on columns"""
+    distinct_on: [dipdup_head_status_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_head_status_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_head_status_bool_exp
+  ): [dipdup_head_status!]!
+
+  """
+  fetch data from the table: "dipdup_index"
+  """
+  dipdupIndex(
+    """distinct select on columns"""
+    distinct_on: [dipdup_index_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_index_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_index_bool_exp
+  ): [dipdup_index!]!
+
+  """fetch data from the table: "dipdup_index" using primary key columns"""
+  dipdupIndexByPk(name: String!): dipdup_index
+
+  """
+  fetch data from the table: "dipdup_model_update"
+  """
+  dipdupModelUpdate(
+    """distinct select on columns"""
+    distinct_on: [dipdup_model_update_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_model_update_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_model_update_bool_exp
+  ): [dipdup_model_update!]!
+
+  """
+  fetch data from the table: "dipdup_model_update" using primary key columns
+  """
+  dipdupModelUpdateByPk(id: Int!): dipdup_model_update
+
+  """
+  fetch data from the table: "dipdup_schema"
+  """
+  dipdupSchema(
+    """distinct select on columns"""
+    distinct_on: [dipdup_schema_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_schema_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_schema_bool_exp
+  ): [dipdup_schema!]!
+
+  """fetch data from the table: "dipdup_schema" using primary key columns"""
+  dipdupSchemaByPk(name: String!): dipdup_schema
+
+  """
+  fetch data from the table: "dipdup_token_metadata"
+  """
+  dipdupTokenMetadata(
+    """distinct select on columns"""
+    distinct_on: [dipdup_token_metadata_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [dipdup_token_metadata_order_by!]
+
+    """filter the rows returned"""
+    where: dipdup_token_metadata_bool_exp
+  ): [dipdup_token_metadata!]!
+
+  """
+  fetch data from the table: "dipdup_token_metadata" using primary key columns
+  """
+  dipdupTokenMetadataByPk(id: Int!): dipdup_token_metadata
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_contract_metadata"
+  """
+  dipdup_contract_metadata_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_contract_metadata_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_contract_metadata_bool_exp
+  ): [dipdup_contract_metadata!]!
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_contract"
+  """
+  dipdup_contract_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_contract_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_contract_bool_exp
+  ): [dipdup_contract!]!
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_head_status"
+  """
+  dipdup_head_status_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_head_status_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_head_status_bool_exp
+  ): [dipdup_head_status!]!
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_head"
+  """
+  dipdup_head_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_head_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_head_bool_exp
+  ): [dipdup_head!]!
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_index"
+  """
+  dipdup_index_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_index_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_index_bool_exp
+  ): [dipdup_index!]!
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_model_update"
+  """
+  dipdup_model_update_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_model_update_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_model_update_bool_exp
+  ): [dipdup_model_update!]!
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_schema"
+  """
+  dipdup_schema_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_schema_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_schema_bool_exp
+  ): [dipdup_schema!]!
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_token_metadata"
+  """
+  dipdup_token_metadata_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_token_metadata_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_token_metadata_bool_exp
+  ): [dipdup_token_metadata!]!
+
+  """
+  fetch data from the table: "entry_liquidity"
+  """
+  entryLiquidity(
+    """distinct select on columns"""
+    distinct_on: [entry_liquidity_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [entry_liquidity_order_by!]
+
+    """filter the rows returned"""
+    where: entry_liquidity_bool_exp
+  ): [entry_liquidity!]!
+
+  """fetch data from the table: "entry_liquidity" using primary key columns"""
+  entryLiquidityByPk(poolEntryId: String!): entry_liquidity
+
+  """
+  fetch data from the table in a streaming manner: "entry_liquidity"
+  """
+  entry_liquidity_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [entry_liquidity_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: entry_liquidity_bool_exp
+  ): [entry_liquidity!]!
+
+  """
+  fetch data from the table: "event"
+  """
+  event(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+
+  """fetch data from the table: "event" using primary key columns"""
+  eventByPk(id: bigint!): event
+
+  """
+  fetch data from the table in a streaming manner: "event"
+  """
+  event_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [event_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+
+  """
+  fetch data from the table: "merged_candles"
+  """
+  mergedCandles(
+    """distinct select on columns"""
+    distinct_on: [merged_candles_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [merged_candles_order_by!]
+
+    """filter the rows returned"""
+    where: merged_candles_bool_exp
+  ): [merged_candles!]!
+
+  """
+  fetch data from the table in a streaming manner: "merged_candles"
+  """
+  merged_candles_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [merged_candles_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: merged_candles_bool_exp
+  ): [merged_candles!]!
+
+  """
+  fetch data from the table: "pool"
+  """
+  pool(
+    """distinct select on columns"""
+    distinct_on: [pool_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_order_by!]
+
+    """filter the rows returned"""
+    where: pool_bool_exp
+  ): [pool!]!
+
+  """fetch data from the table: "pool" using primary key columns"""
+  poolByPk(address: String!): pool
+
+  """
+  fetch data from the table: "pool_event"
+  """
+  poolEvent(
+    """distinct select on columns"""
+    distinct_on: [pool_event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_event_order_by!]
+
+    """filter the rows returned"""
+    where: pool_event_bool_exp
+  ): [pool_event!]!
+
+  """fetch data from the table: "pool_event" using primary key columns"""
+  poolEventByPk(id: bigint!): pool_event
+
+  """
+  fetch data from the table: "pool_line"
+  """
+  poolLine(
+    """distinct select on columns"""
+    distinct_on: [pool_line_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_line_order_by!]
+
+    """filter the rows returned"""
+    where: pool_line_bool_exp
+  ): [pool_line!]!
+
+  """fetch data from the table: "pool_line" using primary key columns"""
+  poolLineByPk(poolLineId: String!): pool_line
+
+  """
+  fetch data from the table: "pool_position"
+  """
+  poolPosition(
+    """distinct select on columns"""
+    distinct_on: [pool_position_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_position_order_by!]
+
+    """filter the rows returned"""
+    where: pool_position_bool_exp
+  ): [pool_position!]!
+
+  """fetch data from the table: "pool_position" using primary key columns"""
+  poolPositionByPk(id: bigint!): pool_position
+
+  """
+  fetch data from the table: "pool_state"
+  """
+  poolState(
+    """distinct select on columns"""
+    distinct_on: [pool_state_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_state_order_by!]
+
+    """filter the rows returned"""
+    where: pool_state_bool_exp
+  ): [pool_state!]!
+
+  """fetch data from the table: "pool_state" using primary key columns"""
+  poolStateByPk(id: bigint!): pool_state
+
+  """
+  fetch data from the table in a streaming manner: "pool_event"
+  """
+  pool_event_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [pool_event_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: pool_event_bool_exp
+  ): [pool_event!]!
+
+  """
+  fetch data from the table in a streaming manner: "pool_line"
+  """
+  pool_line_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [pool_line_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: pool_line_bool_exp
+  ): [pool_line!]!
+
+  """
+  fetch data from the table in a streaming manner: "pool_position"
+  """
+  pool_position_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [pool_position_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: pool_position_bool_exp
+  ): [pool_position!]!
+
+  """
+  fetch data from the table in a streaming manner: "pool_state"
+  """
+  pool_state_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [pool_state_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: pool_state_bool_exp
+  ): [pool_state!]!
+
+  """
+  fetch data from the table in a streaming manner: "pool"
+  """
+  pool_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [pool_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: pool_bool_exp
+  ): [pool!]!
+
+  """
+  fetch data from the table: "position"
+  """
+  position(
+    """distinct select on columns"""
+    distinct_on: [position_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [position_order_by!]
+
+    """filter the rows returned"""
+    where: position_bool_exp
+  ): [position!]!
+
+  """fetch data from the table: "position" using primary key columns"""
+  positionByPk(id: bigint!): position
+
+  """
+  fetch data from the table in a streaming manner: "position"
+  """
+  position_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [position_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: position_bool_exp
+  ): [position!]!
+
+  """
+  fetch data from the table: "quotes_wma"
+  """
+  quotesWma(
+    """distinct select on columns"""
+    distinct_on: [quotes_wma_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [quotes_wma_order_by!]
+
+    """filter the rows returned"""
+    where: quotes_wma_bool_exp
+  ): [quotes_wma!]!
+
+  """
+  fetch data from the table: "quotes_wma_15m"
+  """
+  quotesWma15m(
+    """distinct select on columns"""
+    distinct_on: [quotes_wma_15m_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [quotes_wma_15m_order_by!]
+
+    """filter the rows returned"""
+    where: quotes_wma_15m_bool_exp
+  ): [quotes_wma_15m!]!
+
+  """
+  fetch data from the table in a streaming manner: "quotes_wma_15m"
+  """
+  quotes_wma_15m_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [quotes_wma_15m_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: quotes_wma_15m_bool_exp
+  ): [quotes_wma_15m!]!
+
+  """
+  fetch data from the table in a streaming manner: "quotes_wma"
+  """
+  quotes_wma_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [quotes_wma_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: quotes_wma_bool_exp
+  ): [quotes_wma!]!
+
+  """
+  fetch data from the table: "total_value_locked"
+  """
+  totalValueLocked(
+    """distinct select on columns"""
+    distinct_on: [total_value_locked_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [total_value_locked_order_by!]
+
+    """filter the rows returned"""
+    where: total_value_locked_bool_exp
+  ): [total_value_locked!]!
+
+  """
+  fetch data from the table in a streaming manner: "total_value_locked"
+  """
+  total_value_locked_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [total_value_locked_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: total_value_locked_bool_exp
+  ): [total_value_locked!]!
+
+  """
+  fetch data from the table: "user"
+  """
+  user(
+    """distinct select on columns"""
+    distinct_on: [user_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_order_by!]
+
+    """filter the rows returned"""
+    where: user_bool_exp
+  ): [user!]!
+
+  """fetch data from the table: "user" using primary key columns"""
+  userByPk(address: String!): user
+
+  """
+  fetch data from the table in a streaming manner: "user"
+  """
+  user_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [user_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: user_bool_exp
+  ): [user!]!
+
+  """
+  fetch data from the table: "withdrawal"
+  """
+  withdrawal(
+    """distinct select on columns"""
+    distinct_on: [withdrawal_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [withdrawal_order_by!]
+
+    """filter the rows returned"""
+    where: withdrawal_bool_exp
+  ): [withdrawal!]!
+
+  """fetch data from the table: "withdrawal" using primary key columns"""
+  withdrawalByPk(id: bigint!): withdrawal
+
+  """
+  fetch data from the table in a streaming manner: "withdrawal"
+  """
+  withdrawal_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [withdrawal_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: withdrawal_bool_exp
+  ): [withdrawal!]!
+}
+
+scalar timestamptz
+
+"""
+Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'.
+"""
+input timestamptz_comparison_exp {
+  _eq: timestamptz
+  _gt: timestamptz
+  _gte: timestamptz
+  _in: [timestamptz!]
+  _is_null: Boolean
+  _lt: timestamptz
+  _lte: timestamptz
+  _neq: timestamptz
+  _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "total_value_locked"
+"""
+type total_value_locked {
+  amount: numeric
+  createdTime: timestamptz
+  cumSum: numeric
+  eventId: bigint
+}
+
+"""
+Boolean expression to filter rows from the table "total_value_locked". All fields are combined with a logical 'AND'.
+"""
+input total_value_locked_bool_exp {
+  _and: [total_value_locked_bool_exp!]
+  _not: total_value_locked_bool_exp
+  _or: [total_value_locked_bool_exp!]
+  amount: numeric_comparison_exp
+  createdTime: timestamptz_comparison_exp
+  cumSum: numeric_comparison_exp
+  eventId: bigint_comparison_exp
+}
+
+"""Ordering options when selecting data from "total_value_locked"."""
+input total_value_locked_order_by {
+  amount: order_by
+  createdTime: order_by
+  cumSum: order_by
+  eventId: order_by
+}
+
+"""
+select columns of table "total_value_locked"
+"""
+enum total_value_locked_select_column {
+  """column name"""
+  amount
+
+  """column name"""
+  createdTime
+
+  """column name"""
+  cumSum
+
+  """column name"""
+  eventId
+}
+
+"""
+Streaming cursor of the table "total_value_locked"
+"""
+input total_value_locked_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: total_value_locked_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input total_value_locked_stream_cursor_value_input {
+  amount: numeric
+  createdTime: timestamptz
+  cumSum: numeric
+  eventId: bigint
+}
+
+"""
+columns and relationships of "user"
+"""
+type user {
+  address: String!
+
+  """An array relationship"""
+  bets(
+    """distinct select on columns"""
+    distinct_on: [bet_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bet_order_by!]
+
+    """filter the rows returned"""
+    where: bet_bool_exp
+  ): [bet!]!
+
+  """An array relationship"""
+  claims(
+    """distinct select on columns"""
+    distinct_on: [claim_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [claim_order_by!]
+
+    """filter the rows returned"""
+    where: claim_bool_exp
+  ): [claim!]!
+
+  """An array relationship"""
+  deposits(
+    """distinct select on columns"""
+    distinct_on: [deposit_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [deposit_order_by!]
+
+    """filter the rows returned"""
+    where: deposit_bool_exp
+  ): [deposit!]!
+
+  """An array relationship"""
+  entries(
+    """distinct select on columns"""
+    distinct_on: [entry_liquidity_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [entry_liquidity_order_by!]
+
+    """filter the rows returned"""
+    where: entry_liquidity_bool_exp
+  ): [entry_liquidity!]!
+
+  """An array relationship"""
+  events(
+    """distinct select on columns"""
+    distinct_on: [event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [event_order_by!]
+
+    """filter the rows returned"""
+    where: event_bool_exp
+  ): [event!]!
+
+  """An array relationship"""
+  poolPositions(
+    """distinct select on columns"""
+    distinct_on: [pool_position_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_position_order_by!]
+
+    """filter the rows returned"""
+    where: pool_position_bool_exp
+  ): [pool_position!]!
+
+  """An array relationship"""
+  poolStates(
+    """distinct select on columns"""
+    distinct_on: [pool_state_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [pool_state_order_by!]
+
+    """filter the rows returned"""
+    where: pool_state_bool_exp
+  ): [pool_state!]!
+
+  """An array relationship"""
+  positions(
+    """distinct select on columns"""
+    distinct_on: [position_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [position_order_by!]
+
+    """filter the rows returned"""
+    where: position_bool_exp
+  ): [position!]!
+
+  """An array relationship"""
+  thirdPartyWithdrawals(
+    """distinct select on columns"""
+    distinct_on: [withdrawal_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [withdrawal_order_by!]
+
+    """filter the rows returned"""
+    where: withdrawal_bool_exp
+  ): [withdrawal!]!
+  totalBetsAmount: numeric!
+  totalBetsCount: Int!
+  totalFeesCollected: numeric!
+  totalLiquidityProvided: numeric!
+  totalProviderReward: numeric!
+  totalReward: numeric!
+  totalWithdrawn: numeric!
+
+  """An array relationship"""
+  withdrawals(
+    """distinct select on columns"""
+    distinct_on: [withdrawal_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [withdrawal_order_by!]
+
+    """filter the rows returned"""
+    where: withdrawal_bool_exp
+  ): [withdrawal!]!
+}
+
+"""
+Boolean expression to filter rows from the table "user". All fields are combined with a logical 'AND'.
+"""
+input user_bool_exp {
+  _and: [user_bool_exp!]
+  _not: user_bool_exp
+  _or: [user_bool_exp!]
+  address: String_comparison_exp
+  bets: bet_bool_exp
+  claims: claim_bool_exp
+  deposits: deposit_bool_exp
+  entries: entry_liquidity_bool_exp
+  events: event_bool_exp
+  poolPositions: pool_position_bool_exp
+  poolStates: pool_state_bool_exp
+  positions: position_bool_exp
+  thirdPartyWithdrawals: withdrawal_bool_exp
+  totalBetsAmount: numeric_comparison_exp
+  totalBetsCount: Int_comparison_exp
+  totalFeesCollected: numeric_comparison_exp
+  totalLiquidityProvided: numeric_comparison_exp
+  totalProviderReward: numeric_comparison_exp
+  totalReward: numeric_comparison_exp
+  totalWithdrawn: numeric_comparison_exp
+  withdrawals: withdrawal_bool_exp
+}
+
+"""Ordering options when selecting data from "user"."""
+input user_order_by {
+  address: order_by
+  bets_aggregate: bet_aggregate_order_by
+  claims_aggregate: claim_aggregate_order_by
+  deposits_aggregate: deposit_aggregate_order_by
+  entries_aggregate: entry_liquidity_aggregate_order_by
+  events_aggregate: event_aggregate_order_by
+  poolPositions_aggregate: pool_position_aggregate_order_by
+  poolStates_aggregate: pool_state_aggregate_order_by
+  positions_aggregate: position_aggregate_order_by
+  thirdPartyWithdrawals_aggregate: withdrawal_aggregate_order_by
+  totalBetsAmount: order_by
+  totalBetsCount: order_by
+  totalFeesCollected: order_by
+  totalLiquidityProvided: order_by
+  totalProviderReward: order_by
+  totalReward: order_by
+  totalWithdrawn: order_by
+  withdrawals_aggregate: withdrawal_aggregate_order_by
+}
+
+"""
+select columns of table "user"
+"""
+enum user_select_column {
+  """column name"""
+  address
+
+  """column name"""
+  totalBetsAmount
+
+  """column name"""
+  totalBetsCount
+
+  """column name"""
+  totalFeesCollected
+
+  """column name"""
+  totalLiquidityProvided
+
+  """column name"""
+  totalProviderReward
+
+  """column name"""
+  totalReward
+
+  """column name"""
+  totalWithdrawn
+}
+
+"""
+Streaming cursor of the table "user"
+"""
+input user_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: user_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input user_stream_cursor_value_input {
+  address: String
+  totalBetsAmount: numeric
+  totalBetsCount: Int
+  totalFeesCollected: numeric
+  totalLiquidityProvided: numeric
+  totalProviderReward: numeric
+  totalReward: numeric
+  totalWithdrawn: numeric
+}
+
+"""
+columns and relationships of "withdrawal"
+"""
+type withdrawal {
+  amount: numeric!
+  createdTime: timestamptz!
+
+  """An object relationship"""
+  event: event!
+  eventId: bigint!
+
+  """An object relationship"""
+  feeCollector: user
+  feeCollectorId: String
+  id: bigint!
+  opgHash: String!
+
+  """MANUAL: MANUAL\nTHIRD_PARTY: THIRD_PARTY"""
+  type: String!
+
+  """An object relationship"""
+  user: user!
+  userId: String!
+}
+
+"""
+order by aggregate values of table "withdrawal"
+"""
+input withdrawal_aggregate_order_by {
+  avg: withdrawal_avg_order_by
+  count: order_by
+  max: withdrawal_max_order_by
+  min: withdrawal_min_order_by
+  stddev: withdrawal_stddev_order_by
+  stddev_pop: withdrawal_stddev_pop_order_by
+  stddev_samp: withdrawal_stddev_samp_order_by
+  sum: withdrawal_sum_order_by
+  var_pop: withdrawal_var_pop_order_by
+  var_samp: withdrawal_var_samp_order_by
+  variance: withdrawal_variance_order_by
+}
+
+"""
+order by avg() on columns of table "withdrawal"
+"""
+input withdrawal_avg_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "withdrawal". All fields are combined with a logical 'AND'.
+"""
+input withdrawal_bool_exp {
+  _and: [withdrawal_bool_exp!]
+  _not: withdrawal_bool_exp
+  _or: [withdrawal_bool_exp!]
+  amount: numeric_comparison_exp
+  createdTime: timestamptz_comparison_exp
+  event: event_bool_exp
+  eventId: bigint_comparison_exp
+  feeCollector: user_bool_exp
+  feeCollectorId: String_comparison_exp
+  id: bigint_comparison_exp
+  opgHash: String_comparison_exp
+  type: String_comparison_exp
+  user: user_bool_exp
+  userId: String_comparison_exp
+}
+
+"""
+order by max() on columns of table "withdrawal"
+"""
+input withdrawal_max_order_by {
+  amount: order_by
+  createdTime: order_by
+  eventId: order_by
+  feeCollectorId: order_by
+  id: order_by
+  opgHash: order_by
+
+  """MANUAL: MANUAL\nTHIRD_PARTY: THIRD_PARTY"""
+  type: order_by
+  userId: order_by
+}
+
+"""
+order by min() on columns of table "withdrawal"
+"""
+input withdrawal_min_order_by {
+  amount: order_by
+  createdTime: order_by
+  eventId: order_by
+  feeCollectorId: order_by
+  id: order_by
+  opgHash: order_by
+
+  """MANUAL: MANUAL\nTHIRD_PARTY: THIRD_PARTY"""
+  type: order_by
+  userId: order_by
+}
+
+"""Ordering options when selecting data from "withdrawal"."""
+input withdrawal_order_by {
+  amount: order_by
+  createdTime: order_by
+  event: event_order_by
+  eventId: order_by
+  feeCollector: user_order_by
+  feeCollectorId: order_by
+  id: order_by
+  opgHash: order_by
+  type: order_by
+  user: user_order_by
+  userId: order_by
+}
+
+"""
+select columns of table "withdrawal"
+"""
+enum withdrawal_select_column {
+  """column name"""
+  amount
+
+  """column name"""
+  createdTime
+
+  """column name"""
+  eventId
+
+  """column name"""
+  feeCollectorId
+
+  """column name"""
+  id
+
+  """column name"""
+  opgHash
+
+  """column name"""
+  type
+
+  """column name"""
+  userId
+}
+
+"""
+order by stddev() on columns of table "withdrawal"
+"""
+input withdrawal_stddev_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "withdrawal"
+"""
+input withdrawal_stddev_pop_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "withdrawal"
+"""
+input withdrawal_stddev_samp_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+}
+
+"""
+Streaming cursor of the table "withdrawal"
+"""
+input withdrawal_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: withdrawal_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input withdrawal_stream_cursor_value_input {
+  amount: numeric
+  createdTime: timestamptz
+  eventId: bigint
+  feeCollectorId: String
+  id: bigint
+  opgHash: String
+
+  """MANUAL: MANUAL\nTHIRD_PARTY: THIRD_PARTY"""
+  type: String
+  userId: String
+}
+
+"""
+order by sum() on columns of table "withdrawal"
+"""
+input withdrawal_sum_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+}
+
+"""
+order by var_pop() on columns of table "withdrawal"
+"""
+input withdrawal_var_pop_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+}
+
+"""
+order by var_samp() on columns of table "withdrawal"
+"""
+input withdrawal_var_samp_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+}
+
+"""
+order by variance() on columns of table "withdrawal"
+"""
+input withdrawal_variance_order_by {
+  amount: order_by
+  eventId: order_by
+  id: order_by
+}

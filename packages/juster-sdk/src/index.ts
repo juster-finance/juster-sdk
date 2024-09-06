@@ -1,5 +1,2 @@
-export * from "./instruments/core";
-export * from "./instruments/pool";
-export * from "./estimators/core";
-export * from "./estimators/pool";
-export * from "./types";
+export { JusterDemo, JusterDemoResponseError, type AccessTokenFactory } from './justerDemo/index.js';
+export * as estimator from './estimator.js';
