@@ -1500,7 +1500,7 @@ export default {
                 4
             ]
         },
-        "currency_pair": {
+        "currencyPair": {
             "candles": [
                 25,
                 {
@@ -1586,7 +1586,7 @@ export default {
                 4
             ]
         },
-        "currency_pair_bool_exp": {
+        "currencyPair_bool_exp": {
             "_and": [
                 60
             ],
@@ -1624,7 +1624,7 @@ export default {
                 4
             ]
         },
-        "currency_pair_order_by": {
+        "currencyPair_order_by": {
             "candles_aggregate": [
                 26
             ],
@@ -1653,8 +1653,8 @@ export default {
                 4
             ]
         },
-        "currency_pair_select_column": {},
-        "currency_pair_stream_cursor_input": {
+        "currencyPair_select_column": {},
+        "currencyPair_stream_cursor_input": {
             "initial_value": [
                 64
             ],
@@ -1665,7 +1665,7 @@ export default {
                 4
             ]
         },
-        "currency_pair_stream_cursor_value_input": {
+        "currencyPair_stream_cursor_value_input": {
             "id": [
                 2
             ],
@@ -9210,7 +9210,7 @@ export default {
                 {
                     "distinct_on": [
                         62,
-                        "[currency_pair_select_column!]"
+                        "[currencyPair_select_column!]"
                     ],
                     "limit": [
                         2
@@ -9220,7 +9220,7 @@ export default {
                     ],
                     "order_by": [
                         61,
-                        "[currency_pair_order_by!]"
+                        "[currencyPair_order_by!]"
                     ],
                     "where": [
                         60
@@ -10055,7 +10055,7 @@ export default {
                 {
                     "distinct_on": [
                         62,
-                        "[currency_pair_select_column!]"
+                        "[currencyPair_select_column!]"
                     ],
                     "limit": [
                         2
@@ -10065,7 +10065,7 @@ export default {
                     ],
                     "order_by": [
                         61,
-                        "[currency_pair_order_by!]"
+                        "[currencyPair_order_by!]"
                     ],
                     "where": [
                         60
@@ -10081,7 +10081,7 @@ export default {
                     ]
                 }
             ],
-            "currency_pair_stream": [
+            "currencyPair_stream": [
                 59,
                 {
                     "batch_size": [
@@ -10090,7 +10090,7 @@ export default {
                     ],
                     "cursor": [
                         63,
-                        "[currency_pair_stream_cursor_input]!"
+                        "[currencyPair_stream_cursor_input]!"
                     ],
                     "where": [
                         60

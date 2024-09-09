@@ -38,7 +38,7 @@ export type bet_select_column = 'amount' | 'createdTime' | 'eventId' | 'id' | 'o
 export interface candle {
     close: Scalars['numeric']
     /** An object relationship */
-    currencyPair: currency_pair
+    currencyPair: currencyPair
     currencyPairId: Scalars['Int']
     high: Scalars['numeric']
     id: Scalars['bigint']
@@ -86,8 +86,8 @@ export interface claim {
 export type claim_select_column = 'amount' | 'eventId' | 'id' | 'poolId' | 'positionId' | 'userId' | 'withdrawn'
 
 
-/** columns and relationships of "currency_pair" */
-export interface currency_pair {
+/** columns and relationships of "currencyPair" */
+export interface currencyPair {
     /** An array relationship */
     candles: candle[]
     /** An array relationship */
@@ -99,12 +99,12 @@ export interface currency_pair {
     totalEvents: Scalars['Int']
     totalValueLocked: Scalars['numeric']
     totalVolume: Scalars['numeric']
-    __typename: 'currency_pair'
+    __typename: 'currencyPair'
 }
 
 
-/** select columns of table "currency_pair" */
-export type currency_pair_select_column = 'id' | 'symbol' | 'totalEvents' | 'totalValueLocked' | 'totalVolume'
+/** select columns of table "currencyPair" */
+export type currencyPair_select_column = 'id' | 'symbol' | 'totalEvents' | 'totalValueLocked' | 'totalVolume'
 
 
 /** ordering argument of a cursor */
@@ -308,7 +308,7 @@ export interface event {
     creator: user
     creatorId: Scalars['String']
     /** An object relationship */
-    currencyPair: currency_pair
+    currencyPair: currencyPair
     currencyPairId: Scalars['Int']
     /** An array relationship */
     deposits: deposit[]
@@ -418,7 +418,7 @@ export type pool_event_select_column = 'claimed' | 'eventId' | 'id' | 'lineId' |
 /** columns and relationships of "pool_line" */
 export interface pool_line {
     /** An object relationship */
-    currencyPair: currency_pair
+    currencyPair: currencyPair
     currencyPairId: Scalars['Int']
     /** An array relationship */
     events: pool_event[]
@@ -554,10 +554,10 @@ export interface query_root {
     claim: claim[]
     /** fetch data from the table: "claim" using primary key columns */
     claimByPk?: claim
-    /** fetch data from the table: "currency_pair" */
-    currencyPair: currency_pair[]
-    /** fetch data from the table: "currency_pair" using primary key columns */
-    currencyPairByPk?: currency_pair
+    /** fetch data from the table: "currencyPair" */
+    currencyPair: currencyPair[]
+    /** fetch data from the table: "currencyPair" using primary key columns */
+    currencyPairByPk?: currencyPair
     /** fetch data from the table: "deposit" */
     deposit: deposit[]
     /** fetch data from the table: "deposit" using primary key columns */
@@ -688,12 +688,12 @@ export interface subscription_root {
     claimByPk?: claim
     /** fetch data from the table in a streaming manner: "claim" */
     claim_stream: claim[]
-    /** fetch data from the table: "currency_pair" */
-    currencyPair: currency_pair[]
-    /** fetch data from the table: "currency_pair" using primary key columns */
-    currencyPairByPk?: currency_pair
-    /** fetch data from the table in a streaming manner: "currency_pair" */
-    currency_pair_stream: currency_pair[]
+    /** fetch data from the table: "currencyPair" */
+    currencyPair: currencyPair[]
+    /** fetch data from the table: "currencyPair" using primary key columns */
+    currencyPairByPk?: currencyPair
+    /** fetch data from the table in a streaming manner: "currencyPair" */
+    currencyPair_stream: currencyPair[]
     /** fetch data from the table: "deposit" */
     deposit: deposit[]
     /** fetch data from the table: "deposit" using primary key columns */
@@ -1036,7 +1036,7 @@ export interface bigint_comparison_exp {_eq?: (Scalars['bigint'] | null),_gt?: (
 export interface candleRequest{
     close?: boolean | number
     /** An object relationship */
-    currencyPair?: currency_pairRequest
+    currencyPair?: currencyPairRequest
     currencyPairId?: boolean | number
     high?: boolean | number
     id?: boolean | number
@@ -1063,7 +1063,7 @@ export interface candle_avg_order_by {close?: (order_by | null),currencyPairId?:
 
 
 /** Boolean expression to filter rows from the table "candle". All fields are combined with a logical 'AND'. */
-export interface candle_bool_exp {_and?: (candle_bool_exp[] | null),_not?: (candle_bool_exp | null),_or?: (candle_bool_exp[] | null),close?: (numeric_comparison_exp | null),currencyPair?: (currency_pair_bool_exp | null),currencyPairId?: (Int_comparison_exp | null),high?: (numeric_comparison_exp | null),id?: (bigint_comparison_exp | null),interval?: (String_comparison_exp | null),low?: (numeric_comparison_exp | null),open?: (numeric_comparison_exp | null),since?: (timestamptz_comparison_exp | null),source?: (String_comparison_exp | null),until?: (timestamptz_comparison_exp | null),volume?: (numeric_comparison_exp | null)}
+export interface candle_bool_exp {_and?: (candle_bool_exp[] | null),_not?: (candle_bool_exp | null),_or?: (candle_bool_exp[] | null),close?: (numeric_comparison_exp | null),currencyPair?: (currencyPair_bool_exp | null),currencyPairId?: (Int_comparison_exp | null),high?: (numeric_comparison_exp | null),id?: (bigint_comparison_exp | null),interval?: (String_comparison_exp | null),low?: (numeric_comparison_exp | null),open?: (numeric_comparison_exp | null),since?: (timestamptz_comparison_exp | null),source?: (String_comparison_exp | null),until?: (timestamptz_comparison_exp | null),volume?: (numeric_comparison_exp | null)}
 
 
 /** order by max() on columns of table "candle" */
@@ -1083,7 +1083,7 @@ source?: (order_by | null),until?: (order_by | null),volume?: (order_by | null)}
 
 
 /** Ordering options when selecting data from "candle". */
-export interface candle_order_by {close?: (order_by | null),currencyPair?: (currency_pair_order_by | null),currencyPairId?: (order_by | null),high?: (order_by | null),id?: (order_by | null),interval?: (order_by | null),low?: (order_by | null),open?: (order_by | null),since?: (order_by | null),source?: (order_by | null),until?: (order_by | null),volume?: (order_by | null)}
+export interface candle_order_by {close?: (order_by | null),currencyPair?: (currencyPair_order_by | null),currencyPairId?: (order_by | null),high?: (order_by | null),id?: (order_by | null),interval?: (order_by | null),low?: (order_by | null),open?: (order_by | null),since?: (order_by | null),source?: (order_by | null),until?: (order_by | null),volume?: (order_by | null)}
 
 
 /** order by stddev() on columns of table "candle" */
@@ -1228,8 +1228,8 @@ export interface claim_var_samp_order_by {amount?: (order_by | null),eventId?: (
 export interface claim_variance_order_by {amount?: (order_by | null),eventId?: (order_by | null),id?: (order_by | null),positionId?: (order_by | null)}
 
 
-/** columns and relationships of "currency_pair" */
-export interface currency_pairRequest{
+/** columns and relationships of "currencyPair" */
+export interface currencyPairRequest{
     /** An array relationship */
     candles?: [{
     /** distinct select on columns */
@@ -1276,24 +1276,24 @@ export interface currency_pairRequest{
 }
 
 
-/** Boolean expression to filter rows from the table "currency_pair". All fields are combined with a logical 'AND'. */
-export interface currency_pair_bool_exp {_and?: (currency_pair_bool_exp[] | null),_not?: (currency_pair_bool_exp | null),_or?: (currency_pair_bool_exp[] | null),candles?: (candle_bool_exp | null),events?: (event_bool_exp | null),id?: (Int_comparison_exp | null),poolLines?: (pool_line_bool_exp | null),symbol?: (String_comparison_exp | null),totalEvents?: (Int_comparison_exp | null),totalValueLocked?: (numeric_comparison_exp | null),totalVolume?: (numeric_comparison_exp | null)}
+/** Boolean expression to filter rows from the table "currencyPair". All fields are combined with a logical 'AND'. */
+export interface currencyPair_bool_exp {_and?: (currencyPair_bool_exp[] | null),_not?: (currencyPair_bool_exp | null),_or?: (currencyPair_bool_exp[] | null),candles?: (candle_bool_exp | null),events?: (event_bool_exp | null),id?: (Int_comparison_exp | null),poolLines?: (pool_line_bool_exp | null),symbol?: (String_comparison_exp | null),totalEvents?: (Int_comparison_exp | null),totalValueLocked?: (numeric_comparison_exp | null),totalVolume?: (numeric_comparison_exp | null)}
 
 
-/** Ordering options when selecting data from "currency_pair". */
-export interface currency_pair_order_by {candles_aggregate?: (candle_aggregate_order_by | null),events_aggregate?: (event_aggregate_order_by | null),id?: (order_by | null),poolLines_aggregate?: (pool_line_aggregate_order_by | null),symbol?: (order_by | null),totalEvents?: (order_by | null),totalValueLocked?: (order_by | null),totalVolume?: (order_by | null)}
+/** Ordering options when selecting data from "currencyPair". */
+export interface currencyPair_order_by {candles_aggregate?: (candle_aggregate_order_by | null),events_aggregate?: (event_aggregate_order_by | null),id?: (order_by | null),poolLines_aggregate?: (pool_line_aggregate_order_by | null),symbol?: (order_by | null),totalEvents?: (order_by | null),totalValueLocked?: (order_by | null),totalVolume?: (order_by | null)}
 
 
-/** Streaming cursor of the table "currency_pair" */
-export interface currency_pair_stream_cursor_input {
+/** Streaming cursor of the table "currencyPair" */
+export interface currencyPair_stream_cursor_input {
 /** Stream column input with initial value */
-initial_value: currency_pair_stream_cursor_value_input,
+initial_value: currencyPair_stream_cursor_value_input,
 /** cursor ordering */
 ordering?: (cursor_ordering | null)}
 
 
 /** Initial value of the column from where the streaming should start */
-export interface currency_pair_stream_cursor_value_input {id?: (Scalars['Int'] | null),symbol?: (Scalars['String'] | null),totalEvents?: (Scalars['Int'] | null),totalValueLocked?: (Scalars['numeric'] | null),totalVolume?: (Scalars['numeric'] | null)}
+export interface currencyPair_stream_cursor_value_input {id?: (Scalars['Int'] | null),symbol?: (Scalars['String'] | null),totalEvents?: (Scalars['Int'] | null),totalValueLocked?: (Scalars['numeric'] | null),totalVolume?: (Scalars['numeric'] | null)}
 
 
 /** columns and relationships of "deposit" */
@@ -1793,7 +1793,7 @@ export interface eventRequest{
     creator?: userRequest
     creatorId?: boolean | number
     /** An object relationship */
-    currencyPair?: currency_pairRequest
+    currencyPair?: currencyPairRequest
     currencyPairId?: boolean | number
     /** An array relationship */
     deposits?: [{
@@ -1873,7 +1873,7 @@ export interface event_avg_order_by {closedDynamics?: (order_by | null),closedRa
 
 
 /** Boolean expression to filter rows from the table "event". All fields are combined with a logical 'AND'. */
-export interface event_bool_exp {_and?: (event_bool_exp[] | null),_not?: (event_bool_exp | null),_or?: (event_bool_exp[] | null),bets?: (bet_bool_exp | null),betsCloseTime?: (timestamptz_comparison_exp | null),closedDynamics?: (numeric_comparison_exp | null),closedOracleTime?: (timestamptz_comparison_exp | null),closedRate?: (numeric_comparison_exp | null),createdTime?: (timestamptz_comparison_exp | null),creator?: (user_bool_exp | null),creatorId?: (String_comparison_exp | null),currencyPair?: (currency_pair_bool_exp | null),currencyPairId?: (Int_comparison_exp | null),deposits?: (deposit_bool_exp | null),id?: (bigint_comparison_exp | null),liquidityPercent?: (numeric_comparison_exp | null),measureOracleStartTime?: (timestamptz_comparison_exp | null),measurePeriod?: (bigint_comparison_exp | null),poolAboveEq?: (numeric_comparison_exp | null),poolBelow?: (numeric_comparison_exp | null),poolEventData?: (pool_event_bool_exp | null),positions?: (position_bool_exp | null),startRate?: (numeric_comparison_exp | null),status?: (String_comparison_exp | null),targetDynamics?: (numeric_comparison_exp | null),totalBetsAmount?: (numeric_comparison_exp | null),totalLiquidityProvided?: (numeric_comparison_exp | null),totalLiquidityShares?: (numeric_comparison_exp | null),totalValueLocked?: (numeric_comparison_exp | null),winnerBets?: (String_comparison_exp | null),withdrawals?: (withdrawal_bool_exp | null)}
+export interface event_bool_exp {_and?: (event_bool_exp[] | null),_not?: (event_bool_exp | null),_or?: (event_bool_exp[] | null),bets?: (bet_bool_exp | null),betsCloseTime?: (timestamptz_comparison_exp | null),closedDynamics?: (numeric_comparison_exp | null),closedOracleTime?: (timestamptz_comparison_exp | null),closedRate?: (numeric_comparison_exp | null),createdTime?: (timestamptz_comparison_exp | null),creator?: (user_bool_exp | null),creatorId?: (String_comparison_exp | null),currencyPair?: (currencyPair_bool_exp | null),currencyPairId?: (Int_comparison_exp | null),deposits?: (deposit_bool_exp | null),id?: (bigint_comparison_exp | null),liquidityPercent?: (numeric_comparison_exp | null),measureOracleStartTime?: (timestamptz_comparison_exp | null),measurePeriod?: (bigint_comparison_exp | null),poolAboveEq?: (numeric_comparison_exp | null),poolBelow?: (numeric_comparison_exp | null),poolEventData?: (pool_event_bool_exp | null),positions?: (position_bool_exp | null),startRate?: (numeric_comparison_exp | null),status?: (String_comparison_exp | null),targetDynamics?: (numeric_comparison_exp | null),totalBetsAmount?: (numeric_comparison_exp | null),totalLiquidityProvided?: (numeric_comparison_exp | null),totalLiquidityShares?: (numeric_comparison_exp | null),totalValueLocked?: (numeric_comparison_exp | null),winnerBets?: (String_comparison_exp | null),withdrawals?: (withdrawal_bool_exp | null)}
 
 
 /** order by max() on columns of table "event" */
@@ -1893,7 +1893,7 @@ winnerBets?: (order_by | null)}
 
 
 /** Ordering options when selecting data from "event". */
-export interface event_order_by {betsCloseTime?: (order_by | null),bets_aggregate?: (bet_aggregate_order_by | null),closedDynamics?: (order_by | null),closedOracleTime?: (order_by | null),closedRate?: (order_by | null),createdTime?: (order_by | null),creator?: (user_order_by | null),creatorId?: (order_by | null),currencyPair?: (currency_pair_order_by | null),currencyPairId?: (order_by | null),deposits_aggregate?: (deposit_aggregate_order_by | null),id?: (order_by | null),liquidityPercent?: (order_by | null),measureOracleStartTime?: (order_by | null),measurePeriod?: (order_by | null),poolAboveEq?: (order_by | null),poolBelow?: (order_by | null),poolEventData_aggregate?: (pool_event_aggregate_order_by | null),positions_aggregate?: (position_aggregate_order_by | null),startRate?: (order_by | null),status?: (order_by | null),targetDynamics?: (order_by | null),totalBetsAmount?: (order_by | null),totalLiquidityProvided?: (order_by | null),totalLiquidityShares?: (order_by | null),totalValueLocked?: (order_by | null),winnerBets?: (order_by | null),withdrawals_aggregate?: (withdrawal_aggregate_order_by | null)}
+export interface event_order_by {betsCloseTime?: (order_by | null),bets_aggregate?: (bet_aggregate_order_by | null),closedDynamics?: (order_by | null),closedOracleTime?: (order_by | null),closedRate?: (order_by | null),createdTime?: (order_by | null),creator?: (user_order_by | null),creatorId?: (order_by | null),currencyPair?: (currencyPair_order_by | null),currencyPairId?: (order_by | null),deposits_aggregate?: (deposit_aggregate_order_by | null),id?: (order_by | null),liquidityPercent?: (order_by | null),measureOracleStartTime?: (order_by | null),measurePeriod?: (order_by | null),poolAboveEq?: (order_by | null),poolBelow?: (order_by | null),poolEventData_aggregate?: (pool_event_aggregate_order_by | null),positions_aggregate?: (position_aggregate_order_by | null),startRate?: (order_by | null),status?: (order_by | null),targetDynamics?: (order_by | null),totalBetsAmount?: (order_by | null),totalLiquidityProvided?: (order_by | null),totalLiquidityShares?: (order_by | null),totalValueLocked?: (order_by | null),winnerBets?: (order_by | null),withdrawals_aggregate?: (withdrawal_aggregate_order_by | null)}
 
 
 /** order by stddev() on columns of table "event" */
@@ -2195,7 +2195,7 @@ export interface pool_event_variance_order_by {claimed?: (order_by | null),event
 /** columns and relationships of "pool_line" */
 export interface pool_lineRequest{
     /** An object relationship */
-    currencyPair?: currency_pairRequest
+    currencyPair?: currencyPairRequest
     currencyPairId?: boolean | number
     /** An array relationship */
     events?: [{
@@ -2236,7 +2236,7 @@ export interface pool_line_avg_order_by {currencyPairId?: (order_by | null),line
 
 
 /** Boolean expression to filter rows from the table "pool_line". All fields are combined with a logical 'AND'. */
-export interface pool_line_bool_exp {_and?: (pool_line_bool_exp[] | null),_not?: (pool_line_bool_exp | null),_or?: (pool_line_bool_exp[] | null),currencyPair?: (currency_pair_bool_exp | null),currencyPairId?: (Int_comparison_exp | null),events?: (pool_event_bool_exp | null),isPaused?: (Boolean_comparison_exp | null),lastBetsCloseTime?: (timestamptz_comparison_exp | null),lineId?: (Int_comparison_exp | null),liquidityPercent?: (numeric_comparison_exp | null),maxEvents?: (Int_comparison_exp | null),measurePeriod?: (bigint_comparison_exp | null),pool?: (pool_bool_exp | null),poolId?: (String_comparison_exp | null),poolLineId?: (String_comparison_exp | null),rateAboveEq?: (numeric_comparison_exp | null),rateBelow?: (numeric_comparison_exp | null),targetDynamics?: (numeric_comparison_exp | null)}
+export interface pool_line_bool_exp {_and?: (pool_line_bool_exp[] | null),_not?: (pool_line_bool_exp | null),_or?: (pool_line_bool_exp[] | null),currencyPair?: (currencyPair_bool_exp | null),currencyPairId?: (Int_comparison_exp | null),events?: (pool_event_bool_exp | null),isPaused?: (Boolean_comparison_exp | null),lastBetsCloseTime?: (timestamptz_comparison_exp | null),lineId?: (Int_comparison_exp | null),liquidityPercent?: (numeric_comparison_exp | null),maxEvents?: (Int_comparison_exp | null),measurePeriod?: (bigint_comparison_exp | null),pool?: (pool_bool_exp | null),poolId?: (String_comparison_exp | null),poolLineId?: (String_comparison_exp | null),rateAboveEq?: (numeric_comparison_exp | null),rateBelow?: (numeric_comparison_exp | null),targetDynamics?: (numeric_comparison_exp | null)}
 
 
 /** order by max() on columns of table "pool_line" */
@@ -2248,7 +2248,7 @@ export interface pool_line_min_order_by {currencyPairId?: (order_by | null),last
 
 
 /** Ordering options when selecting data from "pool_line". */
-export interface pool_line_order_by {currencyPair?: (currency_pair_order_by | null),currencyPairId?: (order_by | null),events_aggregate?: (pool_event_aggregate_order_by | null),isPaused?: (order_by | null),lastBetsCloseTime?: (order_by | null),lineId?: (order_by | null),liquidityPercent?: (order_by | null),maxEvents?: (order_by | null),measurePeriod?: (order_by | null),pool?: (pool_order_by | null),poolId?: (order_by | null),poolLineId?: (order_by | null),rateAboveEq?: (order_by | null),rateBelow?: (order_by | null),targetDynamics?: (order_by | null)}
+export interface pool_line_order_by {currencyPair?: (currencyPair_order_by | null),currencyPairId?: (order_by | null),events_aggregate?: (pool_event_aggregate_order_by | null),isPaused?: (order_by | null),lastBetsCloseTime?: (order_by | null),lineId?: (order_by | null),liquidityPercent?: (order_by | null),maxEvents?: (order_by | null),measurePeriod?: (order_by | null),pool?: (pool_order_by | null),poolId?: (order_by | null),poolLineId?: (order_by | null),rateAboveEq?: (order_by | null),rateBelow?: (order_by | null),targetDynamics?: (order_by | null)}
 
 
 /** order by stddev() on columns of table "pool_line" */
@@ -2653,20 +2653,20 @@ export interface query_rootRequest{
     where?: (claim_bool_exp | null)},claimRequest] | claimRequest
     /** fetch data from the table: "claim" using primary key columns */
     claimByPk?: [{id: Scalars['Int']},claimRequest]
-    /** fetch data from the table: "currency_pair" */
+    /** fetch data from the table: "currencyPair" */
     currencyPair?: [{
     /** distinct select on columns */
-    distinct_on?: (currency_pair_select_column[] | null),
+    distinct_on?: (currencyPair_select_column[] | null),
     /** limit the number of rows returned */
     limit?: (Scalars['Int'] | null),
     /** skip the first n rows. Use only with order_by */
     offset?: (Scalars['Int'] | null),
     /** sort the rows by one or more columns */
-    order_by?: (currency_pair_order_by[] | null),
+    order_by?: (currencyPair_order_by[] | null),
     /** filter the rows returned */
-    where?: (currency_pair_bool_exp | null)},currency_pairRequest] | currency_pairRequest
-    /** fetch data from the table: "currency_pair" using primary key columns */
-    currencyPairByPk?: [{id: Scalars['Int']},currency_pairRequest]
+    where?: (currencyPair_bool_exp | null)},currencyPairRequest] | currencyPairRequest
+    /** fetch data from the table: "currencyPair" using primary key columns */
+    currencyPairByPk?: [{id: Scalars['Int']},currencyPairRequest]
     /** fetch data from the table: "deposit" */
     deposit?: [{
     /** distinct select on columns */
@@ -3110,28 +3110,28 @@ export interface subscription_rootRequest{
     cursor: (claim_stream_cursor_input | null)[],
     /** filter the rows returned */
     where?: (claim_bool_exp | null)},claimRequest]
-    /** fetch data from the table: "currency_pair" */
+    /** fetch data from the table: "currencyPair" */
     currencyPair?: [{
     /** distinct select on columns */
-    distinct_on?: (currency_pair_select_column[] | null),
+    distinct_on?: (currencyPair_select_column[] | null),
     /** limit the number of rows returned */
     limit?: (Scalars['Int'] | null),
     /** skip the first n rows. Use only with order_by */
     offset?: (Scalars['Int'] | null),
     /** sort the rows by one or more columns */
-    order_by?: (currency_pair_order_by[] | null),
+    order_by?: (currencyPair_order_by[] | null),
     /** filter the rows returned */
-    where?: (currency_pair_bool_exp | null)},currency_pairRequest] | currency_pairRequest
-    /** fetch data from the table: "currency_pair" using primary key columns */
-    currencyPairByPk?: [{id: Scalars['Int']},currency_pairRequest]
-    /** fetch data from the table in a streaming manner: "currency_pair" */
-    currency_pair_stream?: [{
+    where?: (currencyPair_bool_exp | null)},currencyPairRequest] | currencyPairRequest
+    /** fetch data from the table: "currencyPair" using primary key columns */
+    currencyPairByPk?: [{id: Scalars['Int']},currencyPairRequest]
+    /** fetch data from the table in a streaming manner: "currencyPair" */
+    currencyPair_stream?: [{
     /** maximum number of rows returned in a single batch */
     batch_size: Scalars['Int'],
     /** cursor to stream the results returned by the query */
-    cursor: (currency_pair_stream_cursor_input | null)[],
+    cursor: (currencyPair_stream_cursor_input | null)[],
     /** filter the rows returned */
-    where?: (currency_pair_bool_exp | null)},currency_pairRequest]
+    where?: (currencyPair_bool_exp | null)},currencyPairRequest]
     /** fetch data from the table: "deposit" */
     deposit?: [{
     /** distinct select on columns */
@@ -3942,10 +3942,10 @@ export const isclaim = (obj?: { __typename?: any } | null): obj is claim => {
 
 
 
-const currency_pair_possibleTypes: string[] = ['currency_pair']
-export const iscurrency_pair = (obj?: { __typename?: any } | null): obj is currency_pair => {
-  if (!obj?.__typename) throw new Error('__typename is missing in "iscurrency_pair"')
-  return currency_pair_possibleTypes.includes(obj.__typename)
+const currencyPair_possibleTypes: string[] = ['currencyPair']
+export const iscurrencyPair = (obj?: { __typename?: any } | null): obj is currencyPair => {
+  if (!obj?.__typename) throw new Error('__typename is missing in "iscurrencyPair"')
+  return currencyPair_possibleTypes.includes(obj.__typename)
 }
 
 
@@ -4197,7 +4197,7 @@ export interface candlePromiseChain{
     close: ({get: (request?: boolean|number, defaultValue?: Scalars['numeric']) => Promise<Scalars['numeric']>}),
     
 /** An object relationship */
-currencyPair: (currency_pairPromiseChain & {get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>) => Promise<FieldsSelection<currency_pair, R>>}),
+currencyPair: (currencyPairPromiseChain & {get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>) => Promise<FieldsSelection<currencyPair, R>>}),
     currencyPairId: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Promise<Scalars['Int']>}),
     high: ({get: (request?: boolean|number, defaultValue?: Scalars['numeric']) => Promise<Scalars['numeric']>}),
     id: ({get: (request?: boolean|number, defaultValue?: Scalars['bigint']) => Promise<Scalars['bigint']>}),
@@ -4220,7 +4220,7 @@ export interface candleObservableChain{
     close: ({get: (request?: boolean|number, defaultValue?: Scalars['numeric']) => Observable<Scalars['numeric']>}),
     
 /** An object relationship */
-currencyPair: (currency_pairObservableChain & {get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>) => Observable<FieldsSelection<currency_pair, R>>}),
+currencyPair: (currencyPairObservableChain & {get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>) => Observable<FieldsSelection<currencyPair, R>>}),
     currencyPairId: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Observable<Scalars['Int']>}),
     high: ({get: (request?: boolean|number, defaultValue?: Scalars['numeric']) => Observable<Scalars['numeric']>}),
     id: ({get: (request?: boolean|number, defaultValue?: Scalars['bigint']) => Observable<Scalars['bigint']>}),
@@ -4312,8 +4312,8 @@ user: (userObservableChain & {get: <R extends userRequest>(request: R, defaultVa
 }
 
 
-/** columns and relationships of "currency_pair" */
-export interface currency_pairPromiseChain{
+/** columns and relationships of "currencyPair" */
+export interface currencyPairPromiseChain{
     
 /** An array relationship */
 candles: ((args?: {
@@ -4361,8 +4361,8 @@ where?: (pool_line_bool_exp | null)}) => {get: <R extends pool_lineRequest>(requ
 }
 
 
-/** columns and relationships of "currency_pair" */
-export interface currency_pairObservableChain{
+/** columns and relationships of "currencyPair" */
+export interface currencyPairObservableChain{
     
 /** An array relationship */
 candles: ((args?: {
@@ -4762,7 +4762,7 @@ creator: (userPromiseChain & {get: <R extends userRequest>(request: R, defaultVa
     creatorId: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Promise<Scalars['String']>}),
     
 /** An object relationship */
-currencyPair: (currency_pairPromiseChain & {get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>) => Promise<FieldsSelection<currency_pair, R>>}),
+currencyPair: (currencyPairPromiseChain & {get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>) => Promise<FieldsSelection<currencyPair, R>>}),
     currencyPairId: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Promise<Scalars['Int']>}),
     
 /** An array relationship */
@@ -4863,7 +4863,7 @@ creator: (userObservableChain & {get: <R extends userRequest>(request: R, defaul
     creatorId: ({get: (request?: boolean|number, defaultValue?: Scalars['String']) => Observable<Scalars['String']>}),
     
 /** An object relationship */
-currencyPair: (currency_pairObservableChain & {get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>) => Observable<FieldsSelection<currency_pair, R>>}),
+currencyPair: (currencyPairObservableChain & {get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>) => Observable<FieldsSelection<currencyPair, R>>}),
     currencyPairId: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Observable<Scalars['Int']>}),
     
 /** An array relationship */
@@ -5240,7 +5240,7 @@ where?: (pool_state_bool_exp | null)}) => {get: <R extends pool_stateRequest>(re
 export interface pool_linePromiseChain{
     
 /** An object relationship */
-currencyPair: (currency_pairPromiseChain & {get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>) => Promise<FieldsSelection<currency_pair, R>>}),
+currencyPair: (currencyPairPromiseChain & {get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>) => Promise<FieldsSelection<currencyPair, R>>}),
     currencyPairId: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Promise<Scalars['Int']>}),
     
 /** An array relationship */
@@ -5276,7 +5276,7 @@ pool: (poolPromiseChain & {get: <R extends poolRequest>(request: R, defaultValue
 export interface pool_lineObservableChain{
     
 /** An object relationship */
-currencyPair: (currency_pairObservableChain & {get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>) => Observable<FieldsSelection<currency_pair, R>>}),
+currencyPair: (currencyPairObservableChain & {get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>) => Observable<FieldsSelection<currencyPair, R>>}),
     currencyPairId: ({get: (request?: boolean|number, defaultValue?: Scalars['Int']) => Observable<Scalars['Int']>}),
     
 /** An array relationship */
@@ -5581,21 +5581,21 @@ where?: (claim_bool_exp | null)}) => {get: <R extends claimRequest>(request: R, 
 /** fetch data from the table: "claim" using primary key columns */
 claimByPk: ((args: {id: Scalars['Int']}) => claimPromiseChain & {get: <R extends claimRequest>(request: R, defaultValue?: (FieldsSelection<claim, R> | undefined)) => Promise<(FieldsSelection<claim, R> | undefined)>}),
     
-/** fetch data from the table: "currency_pair" */
+/** fetch data from the table: "currencyPair" */
 currencyPair: ((args?: {
 /** distinct select on columns */
-distinct_on?: (currency_pair_select_column[] | null),
+distinct_on?: (currencyPair_select_column[] | null),
 /** limit the number of rows returned */
 limit?: (Scalars['Int'] | null),
 /** skip the first n rows. Use only with order_by */
 offset?: (Scalars['Int'] | null),
 /** sort the rows by one or more columns */
-order_by?: (currency_pair_order_by[] | null),
+order_by?: (currencyPair_order_by[] | null),
 /** filter the rows returned */
-where?: (currency_pair_bool_exp | null)}) => {get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>[]) => Promise<FieldsSelection<currency_pair, R>[]>})&({get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>[]) => Promise<FieldsSelection<currency_pair, R>[]>}),
+where?: (currencyPair_bool_exp | null)}) => {get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>[]) => Promise<FieldsSelection<currencyPair, R>[]>})&({get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>[]) => Promise<FieldsSelection<currencyPair, R>[]>}),
     
-/** fetch data from the table: "currency_pair" using primary key columns */
-currencyPairByPk: ((args: {id: Scalars['Int']}) => currency_pairPromiseChain & {get: <R extends currency_pairRequest>(request: R, defaultValue?: (FieldsSelection<currency_pair, R> | undefined)) => Promise<(FieldsSelection<currency_pair, R> | undefined)>}),
+/** fetch data from the table: "currencyPair" using primary key columns */
+currencyPairByPk: ((args: {id: Scalars['Int']}) => currencyPairPromiseChain & {get: <R extends currencyPairRequest>(request: R, defaultValue?: (FieldsSelection<currencyPair, R> | undefined)) => Promise<(FieldsSelection<currencyPair, R> | undefined)>}),
     
 /** fetch data from the table: "deposit" */
 deposit: ((args?: {
@@ -6001,21 +6001,21 @@ where?: (claim_bool_exp | null)}) => {get: <R extends claimRequest>(request: R, 
 /** fetch data from the table: "claim" using primary key columns */
 claimByPk: ((args: {id: Scalars['Int']}) => claimObservableChain & {get: <R extends claimRequest>(request: R, defaultValue?: (FieldsSelection<claim, R> | undefined)) => Observable<(FieldsSelection<claim, R> | undefined)>}),
     
-/** fetch data from the table: "currency_pair" */
+/** fetch data from the table: "currencyPair" */
 currencyPair: ((args?: {
 /** distinct select on columns */
-distinct_on?: (currency_pair_select_column[] | null),
+distinct_on?: (currencyPair_select_column[] | null),
 /** limit the number of rows returned */
 limit?: (Scalars['Int'] | null),
 /** skip the first n rows. Use only with order_by */
 offset?: (Scalars['Int'] | null),
 /** sort the rows by one or more columns */
-order_by?: (currency_pair_order_by[] | null),
+order_by?: (currencyPair_order_by[] | null),
 /** filter the rows returned */
-where?: (currency_pair_bool_exp | null)}) => {get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>[]) => Observable<FieldsSelection<currency_pair, R>[]>})&({get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>[]) => Observable<FieldsSelection<currency_pair, R>[]>}),
+where?: (currencyPair_bool_exp | null)}) => {get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>[]) => Observable<FieldsSelection<currencyPair, R>[]>})&({get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>[]) => Observable<FieldsSelection<currencyPair, R>[]>}),
     
-/** fetch data from the table: "currency_pair" using primary key columns */
-currencyPairByPk: ((args: {id: Scalars['Int']}) => currency_pairObservableChain & {get: <R extends currency_pairRequest>(request: R, defaultValue?: (FieldsSelection<currency_pair, R> | undefined)) => Observable<(FieldsSelection<currency_pair, R> | undefined)>}),
+/** fetch data from the table: "currencyPair" using primary key columns */
+currencyPairByPk: ((args: {id: Scalars['Int']}) => currencyPairObservableChain & {get: <R extends currencyPairRequest>(request: R, defaultValue?: (FieldsSelection<currencyPair, R> | undefined)) => Observable<(FieldsSelection<currencyPair, R> | undefined)>}),
     
 /** fetch data from the table: "deposit" */
 deposit: ((args?: {
@@ -6480,30 +6480,30 @@ cursor: (claim_stream_cursor_input | null)[],
 /** filter the rows returned */
 where?: (claim_bool_exp | null)}) => {get: <R extends claimRequest>(request: R, defaultValue?: FieldsSelection<claim, R>[]) => Promise<FieldsSelection<claim, R>[]>}),
     
-/** fetch data from the table: "currency_pair" */
+/** fetch data from the table: "currencyPair" */
 currencyPair: ((args?: {
 /** distinct select on columns */
-distinct_on?: (currency_pair_select_column[] | null),
+distinct_on?: (currencyPair_select_column[] | null),
 /** limit the number of rows returned */
 limit?: (Scalars['Int'] | null),
 /** skip the first n rows. Use only with order_by */
 offset?: (Scalars['Int'] | null),
 /** sort the rows by one or more columns */
-order_by?: (currency_pair_order_by[] | null),
+order_by?: (currencyPair_order_by[] | null),
 /** filter the rows returned */
-where?: (currency_pair_bool_exp | null)}) => {get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>[]) => Promise<FieldsSelection<currency_pair, R>[]>})&({get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>[]) => Promise<FieldsSelection<currency_pair, R>[]>}),
+where?: (currencyPair_bool_exp | null)}) => {get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>[]) => Promise<FieldsSelection<currencyPair, R>[]>})&({get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>[]) => Promise<FieldsSelection<currencyPair, R>[]>}),
     
-/** fetch data from the table: "currency_pair" using primary key columns */
-currencyPairByPk: ((args: {id: Scalars['Int']}) => currency_pairPromiseChain & {get: <R extends currency_pairRequest>(request: R, defaultValue?: (FieldsSelection<currency_pair, R> | undefined)) => Promise<(FieldsSelection<currency_pair, R> | undefined)>}),
+/** fetch data from the table: "currencyPair" using primary key columns */
+currencyPairByPk: ((args: {id: Scalars['Int']}) => currencyPairPromiseChain & {get: <R extends currencyPairRequest>(request: R, defaultValue?: (FieldsSelection<currencyPair, R> | undefined)) => Promise<(FieldsSelection<currencyPair, R> | undefined)>}),
     
-/** fetch data from the table in a streaming manner: "currency_pair" */
-currency_pair_stream: ((args: {
+/** fetch data from the table in a streaming manner: "currencyPair" */
+currencyPair_stream: ((args: {
 /** maximum number of rows returned in a single batch */
 batch_size: Scalars['Int'],
 /** cursor to stream the results returned by the query */
-cursor: (currency_pair_stream_cursor_input | null)[],
+cursor: (currencyPair_stream_cursor_input | null)[],
 /** filter the rows returned */
-where?: (currency_pair_bool_exp | null)}) => {get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>[]) => Promise<FieldsSelection<currency_pair, R>[]>}),
+where?: (currencyPair_bool_exp | null)}) => {get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>[]) => Promise<FieldsSelection<currencyPair, R>[]>}),
     
 /** fetch data from the table: "deposit" */
 deposit: ((args?: {
@@ -7143,30 +7143,30 @@ cursor: (claim_stream_cursor_input | null)[],
 /** filter the rows returned */
 where?: (claim_bool_exp | null)}) => {get: <R extends claimRequest>(request: R, defaultValue?: FieldsSelection<claim, R>[]) => Observable<FieldsSelection<claim, R>[]>}),
     
-/** fetch data from the table: "currency_pair" */
+/** fetch data from the table: "currencyPair" */
 currencyPair: ((args?: {
 /** distinct select on columns */
-distinct_on?: (currency_pair_select_column[] | null),
+distinct_on?: (currencyPair_select_column[] | null),
 /** limit the number of rows returned */
 limit?: (Scalars['Int'] | null),
 /** skip the first n rows. Use only with order_by */
 offset?: (Scalars['Int'] | null),
 /** sort the rows by one or more columns */
-order_by?: (currency_pair_order_by[] | null),
+order_by?: (currencyPair_order_by[] | null),
 /** filter the rows returned */
-where?: (currency_pair_bool_exp | null)}) => {get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>[]) => Observable<FieldsSelection<currency_pair, R>[]>})&({get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>[]) => Observable<FieldsSelection<currency_pair, R>[]>}),
+where?: (currencyPair_bool_exp | null)}) => {get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>[]) => Observable<FieldsSelection<currencyPair, R>[]>})&({get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>[]) => Observable<FieldsSelection<currencyPair, R>[]>}),
     
-/** fetch data from the table: "currency_pair" using primary key columns */
-currencyPairByPk: ((args: {id: Scalars['Int']}) => currency_pairObservableChain & {get: <R extends currency_pairRequest>(request: R, defaultValue?: (FieldsSelection<currency_pair, R> | undefined)) => Observable<(FieldsSelection<currency_pair, R> | undefined)>}),
+/** fetch data from the table: "currencyPair" using primary key columns */
+currencyPairByPk: ((args: {id: Scalars['Int']}) => currencyPairObservableChain & {get: <R extends currencyPairRequest>(request: R, defaultValue?: (FieldsSelection<currencyPair, R> | undefined)) => Observable<(FieldsSelection<currencyPair, R> | undefined)>}),
     
-/** fetch data from the table in a streaming manner: "currency_pair" */
-currency_pair_stream: ((args: {
+/** fetch data from the table in a streaming manner: "currencyPair" */
+currencyPair_stream: ((args: {
 /** maximum number of rows returned in a single batch */
 batch_size: Scalars['Int'],
 /** cursor to stream the results returned by the query */
-cursor: (currency_pair_stream_cursor_input | null)[],
+cursor: (currencyPair_stream_cursor_input | null)[],
 /** filter the rows returned */
-where?: (currency_pair_bool_exp | null)}) => {get: <R extends currency_pairRequest>(request: R, defaultValue?: FieldsSelection<currency_pair, R>[]) => Observable<FieldsSelection<currency_pair, R>[]>}),
+where?: (currencyPair_bool_exp | null)}) => {get: <R extends currencyPairRequest>(request: R, defaultValue?: FieldsSelection<currencyPair, R>[]) => Observable<FieldsSelection<currencyPair, R>[]>}),
     
 /** fetch data from the table: "deposit" */
 deposit: ((args?: {

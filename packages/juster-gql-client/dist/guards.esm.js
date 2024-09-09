@@ -23,10 +23,10 @@ export var isclaim = function(obj) {
 
 
 
-var currency_pair_possibleTypes = ['currency_pair']
-export var iscurrency_pair = function(obj) {
-  if (!obj || !obj.__typename) throw new Error('__typename is missing in "iscurrency_pair"')
-  return currency_pair_possibleTypes.includes(obj.__typename)
+var currencyPair_possibleTypes = ['currencyPair']
+export var iscurrencyPair = function(obj) {
+  if (!obj || !obj.__typename) throw new Error('__typename is missing in "iscurrencyPair"')
+  return currencyPair_possibleTypes.includes(obj.__typename)
 }
 
 

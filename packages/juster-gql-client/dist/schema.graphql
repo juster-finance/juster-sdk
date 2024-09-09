@@ -357,7 +357,7 @@ type candle {
   close: numeric!
 
   """An object relationship"""
-  currencyPair: currency_pair!
+  currencyPair: currencyPair!
   currencyPairId: Int!
   high: numeric!
   id: bigint!
@@ -414,7 +414,7 @@ input candle_bool_exp {
   _not: candle_bool_exp
   _or: [candle_bool_exp!]
   close: numeric_comparison_exp
-  currencyPair: currency_pair_bool_exp
+  currencyPair: currencyPair_bool_exp
   currencyPairId: Int_comparison_exp
   high: numeric_comparison_exp
   id: bigint_comparison_exp
@@ -476,7 +476,7 @@ input candle_min_order_by {
 """Ordering options when selecting data from "candle"."""
 input candle_order_by {
   close: order_by
-  currencyPair: currency_pair_order_by
+  currencyPair: currencyPair_order_by
   currencyPairId: order_by
   high: order_by
   id: order_by
@@ -900,9 +900,9 @@ input claim_variance_order_by {
 }
 
 """
-columns and relationships of "currency_pair"
+columns and relationships of "currencyPair"
 """
-type currency_pair {
+type currencyPair {
   """An array relationship"""
   candles(
     """distinct select on columns"""
@@ -964,12 +964,12 @@ type currency_pair {
 }
 
 """
-Boolean expression to filter rows from the table "currency_pair". All fields are combined with a logical 'AND'.
+Boolean expression to filter rows from the table "currencyPair". All fields are combined with a logical 'AND'.
 """
-input currency_pair_bool_exp {
-  _and: [currency_pair_bool_exp!]
-  _not: currency_pair_bool_exp
-  _or: [currency_pair_bool_exp!]
+input currencyPair_bool_exp {
+  _and: [currencyPair_bool_exp!]
+  _not: currencyPair_bool_exp
+  _or: [currencyPair_bool_exp!]
   candles: candle_bool_exp
   events: event_bool_exp
   id: Int_comparison_exp
@@ -980,8 +980,8 @@ input currency_pair_bool_exp {
   totalVolume: numeric_comparison_exp
 }
 
-"""Ordering options when selecting data from "currency_pair"."""
-input currency_pair_order_by {
+"""Ordering options when selecting data from "currencyPair"."""
+input currencyPair_order_by {
   candles_aggregate: candle_aggregate_order_by
   events_aggregate: event_aggregate_order_by
   id: order_by
@@ -993,9 +993,9 @@ input currency_pair_order_by {
 }
 
 """
-select columns of table "currency_pair"
+select columns of table "currencyPair"
 """
-enum currency_pair_select_column {
+enum currencyPair_select_column {
   """column name"""
   id
 
@@ -1013,18 +1013,18 @@ enum currency_pair_select_column {
 }
 
 """
-Streaming cursor of the table "currency_pair"
+Streaming cursor of the table "currencyPair"
 """
-input currency_pair_stream_cursor_input {
+input currencyPair_stream_cursor_input {
   """Stream column input with initial value"""
-  initial_value: currency_pair_stream_cursor_value_input!
+  initial_value: currencyPair_stream_cursor_value_input!
 
   """cursor ordering"""
   ordering: cursor_ordering
 }
 
 """Initial value of the column from where the streaming should start"""
-input currency_pair_stream_cursor_value_input {
+input currencyPair_stream_cursor_value_input {
   id: Int
   symbol: String
   totalEvents: Int
@@ -2271,7 +2271,7 @@ type event {
   creatorId: String!
 
   """An object relationship"""
-  currencyPair: currency_pair!
+  currencyPair: currencyPair!
   currencyPairId: Int!
 
   """An array relationship"""
@@ -2417,7 +2417,7 @@ input event_bool_exp {
   createdTime: timestamptz_comparison_exp
   creator: user_bool_exp
   creatorId: String_comparison_exp
-  currencyPair: currency_pair_bool_exp
+  currencyPair: currencyPair_bool_exp
   currencyPairId: Int_comparison_exp
   deposits: deposit_bool_exp
   id: bigint_comparison_exp
@@ -2511,7 +2511,7 @@ input event_order_by {
   createdTime: order_by
   creator: user_order_by
   creatorId: order_by
-  currencyPair: currency_pair_order_by
+  currencyPair: currencyPair_order_by
   currencyPairId: order_by
   deposits_aggregate: deposit_aggregate_order_by
   id: order_by
@@ -3371,7 +3371,7 @@ columns and relationships of "pool_line"
 """
 type pool_line {
   """An object relationship"""
-  currencyPair: currency_pair!
+  currencyPair: currencyPair!
   currencyPairId: Int!
 
   """An array relationship"""
@@ -3445,7 +3445,7 @@ input pool_line_bool_exp {
   _and: [pool_line_bool_exp!]
   _not: pool_line_bool_exp
   _or: [pool_line_bool_exp!]
-  currencyPair: currency_pair_bool_exp
+  currencyPair: currencyPair_bool_exp
   currencyPairId: Int_comparison_exp
   events: pool_event_bool_exp
   isPaused: Boolean_comparison_exp
@@ -3498,7 +3498,7 @@ input pool_line_min_order_by {
 
 """Ordering options when selecting data from "pool_line"."""
 input pool_line_order_by {
-  currencyPair: currency_pair_order_by
+  currencyPair: currencyPair_order_by
   currencyPairId: order_by
   events_aggregate: pool_event_aggregate_order_by
   isPaused: order_by
@@ -4887,11 +4887,11 @@ type query_root {
   claimByPk(id: Int!): claim
 
   """
-  fetch data from the table: "currency_pair"
+  fetch data from the table: "currencyPair"
   """
   currencyPair(
     """distinct select on columns"""
-    distinct_on: [currency_pair_select_column!]
+    distinct_on: [currencyPair_select_column!]
 
     """limit the number of rows returned"""
     limit: Int
@@ -4900,14 +4900,14 @@ type query_root {
     offset: Int
 
     """sort the rows by one or more columns"""
-    order_by: [currency_pair_order_by!]
+    order_by: [currencyPair_order_by!]
 
     """filter the rows returned"""
-    where: currency_pair_bool_exp
-  ): [currency_pair!]!
+    where: currencyPair_bool_exp
+  ): [currencyPair!]!
 
-  """fetch data from the table: "currency_pair" using primary key columns"""
-  currencyPairByPk(id: Int!): currency_pair
+  """fetch data from the table: "currencyPair" using primary key columns"""
+  currencyPairByPk(id: Int!): currencyPair
 
   """
   fetch data from the table: "deposit"
@@ -5663,11 +5663,11 @@ type subscription_root {
   ): [claim!]!
 
   """
-  fetch data from the table: "currency_pair"
+  fetch data from the table: "currencyPair"
   """
   currencyPair(
     """distinct select on columns"""
-    distinct_on: [currency_pair_select_column!]
+    distinct_on: [currencyPair_select_column!]
 
     """limit the number of rows returned"""
     limit: Int
@@ -5676,28 +5676,28 @@ type subscription_root {
     offset: Int
 
     """sort the rows by one or more columns"""
-    order_by: [currency_pair_order_by!]
+    order_by: [currencyPair_order_by!]
 
     """filter the rows returned"""
-    where: currency_pair_bool_exp
-  ): [currency_pair!]!
+    where: currencyPair_bool_exp
+  ): [currencyPair!]!
 
-  """fetch data from the table: "currency_pair" using primary key columns"""
-  currencyPairByPk(id: Int!): currency_pair
+  """fetch data from the table: "currencyPair" using primary key columns"""
+  currencyPairByPk(id: Int!): currencyPair
 
   """
-  fetch data from the table in a streaming manner: "currency_pair"
+  fetch data from the table in a streaming manner: "currencyPair"
   """
-  currency_pair_stream(
+  currencyPair_stream(
     """maximum number of rows returned in a single batch"""
     batch_size: Int!
 
     """cursor to stream the results returned by the query"""
-    cursor: [currency_pair_stream_cursor_input]!
+    cursor: [currencyPair_stream_cursor_input]!
 
     """filter the rows returned"""
-    where: currency_pair_bool_exp
-  ): [currency_pair!]!
+    where: currencyPair_bool_exp
+  ): [currencyPair!]!
 
   """
   fetch data from the table: "deposit"
