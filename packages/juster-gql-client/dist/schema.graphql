@@ -5324,11 +5324,11 @@ type query_root {
   positionByPk(id: bigint!): position
 
   """
-  fetch data from the table: "quotes_wma"
+  fetch data from the table: "quotesWma"
   """
   quotesWma(
     """distinct select on columns"""
-    distinct_on: [quotes_wma_select_column!]
+    distinct_on: [quotesWma_select_column!]
 
     """limit the number of rows returned"""
     limit: Int
@@ -5337,18 +5337,18 @@ type query_root {
     offset: Int
 
     """sort the rows by one or more columns"""
-    order_by: [quotes_wma_order_by!]
+    order_by: [quotesWma_order_by!]
 
     """filter the rows returned"""
-    where: quotes_wma_bool_exp
-  ): [quotes_wma!]!
+    where: quotesWma_bool_exp
+  ): [quotesWma!]!
 
   """
-  fetch data from the table: "quotes_wma_15m"
+  fetch data from the table: "quotesWma_15m"
   """
   quotesWma15m(
     """distinct select on columns"""
-    distinct_on: [quotes_wma_15m_select_column!]
+    distinct_on: [quotesWma_15m_select_column!]
 
     """limit the number of rows returned"""
     limit: Int
@@ -5357,11 +5357,11 @@ type query_root {
     offset: Int
 
     """sort the rows by one or more columns"""
-    order_by: [quotes_wma_15m_order_by!]
+    order_by: [quotesWma_15m_order_by!]
 
     """filter the rows returned"""
-    where: quotes_wma_15m_bool_exp
-  ): [quotes_wma_15m!]!
+    where: quotesWma_15m_bool_exp
+  ): [quotesWma_15m!]!
 
   """
   fetch data from the table: "total_value_locked"
@@ -5431,46 +5431,46 @@ type query_root {
 }
 
 """
-columns and relationships of "quotes_wma"
+columns and relationships of "quotesWma"
 """
-type quotes_wma {
+type quotesWma {
   currencyPairId: Int
   price: numeric
   timestamp: timestamptz
 }
 
 """
-columns and relationships of "quotes_wma_15m"
+columns and relationships of "quotesWma_15m"
 """
-type quotes_wma_15m {
+type quotesWma_15m {
   currencyPairId: Int
   price: numeric
   timestamp: timestamptz
 }
 
 """
-Boolean expression to filter rows from the table "quotes_wma_15m". All fields are combined with a logical 'AND'.
+Boolean expression to filter rows from the table "quotesWma_15m". All fields are combined with a logical 'AND'.
 """
-input quotes_wma_15m_bool_exp {
-  _and: [quotes_wma_15m_bool_exp!]
-  _not: quotes_wma_15m_bool_exp
-  _or: [quotes_wma_15m_bool_exp!]
+input quotesWma_15m_bool_exp {
+  _and: [quotesWma_15m_bool_exp!]
+  _not: quotesWma_15m_bool_exp
+  _or: [quotesWma_15m_bool_exp!]
   currencyPairId: Int_comparison_exp
   price: numeric_comparison_exp
   timestamp: timestamptz_comparison_exp
 }
 
-"""Ordering options when selecting data from "quotes_wma_15m"."""
-input quotes_wma_15m_order_by {
+"""Ordering options when selecting data from "quotesWma_15m"."""
+input quotesWma_15m_order_by {
   currencyPairId: order_by
   price: order_by
   timestamp: order_by
 }
 
 """
-select columns of table "quotes_wma_15m"
+select columns of table "quotesWma_15m"
 """
-enum quotes_wma_15m_select_column {
+enum quotesWma_15m_select_column {
   """column name"""
   currencyPairId
 
@@ -5482,46 +5482,46 @@ enum quotes_wma_15m_select_column {
 }
 
 """
-Streaming cursor of the table "quotes_wma_15m"
+Streaming cursor of the table "quotesWma_15m"
 """
-input quotes_wma_15m_stream_cursor_input {
+input quotesWma_15m_stream_cursor_input {
   """Stream column input with initial value"""
-  initial_value: quotes_wma_15m_stream_cursor_value_input!
+  initial_value: quotesWma_15m_stream_cursor_value_input!
 
   """cursor ordering"""
   ordering: cursor_ordering
 }
 
 """Initial value of the column from where the streaming should start"""
-input quotes_wma_15m_stream_cursor_value_input {
+input quotesWma_15m_stream_cursor_value_input {
   currencyPairId: Int
   price: numeric
   timestamp: timestamptz
 }
 
 """
-Boolean expression to filter rows from the table "quotes_wma". All fields are combined with a logical 'AND'.
+Boolean expression to filter rows from the table "quotesWma". All fields are combined with a logical 'AND'.
 """
-input quotes_wma_bool_exp {
-  _and: [quotes_wma_bool_exp!]
-  _not: quotes_wma_bool_exp
-  _or: [quotes_wma_bool_exp!]
+input quotesWma_bool_exp {
+  _and: [quotesWma_bool_exp!]
+  _not: quotesWma_bool_exp
+  _or: [quotesWma_bool_exp!]
   currencyPairId: Int_comparison_exp
   price: numeric_comparison_exp
   timestamp: timestamptz_comparison_exp
 }
 
-"""Ordering options when selecting data from "quotes_wma"."""
-input quotes_wma_order_by {
+"""Ordering options when selecting data from "quotesWma"."""
+input quotesWma_order_by {
   currencyPairId: order_by
   price: order_by
   timestamp: order_by
 }
 
 """
-select columns of table "quotes_wma"
+select columns of table "quotesWma"
 """
-enum quotes_wma_select_column {
+enum quotesWma_select_column {
   """column name"""
   currencyPairId
 
@@ -5533,18 +5533,18 @@ enum quotes_wma_select_column {
 }
 
 """
-Streaming cursor of the table "quotes_wma"
+Streaming cursor of the table "quotesWma"
 """
-input quotes_wma_stream_cursor_input {
+input quotesWma_stream_cursor_input {
   """Stream column input with initial value"""
-  initial_value: quotes_wma_stream_cursor_value_input!
+  initial_value: quotesWma_stream_cursor_value_input!
 
   """cursor ordering"""
   ordering: cursor_ordering
 }
 
 """Initial value of the column from where the streaming should start"""
-input quotes_wma_stream_cursor_value_input {
+input quotesWma_stream_cursor_value_input {
   currencyPairId: Int
   price: numeric
   timestamp: timestamptz
@@ -6366,11 +6366,11 @@ type subscription_root {
   ): [position!]!
 
   """
-  fetch data from the table: "quotes_wma"
+  fetch data from the table: "quotesWma"
   """
   quotesWma(
     """distinct select on columns"""
-    distinct_on: [quotes_wma_select_column!]
+    distinct_on: [quotesWma_select_column!]
 
     """limit the number of rows returned"""
     limit: Int
@@ -6379,18 +6379,18 @@ type subscription_root {
     offset: Int
 
     """sort the rows by one or more columns"""
-    order_by: [quotes_wma_order_by!]
+    order_by: [quotesWma_order_by!]
 
     """filter the rows returned"""
-    where: quotes_wma_bool_exp
-  ): [quotes_wma!]!
+    where: quotesWma_bool_exp
+  ): [quotesWma!]!
 
   """
-  fetch data from the table: "quotes_wma_15m"
+  fetch data from the table: "quotesWma_15m"
   """
   quotesWma15m(
     """distinct select on columns"""
-    distinct_on: [quotes_wma_15m_select_column!]
+    distinct_on: [quotesWma_15m_select_column!]
 
     """limit the number of rows returned"""
     limit: Int
@@ -6399,39 +6399,39 @@ type subscription_root {
     offset: Int
 
     """sort the rows by one or more columns"""
-    order_by: [quotes_wma_15m_order_by!]
+    order_by: [quotesWma_15m_order_by!]
 
     """filter the rows returned"""
-    where: quotes_wma_15m_bool_exp
-  ): [quotes_wma_15m!]!
+    where: quotesWma_15m_bool_exp
+  ): [quotesWma_15m!]!
 
   """
-  fetch data from the table in a streaming manner: "quotes_wma_15m"
+  fetch data from the table in a streaming manner: "quotesWma_15m"
   """
-  quotes_wma_15m_stream(
+  quotesWma_15m_stream(
     """maximum number of rows returned in a single batch"""
     batch_size: Int!
 
     """cursor to stream the results returned by the query"""
-    cursor: [quotes_wma_15m_stream_cursor_input]!
+    cursor: [quotesWma_15m_stream_cursor_input]!
 
     """filter the rows returned"""
-    where: quotes_wma_15m_bool_exp
-  ): [quotes_wma_15m!]!
+    where: quotesWma_15m_bool_exp
+  ): [quotesWma_15m!]!
 
   """
-  fetch data from the table in a streaming manner: "quotes_wma"
+  fetch data from the table in a streaming manner: "quotesWma"
   """
-  quotes_wma_stream(
+  quotesWma_stream(
     """maximum number of rows returned in a single batch"""
     batch_size: Int!
 
     """cursor to stream the results returned by the query"""
-    cursor: [quotes_wma_stream_cursor_input]!
+    cursor: [quotesWma_stream_cursor_input]!
 
     """filter the rows returned"""
-    where: quotes_wma_bool_exp
-  ): [quotes_wma!]!
+    where: quotesWma_bool_exp
+  ): [quotesWma!]!
 
   """
   fetch data from the table: "total_value_locked"

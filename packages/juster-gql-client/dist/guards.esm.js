@@ -183,18 +183,18 @@ export var isquery_root = function(obj) {
 
 
 
-var quotes_wma_possibleTypes = ['quotes_wma']
-export var isquotes_wma = function(obj) {
-  if (!obj || !obj.__typename) throw new Error('__typename is missing in "isquotes_wma"')
-  return quotes_wma_possibleTypes.includes(obj.__typename)
+var quotesWma_possibleTypes = ['quotesWma']
+export var isquotesWma = function(obj) {
+  if (!obj || !obj.__typename) throw new Error('__typename is missing in "isquotesWma"')
+  return quotesWma_possibleTypes.includes(obj.__typename)
 }
 
 
 
-var quotes_wma_15m_possibleTypes = ['quotes_wma_15m']
-export var isquotes_wma_15m = function(obj) {
-  if (!obj || !obj.__typename) throw new Error('__typename is missing in "isquotes_wma_15m"')
-  return quotes_wma_15m_possibleTypes.includes(obj.__typename)
+var quotesWma_15m_possibleTypes = ['quotesWma_15m']
+export var isquotesWma_15m = function(obj) {
+  if (!obj || !obj.__typename) throw new Error('__typename is missing in "isquotesWma_15m"')
+  return quotesWma_15m_possibleTypes.includes(obj.__typename)
 }
 
 

@@ -8046,7 +8046,7 @@ export default {
                 4
             ]
         },
-        "quotes_wma": {
+        "quotesWma": {
             "currencyPairId": [
                 2
             ],
@@ -8060,7 +8060,7 @@ export default {
                 4
             ]
         },
-        "quotes_wma_15m": {
+        "quotesWma_15m": {
             "currencyPairId": [
                 2
             ],
@@ -8074,7 +8074,7 @@ export default {
                 4
             ]
         },
-        "quotes_wma_15m_bool_exp": {
+        "quotesWma_15m_bool_exp": {
             "_and": [
                 270
             ],
@@ -8097,7 +8097,7 @@ export default {
                 4
             ]
         },
-        "quotes_wma_15m_order_by": {
+        "quotesWma_15m_order_by": {
             "currencyPairId": [
                 176
             ],
@@ -8111,8 +8111,8 @@ export default {
                 4
             ]
         },
-        "quotes_wma_15m_select_column": {},
-        "quotes_wma_15m_stream_cursor_input": {
+        "quotesWma_15m_select_column": {},
+        "quotesWma_15m_stream_cursor_input": {
             "initial_value": [
                 274
             ],
@@ -8123,7 +8123,7 @@ export default {
                 4
             ]
         },
-        "quotes_wma_15m_stream_cursor_value_input": {
+        "quotesWma_15m_stream_cursor_value_input": {
             "currencyPairId": [
                 2
             ],
@@ -8137,7 +8137,7 @@ export default {
                 4
             ]
         },
-        "quotes_wma_bool_exp": {
+        "quotesWma_bool_exp": {
             "_and": [
                 275
             ],
@@ -8160,7 +8160,7 @@ export default {
                 4
             ]
         },
-        "quotes_wma_order_by": {
+        "quotesWma_order_by": {
             "currencyPairId": [
                 176
             ],
@@ -8174,8 +8174,8 @@ export default {
                 4
             ]
         },
-        "quotes_wma_select_column": {},
-        "quotes_wma_stream_cursor_input": {
+        "quotesWma_select_column": {},
+        "quotesWma_stream_cursor_input": {
             "initial_value": [
                 279
             ],
@@ -8186,7 +8186,7 @@ export default {
                 4
             ]
         },
-        "quotes_wma_stream_cursor_value_input": {
+        "quotesWma_stream_cursor_value_input": {
             "currencyPairId": [
                 2
             ],
@@ -9781,7 +9781,7 @@ export default {
                 {
                     "distinct_on": [
                         277,
-                        "[quotes_wma_select_column!]"
+                        "[quotesWma_select_column!]"
                     ],
                     "limit": [
                         2
@@ -9791,7 +9791,7 @@ export default {
                     ],
                     "order_by": [
                         276,
-                        "[quotes_wma_order_by!]"
+                        "[quotesWma_order_by!]"
                     ],
                     "where": [
                         275
@@ -9803,7 +9803,7 @@ export default {
                 {
                     "distinct_on": [
                         272,
-                        "[quotes_wma_15m_select_column!]"
+                        "[quotesWma_15m_select_column!]"
                     ],
                     "limit": [
                         2
@@ -9813,7 +9813,7 @@ export default {
                     ],
                     "order_by": [
                         271,
-                        "[quotes_wma_15m_order_by!]"
+                        "[quotesWma_15m_order_by!]"
                     ],
                     "where": [
                         270
@@ -10930,7 +10930,7 @@ export default {
                 {
                     "distinct_on": [
                         277,
-                        "[quotes_wma_select_column!]"
+                        "[quotesWma_select_column!]"
                     ],
                     "limit": [
                         2
@@ -10940,7 +10940,7 @@ export default {
                     ],
                     "order_by": [
                         276,
-                        "[quotes_wma_order_by!]"
+                        "[quotesWma_order_by!]"
                     ],
                     "where": [
                         275
@@ -10952,7 +10952,7 @@ export default {
                 {
                     "distinct_on": [
                         272,
-                        "[quotes_wma_15m_select_column!]"
+                        "[quotesWma_15m_select_column!]"
                     ],
                     "limit": [
                         2
@@ -10962,14 +10962,14 @@ export default {
                     ],
                     "order_by": [
                         271,
-                        "[quotes_wma_15m_order_by!]"
+                        "[quotesWma_15m_order_by!]"
                     ],
                     "where": [
                         270
                     ]
                 }
             ],
-            "quotes_wma_15m_stream": [
+            "quotesWma_15m_stream": [
                 269,
                 {
                     "batch_size": [
@@ -10978,14 +10978,14 @@ export default {
                     ],
                     "cursor": [
                         273,
-                        "[quotes_wma_15m_stream_cursor_input]!"
+                        "[quotesWma_15m_stream_cursor_input]!"
                     ],
                     "where": [
                         270
                     ]
                 }
             ],
-            "quotes_wma_stream": [
+            "quotesWma_stream": [
                 268,
                 {
                     "batch_size": [
@@ -10994,7 +10994,7 @@ export default {
                     ],
                     "cursor": [
                         278,
-                        "[quotes_wma_stream_cursor_input]!"
+                        "[quotesWma_stream_cursor_input]!"
                     ],
                     "where": [
                         275

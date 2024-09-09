@@ -626,10 +626,10 @@ export interface query_root {
     position: position[]
     /** fetch data from the table: "position" using primary key columns */
     positionByPk?: position
-    /** fetch data from the table: "quotes_wma" */
-    quotesWma: quotes_wma[]
-    /** fetch data from the table: "quotes_wma_15m" */
-    quotesWma15m: quotes_wma_15m[]
+    /** fetch data from the table: "quotesWma" */
+    quotesWma: quotesWma[]
+    /** fetch data from the table: "quotesWma_15m" */
+    quotesWma15m: quotesWma_15m[]
     /** fetch data from the table: "total_value_locked" */
     totalValueLocked: total_value_locked[]
     /** fetch data from the table: "user" */
@@ -644,30 +644,30 @@ export interface query_root {
 }
 
 
-/** columns and relationships of "quotes_wma" */
-export interface quotes_wma {
+/** columns and relationships of "quotesWma" */
+export interface quotesWma {
     currencyPairId?: Scalars['Int']
     price?: Scalars['numeric']
     timestamp?: Scalars['timestamptz']
-    __typename: 'quotes_wma'
+    __typename: 'quotesWma'
 }
 
 
-/** columns and relationships of "quotes_wma_15m" */
-export interface quotes_wma_15m {
+/** columns and relationships of "quotesWma_15m" */
+export interface quotesWma_15m {
     currencyPairId?: Scalars['Int']
     price?: Scalars['numeric']
     timestamp?: Scalars['timestamptz']
-    __typename: 'quotes_wma_15m'
+    __typename: 'quotesWma_15m'
 }
 
 
-/** select columns of table "quotes_wma_15m" */
-export type quotes_wma_15m_select_column = 'currencyPairId' | 'price' | 'timestamp'
+/** select columns of table "quotesWma_15m" */
+export type quotesWma_15m_select_column = 'currencyPairId' | 'price' | 'timestamp'
 
 
-/** select columns of table "quotes_wma" */
-export type quotes_wma_select_column = 'currencyPairId' | 'price' | 'timestamp'
+/** select columns of table "quotesWma" */
+export type quotesWma_select_column = 'currencyPairId' | 'price' | 'timestamp'
 
 export interface subscription_root {
     /** fetch data from the table: "bet" */
@@ -798,14 +798,14 @@ export interface subscription_root {
     positionByPk?: position
     /** fetch data from the table in a streaming manner: "position" */
     position_stream: position[]
-    /** fetch data from the table: "quotes_wma" */
-    quotesWma: quotes_wma[]
-    /** fetch data from the table: "quotes_wma_15m" */
-    quotesWma15m: quotes_wma_15m[]
-    /** fetch data from the table in a streaming manner: "quotes_wma_15m" */
-    quotes_wma_15m_stream: quotes_wma_15m[]
-    /** fetch data from the table in a streaming manner: "quotes_wma" */
-    quotes_wma_stream: quotes_wma[]
+    /** fetch data from the table: "quotesWma" */
+    quotesWma: quotesWma[]
+    /** fetch data from the table: "quotesWma_15m" */
+    quotesWma15m: quotesWma_15m[]
+    /** fetch data from the table in a streaming manner: "quotesWma_15m" */
+    quotesWma_15m_stream: quotesWma_15m[]
+    /** fetch data from the table in a streaming manner: "quotesWma" */
+    quotesWma_stream: quotesWma[]
     /** fetch data from the table: "total_value_locked" */
     totalValueLocked: total_value_locked[]
     /** fetch data from the table in a streaming manner: "total_value_locked" */
@@ -2915,30 +2915,30 @@ export interface query_rootRequest{
     where?: (position_bool_exp | null)},positionRequest] | positionRequest
     /** fetch data from the table: "position" using primary key columns */
     positionByPk?: [{id: Scalars['bigint']},positionRequest]
-    /** fetch data from the table: "quotes_wma" */
+    /** fetch data from the table: "quotesWma" */
     quotesWma?: [{
     /** distinct select on columns */
-    distinct_on?: (quotes_wma_select_column[] | null),
+    distinct_on?: (quotesWma_select_column[] | null),
     /** limit the number of rows returned */
     limit?: (Scalars['Int'] | null),
     /** skip the first n rows. Use only with order_by */
     offset?: (Scalars['Int'] | null),
     /** sort the rows by one or more columns */
-    order_by?: (quotes_wma_order_by[] | null),
+    order_by?: (quotesWma_order_by[] | null),
     /** filter the rows returned */
-    where?: (quotes_wma_bool_exp | null)},quotes_wmaRequest] | quotes_wmaRequest
-    /** fetch data from the table: "quotes_wma_15m" */
+    where?: (quotesWma_bool_exp | null)},quotesWmaRequest] | quotesWmaRequest
+    /** fetch data from the table: "quotesWma_15m" */
     quotesWma15m?: [{
     /** distinct select on columns */
-    distinct_on?: (quotes_wma_15m_select_column[] | null),
+    distinct_on?: (quotesWma_15m_select_column[] | null),
     /** limit the number of rows returned */
     limit?: (Scalars['Int'] | null),
     /** skip the first n rows. Use only with order_by */
     offset?: (Scalars['Int'] | null),
     /** sort the rows by one or more columns */
-    order_by?: (quotes_wma_15m_order_by[] | null),
+    order_by?: (quotesWma_15m_order_by[] | null),
     /** filter the rows returned */
-    where?: (quotes_wma_15m_bool_exp | null)},quotes_wma_15mRequest] | quotes_wma_15mRequest
+    where?: (quotesWma_15m_bool_exp | null)},quotesWma_15mRequest] | quotesWma_15mRequest
     /** fetch data from the table: "total_value_locked" */
     totalValueLocked?: [{
     /** distinct select on columns */
@@ -2984,8 +2984,8 @@ export interface query_rootRequest{
 }
 
 
-/** columns and relationships of "quotes_wma" */
-export interface quotes_wmaRequest{
+/** columns and relationships of "quotesWma" */
+export interface quotesWmaRequest{
     currencyPairId?: boolean | number
     price?: boolean | number
     timestamp?: boolean | number
@@ -2994,8 +2994,8 @@ export interface quotes_wmaRequest{
 }
 
 
-/** columns and relationships of "quotes_wma_15m" */
-export interface quotes_wma_15mRequest{
+/** columns and relationships of "quotesWma_15m" */
+export interface quotesWma_15mRequest{
     currencyPairId?: boolean | number
     price?: boolean | number
     timestamp?: boolean | number
@@ -3004,44 +3004,44 @@ export interface quotes_wma_15mRequest{
 }
 
 
-/** Boolean expression to filter rows from the table "quotes_wma_15m". All fields are combined with a logical 'AND'. */
-export interface quotes_wma_15m_bool_exp {_and?: (quotes_wma_15m_bool_exp[] | null),_not?: (quotes_wma_15m_bool_exp | null),_or?: (quotes_wma_15m_bool_exp[] | null),currencyPairId?: (Int_comparison_exp | null),price?: (numeric_comparison_exp | null),timestamp?: (timestamptz_comparison_exp | null)}
+/** Boolean expression to filter rows from the table "quotesWma_15m". All fields are combined with a logical 'AND'. */
+export interface quotesWma_15m_bool_exp {_and?: (quotesWma_15m_bool_exp[] | null),_not?: (quotesWma_15m_bool_exp | null),_or?: (quotesWma_15m_bool_exp[] | null),currencyPairId?: (Int_comparison_exp | null),price?: (numeric_comparison_exp | null),timestamp?: (timestamptz_comparison_exp | null)}
 
 
-/** Ordering options when selecting data from "quotes_wma_15m". */
-export interface quotes_wma_15m_order_by {currencyPairId?: (order_by | null),price?: (order_by | null),timestamp?: (order_by | null)}
+/** Ordering options when selecting data from "quotesWma_15m". */
+export interface quotesWma_15m_order_by {currencyPairId?: (order_by | null),price?: (order_by | null),timestamp?: (order_by | null)}
 
 
-/** Streaming cursor of the table "quotes_wma_15m" */
-export interface quotes_wma_15m_stream_cursor_input {
+/** Streaming cursor of the table "quotesWma_15m" */
+export interface quotesWma_15m_stream_cursor_input {
 /** Stream column input with initial value */
-initial_value: quotes_wma_15m_stream_cursor_value_input,
+initial_value: quotesWma_15m_stream_cursor_value_input,
 /** cursor ordering */
 ordering?: (cursor_ordering | null)}
 
 
 /** Initial value of the column from where the streaming should start */
-export interface quotes_wma_15m_stream_cursor_value_input {currencyPairId?: (Scalars['Int'] | null),price?: (Scalars['numeric'] | null),timestamp?: (Scalars['timestamptz'] | null)}
+export interface quotesWma_15m_stream_cursor_value_input {currencyPairId?: (Scalars['Int'] | null),price?: (Scalars['numeric'] | null),timestamp?: (Scalars['timestamptz'] | null)}
 
 
-/** Boolean expression to filter rows from the table "quotes_wma". All fields are combined with a logical 'AND'. */
-export interface quotes_wma_bool_exp {_and?: (quotes_wma_bool_exp[] | null),_not?: (quotes_wma_bool_exp | null),_or?: (quotes_wma_bool_exp[] | null),currencyPairId?: (Int_comparison_exp | null),price?: (numeric_comparison_exp | null),timestamp?: (timestamptz_comparison_exp | null)}
+/** Boolean expression to filter rows from the table "quotesWma". All fields are combined with a logical 'AND'. */
+export interface quotesWma_bool_exp {_and?: (quotesWma_bool_exp[] | null),_not?: (quotesWma_bool_exp | null),_or?: (quotesWma_bool_exp[] | null),currencyPairId?: (Int_comparison_exp | null),price?: (numeric_comparison_exp | null),timestamp?: (timestamptz_comparison_exp | null)}
 
 
-/** Ordering options when selecting data from "quotes_wma". */
-export interface quotes_wma_order_by {currencyPairId?: (order_by | null),price?: (order_by | null),timestamp?: (order_by | null)}
+/** Ordering options when selecting data from "quotesWma". */
+export interface quotesWma_order_by {currencyPairId?: (order_by | null),price?: (order_by | null),timestamp?: (order_by | null)}
 
 
-/** Streaming cursor of the table "quotes_wma" */
-export interface quotes_wma_stream_cursor_input {
+/** Streaming cursor of the table "quotesWma" */
+export interface quotesWma_stream_cursor_input {
 /** Stream column input with initial value */
-initial_value: quotes_wma_stream_cursor_value_input,
+initial_value: quotesWma_stream_cursor_value_input,
 /** cursor ordering */
 ordering?: (cursor_ordering | null)}
 
 
 /** Initial value of the column from where the streaming should start */
-export interface quotes_wma_stream_cursor_value_input {currencyPairId?: (Scalars['Int'] | null),price?: (Scalars['numeric'] | null),timestamp?: (Scalars['timestamptz'] | null)}
+export interface quotesWma_stream_cursor_value_input {currencyPairId?: (Scalars['Int'] | null),price?: (Scalars['numeric'] | null),timestamp?: (Scalars['timestamptz'] | null)}
 
 export interface subscription_rootRequest{
     /** fetch data from the table: "bet" */
@@ -3524,46 +3524,46 @@ export interface subscription_rootRequest{
     cursor: (position_stream_cursor_input | null)[],
     /** filter the rows returned */
     where?: (position_bool_exp | null)},positionRequest]
-    /** fetch data from the table: "quotes_wma" */
+    /** fetch data from the table: "quotesWma" */
     quotesWma?: [{
     /** distinct select on columns */
-    distinct_on?: (quotes_wma_select_column[] | null),
+    distinct_on?: (quotesWma_select_column[] | null),
     /** limit the number of rows returned */
     limit?: (Scalars['Int'] | null),
     /** skip the first n rows. Use only with order_by */
     offset?: (Scalars['Int'] | null),
     /** sort the rows by one or more columns */
-    order_by?: (quotes_wma_order_by[] | null),
+    order_by?: (quotesWma_order_by[] | null),
     /** filter the rows returned */
-    where?: (quotes_wma_bool_exp | null)},quotes_wmaRequest] | quotes_wmaRequest
-    /** fetch data from the table: "quotes_wma_15m" */
+    where?: (quotesWma_bool_exp | null)},quotesWmaRequest] | quotesWmaRequest
+    /** fetch data from the table: "quotesWma_15m" */
     quotesWma15m?: [{
     /** distinct select on columns */
-    distinct_on?: (quotes_wma_15m_select_column[] | null),
+    distinct_on?: (quotesWma_15m_select_column[] | null),
     /** limit the number of rows returned */
     limit?: (Scalars['Int'] | null),
     /** skip the first n rows. Use only with order_by */
     offset?: (Scalars['Int'] | null),
     /** sort the rows by one or more columns */
-    order_by?: (quotes_wma_15m_order_by[] | null),
+    order_by?: (quotesWma_15m_order_by[] | null),
     /** filter the rows returned */
-    where?: (quotes_wma_15m_bool_exp | null)},quotes_wma_15mRequest] | quotes_wma_15mRequest
-    /** fetch data from the table in a streaming manner: "quotes_wma_15m" */
-    quotes_wma_15m_stream?: [{
+    where?: (quotesWma_15m_bool_exp | null)},quotesWma_15mRequest] | quotesWma_15mRequest
+    /** fetch data from the table in a streaming manner: "quotesWma_15m" */
+    quotesWma_15m_stream?: [{
     /** maximum number of rows returned in a single batch */
     batch_size: Scalars['Int'],
     /** cursor to stream the results returned by the query */
-    cursor: (quotes_wma_15m_stream_cursor_input | null)[],
+    cursor: (quotesWma_15m_stream_cursor_input | null)[],
     /** filter the rows returned */
-    where?: (quotes_wma_15m_bool_exp | null)},quotes_wma_15mRequest]
-    /** fetch data from the table in a streaming manner: "quotes_wma" */
-    quotes_wma_stream?: [{
+    where?: (quotesWma_15m_bool_exp | null)},quotesWma_15mRequest]
+    /** fetch data from the table in a streaming manner: "quotesWma" */
+    quotesWma_stream?: [{
     /** maximum number of rows returned in a single batch */
     batch_size: Scalars['Int'],
     /** cursor to stream the results returned by the query */
-    cursor: (quotes_wma_stream_cursor_input | null)[],
+    cursor: (quotesWma_stream_cursor_input | null)[],
     /** filter the rows returned */
-    where?: (quotes_wma_bool_exp | null)},quotes_wmaRequest]
+    where?: (quotesWma_bool_exp | null)},quotesWmaRequest]
     /** fetch data from the table: "total_value_locked" */
     totalValueLocked?: [{
     /** distinct select on columns */
@@ -4102,18 +4102,18 @@ export const isquery_root = (obj?: { __typename?: any } | null): obj is query_ro
 
 
 
-const quotes_wma_possibleTypes: string[] = ['quotes_wma']
-export const isquotes_wma = (obj?: { __typename?: any } | null): obj is quotes_wma => {
-  if (!obj?.__typename) throw new Error('__typename is missing in "isquotes_wma"')
-  return quotes_wma_possibleTypes.includes(obj.__typename)
+const quotesWma_possibleTypes: string[] = ['quotesWma']
+export const isquotesWma = (obj?: { __typename?: any } | null): obj is quotesWma => {
+  if (!obj?.__typename) throw new Error('__typename is missing in "isquotesWma"')
+  return quotesWma_possibleTypes.includes(obj.__typename)
 }
 
 
 
-const quotes_wma_15m_possibleTypes: string[] = ['quotes_wma_15m']
-export const isquotes_wma_15m = (obj?: { __typename?: any } | null): obj is quotes_wma_15m => {
-  if (!obj?.__typename) throw new Error('__typename is missing in "isquotes_wma_15m"')
-  return quotes_wma_15m_possibleTypes.includes(obj.__typename)
+const quotesWma_15m_possibleTypes: string[] = ['quotesWma_15m']
+export const isquotesWma_15m = (obj?: { __typename?: any } | null): obj is quotesWma_15m => {
+  if (!obj?.__typename) throw new Error('__typename is missing in "isquotesWma_15m"')
+  return quotesWma_15m_possibleTypes.includes(obj.__typename)
 }
 
 
@@ -5879,31 +5879,31 @@ where?: (position_bool_exp | null)}) => {get: <R extends positionRequest>(reques
 /** fetch data from the table: "position" using primary key columns */
 positionByPk: ((args: {id: Scalars['bigint']}) => positionPromiseChain & {get: <R extends positionRequest>(request: R, defaultValue?: (FieldsSelection<position, R> | undefined)) => Promise<(FieldsSelection<position, R> | undefined)>}),
     
-/** fetch data from the table: "quotes_wma" */
+/** fetch data from the table: "quotesWma" */
 quotesWma: ((args?: {
 /** distinct select on columns */
-distinct_on?: (quotes_wma_select_column[] | null),
+distinct_on?: (quotesWma_select_column[] | null),
 /** limit the number of rows returned */
 limit?: (Scalars['Int'] | null),
 /** skip the first n rows. Use only with order_by */
 offset?: (Scalars['Int'] | null),
 /** sort the rows by one or more columns */
-order_by?: (quotes_wma_order_by[] | null),
+order_by?: (quotesWma_order_by[] | null),
 /** filter the rows returned */
-where?: (quotes_wma_bool_exp | null)}) => {get: <R extends quotes_wmaRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma, R>[]) => Promise<FieldsSelection<quotes_wma, R>[]>})&({get: <R extends quotes_wmaRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma, R>[]) => Promise<FieldsSelection<quotes_wma, R>[]>}),
+where?: (quotesWma_bool_exp | null)}) => {get: <R extends quotesWmaRequest>(request: R, defaultValue?: FieldsSelection<quotesWma, R>[]) => Promise<FieldsSelection<quotesWma, R>[]>})&({get: <R extends quotesWmaRequest>(request: R, defaultValue?: FieldsSelection<quotesWma, R>[]) => Promise<FieldsSelection<quotesWma, R>[]>}),
     
-/** fetch data from the table: "quotes_wma_15m" */
+/** fetch data from the table: "quotesWma_15m" */
 quotesWma15m: ((args?: {
 /** distinct select on columns */
-distinct_on?: (quotes_wma_15m_select_column[] | null),
+distinct_on?: (quotesWma_15m_select_column[] | null),
 /** limit the number of rows returned */
 limit?: (Scalars['Int'] | null),
 /** skip the first n rows. Use only with order_by */
 offset?: (Scalars['Int'] | null),
 /** sort the rows by one or more columns */
-order_by?: (quotes_wma_15m_order_by[] | null),
+order_by?: (quotesWma_15m_order_by[] | null),
 /** filter the rows returned */
-where?: (quotes_wma_15m_bool_exp | null)}) => {get: <R extends quotes_wma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma_15m, R>[]) => Promise<FieldsSelection<quotes_wma_15m, R>[]>})&({get: <R extends quotes_wma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma_15m, R>[]) => Promise<FieldsSelection<quotes_wma_15m, R>[]>}),
+where?: (quotesWma_15m_bool_exp | null)}) => {get: <R extends quotesWma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotesWma_15m, R>[]) => Promise<FieldsSelection<quotesWma_15m, R>[]>})&({get: <R extends quotesWma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotesWma_15m, R>[]) => Promise<FieldsSelection<quotesWma_15m, R>[]>}),
     
 /** fetch data from the table: "total_value_locked" */
 totalValueLocked: ((args?: {
@@ -6299,31 +6299,31 @@ where?: (position_bool_exp | null)}) => {get: <R extends positionRequest>(reques
 /** fetch data from the table: "position" using primary key columns */
 positionByPk: ((args: {id: Scalars['bigint']}) => positionObservableChain & {get: <R extends positionRequest>(request: R, defaultValue?: (FieldsSelection<position, R> | undefined)) => Observable<(FieldsSelection<position, R> | undefined)>}),
     
-/** fetch data from the table: "quotes_wma" */
+/** fetch data from the table: "quotesWma" */
 quotesWma: ((args?: {
 /** distinct select on columns */
-distinct_on?: (quotes_wma_select_column[] | null),
+distinct_on?: (quotesWma_select_column[] | null),
 /** limit the number of rows returned */
 limit?: (Scalars['Int'] | null),
 /** skip the first n rows. Use only with order_by */
 offset?: (Scalars['Int'] | null),
 /** sort the rows by one or more columns */
-order_by?: (quotes_wma_order_by[] | null),
+order_by?: (quotesWma_order_by[] | null),
 /** filter the rows returned */
-where?: (quotes_wma_bool_exp | null)}) => {get: <R extends quotes_wmaRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma, R>[]) => Observable<FieldsSelection<quotes_wma, R>[]>})&({get: <R extends quotes_wmaRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma, R>[]) => Observable<FieldsSelection<quotes_wma, R>[]>}),
+where?: (quotesWma_bool_exp | null)}) => {get: <R extends quotesWmaRequest>(request: R, defaultValue?: FieldsSelection<quotesWma, R>[]) => Observable<FieldsSelection<quotesWma, R>[]>})&({get: <R extends quotesWmaRequest>(request: R, defaultValue?: FieldsSelection<quotesWma, R>[]) => Observable<FieldsSelection<quotesWma, R>[]>}),
     
-/** fetch data from the table: "quotes_wma_15m" */
+/** fetch data from the table: "quotesWma_15m" */
 quotesWma15m: ((args?: {
 /** distinct select on columns */
-distinct_on?: (quotes_wma_15m_select_column[] | null),
+distinct_on?: (quotesWma_15m_select_column[] | null),
 /** limit the number of rows returned */
 limit?: (Scalars['Int'] | null),
 /** skip the first n rows. Use only with order_by */
 offset?: (Scalars['Int'] | null),
 /** sort the rows by one or more columns */
-order_by?: (quotes_wma_15m_order_by[] | null),
+order_by?: (quotesWma_15m_order_by[] | null),
 /** filter the rows returned */
-where?: (quotes_wma_15m_bool_exp | null)}) => {get: <R extends quotes_wma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma_15m, R>[]) => Observable<FieldsSelection<quotes_wma_15m, R>[]>})&({get: <R extends quotes_wma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma_15m, R>[]) => Observable<FieldsSelection<quotes_wma_15m, R>[]>}),
+where?: (quotesWma_15m_bool_exp | null)}) => {get: <R extends quotesWma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotesWma_15m, R>[]) => Observable<FieldsSelection<quotesWma_15m, R>[]>})&({get: <R extends quotesWma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotesWma_15m, R>[]) => Observable<FieldsSelection<quotesWma_15m, R>[]>}),
     
 /** fetch data from the table: "total_value_locked" */
 totalValueLocked: ((args?: {
@@ -6372,32 +6372,32 @@ withdrawalByPk: ((args: {id: Scalars['bigint']}) => withdrawalObservableChain & 
 }
 
 
-/** columns and relationships of "quotes_wma" */
-export interface quotes_wmaPromiseChain{
+/** columns and relationships of "quotesWma" */
+export interface quotesWmaPromiseChain{
     currencyPairId: ({get: (request?: boolean|number, defaultValue?: (Scalars['Int'] | undefined)) => Promise<(Scalars['Int'] | undefined)>}),
     price: ({get: (request?: boolean|number, defaultValue?: (Scalars['numeric'] | undefined)) => Promise<(Scalars['numeric'] | undefined)>}),
     timestamp: ({get: (request?: boolean|number, defaultValue?: (Scalars['timestamptz'] | undefined)) => Promise<(Scalars['timestamptz'] | undefined)>})
 }
 
 
-/** columns and relationships of "quotes_wma" */
-export interface quotes_wmaObservableChain{
+/** columns and relationships of "quotesWma" */
+export interface quotesWmaObservableChain{
     currencyPairId: ({get: (request?: boolean|number, defaultValue?: (Scalars['Int'] | undefined)) => Observable<(Scalars['Int'] | undefined)>}),
     price: ({get: (request?: boolean|number, defaultValue?: (Scalars['numeric'] | undefined)) => Observable<(Scalars['numeric'] | undefined)>}),
     timestamp: ({get: (request?: boolean|number, defaultValue?: (Scalars['timestamptz'] | undefined)) => Observable<(Scalars['timestamptz'] | undefined)>})
 }
 
 
-/** columns and relationships of "quotes_wma_15m" */
-export interface quotes_wma_15mPromiseChain{
+/** columns and relationships of "quotesWma_15m" */
+export interface quotesWma_15mPromiseChain{
     currencyPairId: ({get: (request?: boolean|number, defaultValue?: (Scalars['Int'] | undefined)) => Promise<(Scalars['Int'] | undefined)>}),
     price: ({get: (request?: boolean|number, defaultValue?: (Scalars['numeric'] | undefined)) => Promise<(Scalars['numeric'] | undefined)>}),
     timestamp: ({get: (request?: boolean|number, defaultValue?: (Scalars['timestamptz'] | undefined)) => Promise<(Scalars['timestamptz'] | undefined)>})
 }
 
 
-/** columns and relationships of "quotes_wma_15m" */
-export interface quotes_wma_15mObservableChain{
+/** columns and relationships of "quotesWma_15m" */
+export interface quotesWma_15mObservableChain{
     currencyPairId: ({get: (request?: boolean|number, defaultValue?: (Scalars['Int'] | undefined)) => Observable<(Scalars['Int'] | undefined)>}),
     price: ({get: (request?: boolean|number, defaultValue?: (Scalars['numeric'] | undefined)) => Observable<(Scalars['numeric'] | undefined)>}),
     timestamp: ({get: (request?: boolean|number, defaultValue?: (Scalars['timestamptz'] | undefined)) => Observable<(Scalars['timestamptz'] | undefined)>})
@@ -6949,49 +6949,49 @@ cursor: (position_stream_cursor_input | null)[],
 /** filter the rows returned */
 where?: (position_bool_exp | null)}) => {get: <R extends positionRequest>(request: R, defaultValue?: FieldsSelection<position, R>[]) => Promise<FieldsSelection<position, R>[]>}),
     
-/** fetch data from the table: "quotes_wma" */
+/** fetch data from the table: "quotesWma" */
 quotesWma: ((args?: {
 /** distinct select on columns */
-distinct_on?: (quotes_wma_select_column[] | null),
+distinct_on?: (quotesWma_select_column[] | null),
 /** limit the number of rows returned */
 limit?: (Scalars['Int'] | null),
 /** skip the first n rows. Use only with order_by */
 offset?: (Scalars['Int'] | null),
 /** sort the rows by one or more columns */
-order_by?: (quotes_wma_order_by[] | null),
+order_by?: (quotesWma_order_by[] | null),
 /** filter the rows returned */
-where?: (quotes_wma_bool_exp | null)}) => {get: <R extends quotes_wmaRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma, R>[]) => Promise<FieldsSelection<quotes_wma, R>[]>})&({get: <R extends quotes_wmaRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma, R>[]) => Promise<FieldsSelection<quotes_wma, R>[]>}),
+where?: (quotesWma_bool_exp | null)}) => {get: <R extends quotesWmaRequest>(request: R, defaultValue?: FieldsSelection<quotesWma, R>[]) => Promise<FieldsSelection<quotesWma, R>[]>})&({get: <R extends quotesWmaRequest>(request: R, defaultValue?: FieldsSelection<quotesWma, R>[]) => Promise<FieldsSelection<quotesWma, R>[]>}),
     
-/** fetch data from the table: "quotes_wma_15m" */
+/** fetch data from the table: "quotesWma_15m" */
 quotesWma15m: ((args?: {
 /** distinct select on columns */
-distinct_on?: (quotes_wma_15m_select_column[] | null),
+distinct_on?: (quotesWma_15m_select_column[] | null),
 /** limit the number of rows returned */
 limit?: (Scalars['Int'] | null),
 /** skip the first n rows. Use only with order_by */
 offset?: (Scalars['Int'] | null),
 /** sort the rows by one or more columns */
-order_by?: (quotes_wma_15m_order_by[] | null),
+order_by?: (quotesWma_15m_order_by[] | null),
 /** filter the rows returned */
-where?: (quotes_wma_15m_bool_exp | null)}) => {get: <R extends quotes_wma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma_15m, R>[]) => Promise<FieldsSelection<quotes_wma_15m, R>[]>})&({get: <R extends quotes_wma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma_15m, R>[]) => Promise<FieldsSelection<quotes_wma_15m, R>[]>}),
+where?: (quotesWma_15m_bool_exp | null)}) => {get: <R extends quotesWma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotesWma_15m, R>[]) => Promise<FieldsSelection<quotesWma_15m, R>[]>})&({get: <R extends quotesWma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotesWma_15m, R>[]) => Promise<FieldsSelection<quotesWma_15m, R>[]>}),
     
-/** fetch data from the table in a streaming manner: "quotes_wma_15m" */
-quotes_wma_15m_stream: ((args: {
+/** fetch data from the table in a streaming manner: "quotesWma_15m" */
+quotesWma_15m_stream: ((args: {
 /** maximum number of rows returned in a single batch */
 batch_size: Scalars['Int'],
 /** cursor to stream the results returned by the query */
-cursor: (quotes_wma_15m_stream_cursor_input | null)[],
+cursor: (quotesWma_15m_stream_cursor_input | null)[],
 /** filter the rows returned */
-where?: (quotes_wma_15m_bool_exp | null)}) => {get: <R extends quotes_wma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma_15m, R>[]) => Promise<FieldsSelection<quotes_wma_15m, R>[]>}),
+where?: (quotesWma_15m_bool_exp | null)}) => {get: <R extends quotesWma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotesWma_15m, R>[]) => Promise<FieldsSelection<quotesWma_15m, R>[]>}),
     
-/** fetch data from the table in a streaming manner: "quotes_wma" */
-quotes_wma_stream: ((args: {
+/** fetch data from the table in a streaming manner: "quotesWma" */
+quotesWma_stream: ((args: {
 /** maximum number of rows returned in a single batch */
 batch_size: Scalars['Int'],
 /** cursor to stream the results returned by the query */
-cursor: (quotes_wma_stream_cursor_input | null)[],
+cursor: (quotesWma_stream_cursor_input | null)[],
 /** filter the rows returned */
-where?: (quotes_wma_bool_exp | null)}) => {get: <R extends quotes_wmaRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma, R>[]) => Promise<FieldsSelection<quotes_wma, R>[]>}),
+where?: (quotesWma_bool_exp | null)}) => {get: <R extends quotesWmaRequest>(request: R, defaultValue?: FieldsSelection<quotesWma, R>[]) => Promise<FieldsSelection<quotesWma, R>[]>}),
     
 /** fetch data from the table: "total_value_locked" */
 totalValueLocked: ((args?: {
@@ -7612,49 +7612,49 @@ cursor: (position_stream_cursor_input | null)[],
 /** filter the rows returned */
 where?: (position_bool_exp | null)}) => {get: <R extends positionRequest>(request: R, defaultValue?: FieldsSelection<position, R>[]) => Observable<FieldsSelection<position, R>[]>}),
     
-/** fetch data from the table: "quotes_wma" */
+/** fetch data from the table: "quotesWma" */
 quotesWma: ((args?: {
 /** distinct select on columns */
-distinct_on?: (quotes_wma_select_column[] | null),
+distinct_on?: (quotesWma_select_column[] | null),
 /** limit the number of rows returned */
 limit?: (Scalars['Int'] | null),
 /** skip the first n rows. Use only with order_by */
 offset?: (Scalars['Int'] | null),
 /** sort the rows by one or more columns */
-order_by?: (quotes_wma_order_by[] | null),
+order_by?: (quotesWma_order_by[] | null),
 /** filter the rows returned */
-where?: (quotes_wma_bool_exp | null)}) => {get: <R extends quotes_wmaRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma, R>[]) => Observable<FieldsSelection<quotes_wma, R>[]>})&({get: <R extends quotes_wmaRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma, R>[]) => Observable<FieldsSelection<quotes_wma, R>[]>}),
+where?: (quotesWma_bool_exp | null)}) => {get: <R extends quotesWmaRequest>(request: R, defaultValue?: FieldsSelection<quotesWma, R>[]) => Observable<FieldsSelection<quotesWma, R>[]>})&({get: <R extends quotesWmaRequest>(request: R, defaultValue?: FieldsSelection<quotesWma, R>[]) => Observable<FieldsSelection<quotesWma, R>[]>}),
     
-/** fetch data from the table: "quotes_wma_15m" */
+/** fetch data from the table: "quotesWma_15m" */
 quotesWma15m: ((args?: {
 /** distinct select on columns */
-distinct_on?: (quotes_wma_15m_select_column[] | null),
+distinct_on?: (quotesWma_15m_select_column[] | null),
 /** limit the number of rows returned */
 limit?: (Scalars['Int'] | null),
 /** skip the first n rows. Use only with order_by */
 offset?: (Scalars['Int'] | null),
 /** sort the rows by one or more columns */
-order_by?: (quotes_wma_15m_order_by[] | null),
+order_by?: (quotesWma_15m_order_by[] | null),
 /** filter the rows returned */
-where?: (quotes_wma_15m_bool_exp | null)}) => {get: <R extends quotes_wma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma_15m, R>[]) => Observable<FieldsSelection<quotes_wma_15m, R>[]>})&({get: <R extends quotes_wma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma_15m, R>[]) => Observable<FieldsSelection<quotes_wma_15m, R>[]>}),
+where?: (quotesWma_15m_bool_exp | null)}) => {get: <R extends quotesWma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotesWma_15m, R>[]) => Observable<FieldsSelection<quotesWma_15m, R>[]>})&({get: <R extends quotesWma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotesWma_15m, R>[]) => Observable<FieldsSelection<quotesWma_15m, R>[]>}),
     
-/** fetch data from the table in a streaming manner: "quotes_wma_15m" */
-quotes_wma_15m_stream: ((args: {
+/** fetch data from the table in a streaming manner: "quotesWma_15m" */
+quotesWma_15m_stream: ((args: {
 /** maximum number of rows returned in a single batch */
 batch_size: Scalars['Int'],
 /** cursor to stream the results returned by the query */
-cursor: (quotes_wma_15m_stream_cursor_input | null)[],
+cursor: (quotesWma_15m_stream_cursor_input | null)[],
 /** filter the rows returned */
-where?: (quotes_wma_15m_bool_exp | null)}) => {get: <R extends quotes_wma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma_15m, R>[]) => Observable<FieldsSelection<quotes_wma_15m, R>[]>}),
+where?: (quotesWma_15m_bool_exp | null)}) => {get: <R extends quotesWma_15mRequest>(request: R, defaultValue?: FieldsSelection<quotesWma_15m, R>[]) => Observable<FieldsSelection<quotesWma_15m, R>[]>}),
     
-/** fetch data from the table in a streaming manner: "quotes_wma" */
-quotes_wma_stream: ((args: {
+/** fetch data from the table in a streaming manner: "quotesWma" */
+quotesWma_stream: ((args: {
 /** maximum number of rows returned in a single batch */
 batch_size: Scalars['Int'],
 /** cursor to stream the results returned by the query */
-cursor: (quotes_wma_stream_cursor_input | null)[],
+cursor: (quotesWma_stream_cursor_input | null)[],
 /** filter the rows returned */
-where?: (quotes_wma_bool_exp | null)}) => {get: <R extends quotes_wmaRequest>(request: R, defaultValue?: FieldsSelection<quotes_wma, R>[]) => Observable<FieldsSelection<quotes_wma, R>[]>}),
+where?: (quotesWma_bool_exp | null)}) => {get: <R extends quotesWmaRequest>(request: R, defaultValue?: FieldsSelection<quotesWma, R>[]) => Observable<FieldsSelection<quotesWma, R>[]>}),
     
 /** fetch data from the table: "total_value_locked" */
 totalValueLocked: ((args?: {
