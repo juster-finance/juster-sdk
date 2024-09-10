@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 import { textUtils } from '../utils/index.js';
 import type { BetSide } from '../models.js';
-import type { BetParamsDto, BetResultDto, ProvideLiquidityParams, ProvideLiquidityResult } from './dtos.js';
+import type { BetParamsDto, BetResultDto, ProvideLiquidityParams, ProvideLiquidityResult, UserDto } from './dtos.js';
 import type { AccessTokenFactory } from './accessTokenFactory.js';
 import { JusterDemoResponseError } from './justerDemoResponseError.js';
 
@@ -14,12 +14,26 @@ export class JusterDemo {
   }
 
   constructor(baseUrl: string, accessTokenFactory?: AccessTokenFactory) {
-    this.baseUrl = textUtils.trimSlashes(baseUrl); ;
+    this.baseUrl = textUtils.trimSlashes(baseUrl);
     this._accessTokenFactory = accessTokenFactory;
   }
 
   protected getUrl(uri: string) {
     return new URL(this.baseUrl + '/' + textUtils.trimSlashes(uri));
+  }
+
+  /**
+   * Get user
+   *
+   * @param {string} address address of the user
+   * @returns promise with User
+   */
+  async getUser(address: string): Promise<UserDto> {
+    const user = await this.fetch<UserDto>(`/data/users/${address}`, false, {
+      method: 'GET',
+    });
+
+    return user;
   }
 
   /**
@@ -110,7 +124,7 @@ export class JusterDemo {
       if (!this.accessTokenFactory)
         throw new Error('The \'accessTokenFactory\' should be defined for the private URIs');
       const accessToken = await this.accessTokenFactory();
-      headers.append('Authorization', `${accessToken}`);
+      headers.append('Authorization', `Bearer ${accessToken}`);
     }
 
     requestInit.headers = headers;
