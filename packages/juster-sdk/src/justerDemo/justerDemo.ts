@@ -37,6 +37,19 @@ export class JusterDemo {
   }
 
   /**
+   * Top up user account
+   *
+   * @returns promise with User
+   */
+  async topUp(): Promise<UserDto> {
+    const user = await this.fetch<UserDto>(`/demo/top-up`, true, {
+      method: 'POST',
+    });
+
+    return user;
+  }
+
+  /**
    * Calling provideLiquidity action
    *
    * @param {number} eventId number of event
