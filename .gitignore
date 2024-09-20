@@ -1,7 +1,5 @@
 dist/
 
-.vscode/
-
 **/.ipynb_checkpoints/
 
 # dependencies
