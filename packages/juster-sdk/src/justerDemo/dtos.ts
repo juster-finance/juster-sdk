@@ -1,99 +1,83 @@
-export type BetSide = 'ABOVE_EQ' | 'BELOW';
-export type JusterEventStatus = 'NEW' | 'STARTED' | 'FINISHED' | 'CANCELED';
+export type BetSideDto = 'ABOVE_EQ' | 'BELOW';
+export type JusterEventStatusDto = 'NEW' | 'STARTED' | 'FINISHED' | 'CANCELED';
 
 export interface UserDto {
   address: string;
-  balance: number;
-  totalBetsCount: number;
-  totalBetsAmount: number;
-  totalLiquidityProvided: number;
-  totalReward: number;
-  totalProviderReward: number;
-  totalWithdrawn: number;
-  totalFeesCollected: number;
+  balance: string;
+  lockedAmount: string;
+  totalBetsCount: string;
+  totalBetsAmount: string;
+  totalLiquidityProvided: string;
+  totalReward: string;
+  totalProviderReward: string;
+  totalWithdrawn: string;
+  totalFeesCollected: string;
 }
 
 export interface JusterEventDto {
   id: number;
   currencyPairId: number;
   creatorId: string;
-  status: JusterEventStatus;
-  winnerBets: BetSide;
-  targetDynamics: number;
+  status: JusterEventStatusDto;
+  winnerBets: BetSideDto;
+  targetDynamics: string;
   measurePeriod: number;
-  betsCloseTime: number;
-  startRate?: number;
-  closedRate?: number;
-  closedDynamics?: number;
-  measureOracleStartTime?: number;
-  closedOracleTime?: number;
-  createdTime: number;
-  poolAboveEq: number;
-  poolBelow: number;
-  liquidityPercent: number;
-  totalLiquidityShares: number;
-  totalBetsAmount: number;
-  totalLiquidityProvided: number;
-  totalValueLocked: number;
+  betsCloseTime: string;
+  startRate?: string;
+  closedRate?: string;
+  closedDynamics?: string;
+  measureOracleStartTime?: string;
+  closedOracleTime?: string;
+  createdTime: string;
+  poolAboveEq: string;
+  poolBelow: string;
+  liquidityPercent: string;
+  totalLiquidityShares: string;
+  totalBetsAmount: string;
+  totalLiquidityProvided: string;
+  totalValueLocked: string;
 }
 
 export interface PositionDto {
   id: number;
   eventId: number;
   userId: string;
-  shares: number;
-  rewardAboveEq: number;
-  rewardBelow: number;
-  liquidityProvidedAboveEq: number;
-  liquidityProvidedBelow: number;
+  shares: string;
+  rewardAboveEq: string;
+  rewardBelow: string;
+  liquidityProvidedAboveEq: string;
+  liquidityProvidedBelow: string;
   withdrawn: boolean;
-  value: number;
+  value: string;
 }
 
 export interface DepositDto {
   id: number;
-  createdTime: number;
+  createdTime: string;
   opgHash: string;
   eventId: number;
   userId: string;
-  amountAboveEq: number;
-  amountBelow: number;
-  shares: number;
+  amountAboveEq: string;
+  amountBelow: string;
+  shares: string;
 }
 
 export interface BetDto {
   id: number;
-  createdTime: number;
+  createdTime: string;
   opgHash: string;
-  side: BetSide;
-  amount: number;
-  reward: number;
+  side: BetSideDto;
+  amount: string;
+  reward: string;
   eventId: number;
   userId: string;
 }
 
-export interface BaseParamsDto {
-  amount: number;
-}
-
-export interface ProvideLiquidityParams extends BaseParamsDto {
-  eventId: number;
-  expectedRatioAboveEq: number;
-  expectedRatioBelow: number;
-  maxSlippage: number;
-}
-
-export interface ProvideLiquidityResult extends BaseParamsDto {
+export interface ProvideLiquidityResultDto {
   user: UserDto;
   event: JusterEventDto;
   position: PositionDto;
   deposit: DepositDto;
-}
-
-export interface BetParamsDto extends BaseParamsDto {
-  eventId: number;
-  side: 0 | 1;
-  minimalWinAmount: number;
 }
 
 export interface BetResultDto {

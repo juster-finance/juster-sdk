@@ -1,21 +1,52 @@
 import { BigNumber } from 'bignumber.js';
+
 import { textUtils } from '../utils/index.js';
 import type { BetSide } from '../models.js';
-import type { BetParamsDto, BetResultDto, ProvideLiquidityParams, ProvideLiquidityResult, UserDto } from './dtos.js';
-import type { AccessTokenFactory } from './accessTokenFactory.js';
+
 import { JusterDemoResponseError } from './justerDemoResponseError.js';
+import type { AccessTokenFactory } from './accessTokenFactory.js';
+import type { JusterDemoOptions, DefaultJusterDemoOptions } from './options.js';
+import type { JusterContractConfig } from './contractConfig.js';
+import type { ProvideLiquidityParams, BetParams } from './params.js';
+import type { UserDto, BetResultDto, ProvideLiquidityResultDto } from './dtos.js';
+import type { User, BetResult, ProvideLiquidityResult } from './models.js';
+import * as defaultMappers from './mappers.js';
 
 export class JusterDemo {
+  static readonly defaultMappers: typeof defaultMappers = defaultMappers;
+  static readonly defaultOptions: DefaultJusterDemoOptions = {
+    contractConfig: {
+      nativeTokenDecimals: 9,
+      sharesPrecision: 12,
+      targetDynamicsPrecision: 12,
+    },
+  };
+
   readonly baseUrl: string;
+  readonly contractConfig: JusterContractConfig;
   protected _accessTokenFactory: AccessTokenFactory | undefined;
+  protected mappers: typeof defaultMappers = JusterDemo.defaultMappers;
 
   get accessTokenFactory() {
     return this._accessTokenFactory;
   }
 
-  constructor(baseUrl: string, accessTokenFactory?: AccessTokenFactory) {
-    this.baseUrl = textUtils.trimSlashes(baseUrl);
-    this._accessTokenFactory = accessTokenFactory;
+  constructor(options: JusterDemoOptions) {
+    this.baseUrl = textUtils.trimSlashes(options.baseUrl);
+
+    const nativeTokenDecimals = options.contractConfig?.nativeTokenDecimals || JusterDemo.defaultOptions.contractConfig.nativeTokenDecimals;
+    const sharesPrecision = options.contractConfig?.sharesPrecision || JusterDemo.defaultOptions.contractConfig.sharesPrecision;
+    const targetDynamicsPrecision = options.contractConfig?.targetDynamicsPrecision || JusterDemo.defaultOptions.contractConfig.targetDynamicsPrecision;
+    this.contractConfig = {
+      nativeTokenDecimals,
+      nativeTokenDecimalsFactor: 10n ** BigInt(nativeTokenDecimals),
+      sharesPrecision,
+      sharesPrecisionFactor: 10n ** BigInt(sharesPrecision),
+      targetDynamicsPrecision,
+      targetDynamicsPrecisionFactor: 10n ** BigInt(targetDynamicsPrecision),
+    };
+
+    this._accessTokenFactory = options.accessTokenFactory;
   }
 
   protected getUrl(uri: string) {
@@ -28,12 +59,12 @@ export class JusterDemo {
    * @param {string} address address of the user
    * @returns promise with User
    */
-  async getUser(address: string): Promise<UserDto> {
+  async getUser(address: string): Promise<User> {
     const user = await this.fetch<UserDto>(`/data/users/${address}`, false, {
       method: 'GET',
     });
 
-    return user;
+    return this.mappers.mapUserDtoToUser(user);
   }
 
   /**
@@ -41,12 +72,12 @@ export class JusterDemo {
    *
    * @returns promise with User
    */
-  async topUp(): Promise<UserDto> {
+  async topUp(): Promise<User> {
     const user = await this.fetch<UserDto>(`/demo/top-up`, true, {
       method: 'POST',
     });
 
-    return user;
+    return this.mappers.mapUserDtoToUser(user);
   }
 
   /**
@@ -54,7 +85,7 @@ export class JusterDemo {
    *
    * @param {number} eventId number of event
    * @param {BigNumber} expectedRatioAboveEq expected pool ratio numerator
-   * @param {BigNumber} expectedRatioBellow expected pool ratio denomimator
+   * @param {BigNumber} expectedRatioBelow expected pool ratio denomimator
    * @param {BigNumber} maxSlippage maximal difference between expected ratio and actual ratio (nat number measured in ratioPrecision)
    * @param {BigNumber} amount added liquidity amount
    * @returns promise with ProvideLiquidityResult
@@ -62,23 +93,23 @@ export class JusterDemo {
   async provideLiquidity(
     eventId: number,
     expectedRatioAboveEq: BigNumber,
-    expectedRatioBellow: BigNumber,
+    expectedRatioBelow: BigNumber,
     maxSlippage: BigNumber,
     amount: BigNumber
   ): Promise<ProvideLiquidityResult> {
     const provideLiquidityParams: ProvideLiquidityParams = {
-      amount: amount.toNumber(),
+      amount: this.convertUnitsToRaw(amount, this.contractConfig.nativeTokenDecimalsFactor),
       eventId,
-      expectedRatioAboveEq: expectedRatioAboveEq.toNumber(),
-      expectedRatioBelow: expectedRatioBellow.toNumber(),
-      maxSlippage: maxSlippage.toNumber(),
+      expectedRatioAboveEq: this.convertUnitsToRaw(expectedRatioAboveEq, this.contractConfig.nativeTokenDecimalsFactor),
+      expectedRatioBelow: this.convertUnitsToRaw(expectedRatioBelow, this.contractConfig.nativeTokenDecimalsFactor),
+      maxSlippage: this.convertUnitsToRaw(maxSlippage, this.contractConfig.sharesPrecisionFactor),
     };
-    const provideLiquidityResult = await this.fetch<ProvideLiquidityResult>('/contract/add-liquidity', true, {
+    const provideLiquidityResult = await this.fetch<ProvideLiquidityResultDto>('/contract/add-liquidity', true, {
       method: 'POST',
       body: JSON.stringify(provideLiquidityParams),
     });
 
-    return provideLiquidityResult;
+    return this.mappers.mapProvideLiquidityResultDtoToProvideLiquidityResult(provideLiquidityResult);
   };
 
   /**
@@ -95,19 +126,19 @@ export class JusterDemo {
     betSide: BetSide,
     betValue: BigNumber,
     minimalWinAmount: BigNumber
-  ): Promise<BetResultDto> {
-    const betParams: BetParamsDto = {
-      amount: betValue.toNumber(),
+  ): Promise<BetResult> {
+    const betParams: BetParams = {
+      amount: this.convertUnitsToRaw(betValue, this.contractConfig.nativeTokenDecimalsFactor),
       eventId,
       side: betSide === 'aboveEq' ? 0 : 1,
-      minimalWinAmount: minimalWinAmount.toNumber(),
+      minimalWinAmount: this.convertUnitsToRaw(minimalWinAmount, this.contractConfig.nativeTokenDecimalsFactor),
     };
     const betResult = await this.fetch<BetResultDto>('/contract/bet', true, {
       method: 'POST',
       body: JSON.stringify(betParams),
     });
 
-    return betResult;
+    return this.mappers.mapBetResultDtoToBetResult(betResult);
   }
 
   /**
@@ -144,7 +175,7 @@ export class JusterDemo {
     return requestInit;
   }
 
-  private async fetch<T>(uri: string, isPrivate: boolean, requestInit?: RequestInit, useDefaultRequestInitFields = true): Promise<T> {
+  protected async fetch<T>(uri: string, isPrivate: boolean, requestInit?: RequestInit, useDefaultRequestInitFields = true): Promise<T> {
     if (useDefaultRequestInitFields)
       requestInit = await this.getRequestInit(isPrivate, requestInit);
     const url = this.getUrl(uri);
@@ -155,7 +186,7 @@ export class JusterDemo {
     return response.json();
   }
 
-  private async ensureResponseOk(response: Response) {
+  protected async ensureResponseOk(response: Response) {
     if (response.ok)
       return;
 
@@ -168,5 +199,9 @@ export class JusterDemo {
     }
 
     throw new JusterDemoResponseError(response.status, content);
+  }
+
+  protected convertUnitsToRaw(value: BigNumber, factor: bigint): string {
+    return value.times(factor.toString()).integerValue().toString();
   }
 }
