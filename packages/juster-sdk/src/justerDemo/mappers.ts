@@ -7,7 +7,7 @@ export const mapUserDtoToUser = (user: UserDto): User => ({
   address: user.address,
   balance: new BigNumber(user.balance),
   lockedAmount: new BigNumber(user.lockedAmount),
-  totalBetsCount: new BigNumber(user.totalBetsCount),
+  totalBetsCount: user.totalBetsCount,
   totalBetsAmount: new BigNumber(user.totalBetsAmount),
   totalLiquidityProvided: new BigNumber(user.totalLiquidityProvided),
   totalReward: new BigNumber(user.totalReward),

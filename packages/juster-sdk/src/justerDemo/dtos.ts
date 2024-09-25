@@ -5,7 +5,7 @@ export interface UserDto {
   address: string;
   balance: string;
   lockedAmount: string;
-  totalBetsCount: string;
+  totalBetsCount: number;
   totalBetsAmount: string;
   totalLiquidityProvided: string;
   totalReward: string;
@@ -56,7 +56,7 @@ export interface DepositDto {
   createdTime: string;
   opgHash: string;
   eventId: number;
-  userId: string;
+  userId: number;
   amountAboveEq: string;
   amountBelow: string;
   shares: string;

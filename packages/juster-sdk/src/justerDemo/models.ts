@@ -7,7 +7,7 @@ export interface User {
   address: string;
   balance: BigNumber;
   lockedAmount: BigNumber;
-  totalBetsCount: BigNumber;
+  totalBetsCount: number;
   totalBetsAmount: BigNumber;
   totalLiquidityProvided: BigNumber;
   totalReward: BigNumber;
@@ -58,7 +58,7 @@ export interface Deposit {
   createdTime: Date;
   opgHash: string;
   eventId: number;
-  userId: string;
+  userId: number;
   amountAboveEq: BigNumber;
   amountBelow: BigNumber;
   shares: BigNumber;
