@@ -1,0 +1,42 @@
+name: packages/juster-gql-client
+on:
+  push:
+    paths:
+      - 'packages/juster-gql-client/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/juster-gql-client.yml'
+    branches:
+      - master
+      - dev
+    tags:
+      - 'juster-gql-client@*.*.*'
+  pull_request:
+env:
+  node-version: 22
+
+jobs:
+  publish-npm:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.ref, 'refs/tags/juster-gql-client@') }}
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          registry-url: 'https://registry.npmjs.org'
+          node-version: ${{ env.node-version }}
+
+      - name: Print environment info
+        run: |
+          node --version
+          npm --version
+
+      - name: Publish
+        working-directory: packages/juster-gql-client
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
